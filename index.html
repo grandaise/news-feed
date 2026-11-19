@@ -86,6 +86,11 @@
   .help { font-size: 12px; color: var(--muted); margin-top: 6px; }
   .help a { color: var(--accent); }
   .actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 18px; }
+  .steps { padding-left: 18px; margin: 6px 0; }
+  .steps li { margin-bottom: 8px; list-style: none; margin-left: -18px; }
+  .btnlink { display: inline-block; font-weight: 600; margin-bottom: 4px; }
+  #connect.attention { outline: 2px solid var(--accent); outline-offset: 6px; border-radius: 8px; }
+  .tab.add { font-weight: 700; color: var(--accent); }
   #toast {
     position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%);
     background: var(--text); color: var(--bg); padding: 10px 16px; border-radius: 10px;
@@ -124,14 +129,23 @@
   </form>
   <p class="help" id="kwHelp"></p>
 
-  <h3>GitHub 연결 (기기마다 한 번)</h3>
-  <div class="field"><label>저장소 (owner/repo)</label><input id="repoInput" placeholder="grandaise/news-feed"></div>
-  <div class="field"><label>Personal Access Token</label><input id="tokenInput" type="password" placeholder="github_pat_..."></div>
-  <p class="help">
-    키워드 추가·삭제와 "지금 수집"에 필요합니다. 토큰은 이 브라우저에만 저장됩니다.<br>
-    <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">Fine-grained token 만들기</a>
-    → 이 저장소만 선택 → 권한: <b>Contents</b> 읽기/쓰기, <b>Actions</b> 읽기/쓰기.
-  </p>
+  <section id="connect">
+    <h3>이 기기 연결 <span id="connStatus" class="help"></span></h3>
+    <ol class="help steps">
+      <li><a id="tokenLink" class="btnlink" target="_blank" rel="noopener">① GitHub 토큰 만들기 ↗</a><br>
+        열린 화면에서 <b>Repository access → Only select repositories → news-feed</b> 선택,
+        <b>Permissions</b>에서 <b>Contents</b>와 <b>Actions</b>를 <b>Read and write</b>로 바꾼 뒤 <b>Generate token</b>.</li>
+      <li>② 만들어진 토큰(github_pat_…)을 복사해 아래에 붙여넣기</li>
+    </ol>
+    <div class="row">
+      <input id="tokenInput" type="password" placeholder="github_pat_..." autocomplete="off">
+      <button id="connectBtn" class="primary">연결</button>
+    </div>
+    <p class="help">기기마다 한 번만 하면 되고, 토큰은 이 브라우저에만 저장됩니다.</p>
+    <details class="help"><summary>고급 설정</summary>
+      <div class="field"><label>저장소 (owner/repo)</label><input id="repoInput" placeholder="grandaise/news-feed"></div>
+    </details>
+  </section>
   <div class="actions">
     <button id="runNow">⚡ 지금 수집</button>
     <button class="primary" id="closeSettings">닫기</button>
@@ -297,7 +311,7 @@ function render() {
   const tabs = [["__all", "전체"], ...state.keywords.map((k) => [k, k])];
   $("#tabs").innerHTML = tabs.map(([id, label]) =>
     `<button class="tab${id === state.tab ? " active" : ""}" data-tab="${esc(id)}">${esc(label)}<span class="cnt">${itemsFor(id).length}</span></button>`
-  ).join("");
+  ).join("") + `<button class="tab add" id="addTab" title="키워드 추가">＋ 키워드</button>`;
 
   // 필터
   document.querySelectorAll("[data-range]").forEach((b) => b.classList.toggle("on", +b.dataset.range === state.range));
@@ -311,7 +325,7 @@ function render() {
   if (!items.length) {
     const pending = state.tab !== "__all" && !state.data.keywords?.[state.tab];
     $("#list").innerHTML = `<div class="empty">${
-      !state.keywords.length ? "⚙︎ 버튼을 눌러 키워드를 추가하세요."
+      !state.keywords.length ? "＋ 키워드 버튼을 눌러 키워드를 추가하세요."
       : pending ? "아직 수집되지 않은 키워드입니다.<br>잠시 후 자동으로 표시됩니다."
       : state.range === 1 ? "오늘 올라온 기사가 없습니다.<br>3일·7일 필터를 눌러보세요."
       : "기사가 없습니다."
@@ -339,15 +353,72 @@ function renderChips() {
   $("#kwChips").innerHTML = state.keywords.map((k) =>
     `<span class="chip">${esc(k)}<button data-del="${esc(k)}" title="삭제">×</button></span>`
   ).join("") || '<span class="help">등록된 키워드가 없습니다.</span>';
-  $("#kwHelp").innerHTML = cfg.token
-    ? "추가·삭제하면 1~2분 뒤 새 기사가 수집됩니다."
-    : `토큰이 없으면 <a href="${esc(editUrl())}" target="_blank" rel="noopener">GitHub에서 keywords.json 직접 편집</a>으로 바뀝니다. (GitHub 로그인 필요)<br>매번 편하게 쓰려면 아래 토큰을 한 번 입력하세요.`;
+  $("#kwHelp").textContent = cfg.token
+    ? "추가·삭제하면 탭에 바로 반영되고, 1~2분 뒤 기사가 수집됩니다."
+    : "처음 한 번은 아래에서 이 기기를 연결해야 추가·삭제할 수 있습니다.";
+  $("#connStatus").textContent = cfg.token ? "✓ 연결됨" : "";
 }
 
-const editUrl = () => `https://github.com/${cfg.repo}/edit/main/keywords.json`;
-function editOnGitHub(msg) {
-  window.open(editUrl(), "_blank", "noopener");
-  toast(msg);
+// 토큰 생성 화면을 이름·권한이 미리 채워진 상태로 연다
+function tokenUrl() {
+  const owner = cfg.repo.split("/")[0] || "";
+  const p = new URLSearchParams({
+    name: "news-feed 키워드 관리",
+    description: "내 뉴스 피드 사이트에서 키워드 추가·삭제",
+    target_name: owner,
+    expires_in: "none",
+    contents: "write",
+    actions: "write",
+  });
+  return `https://github.com/settings/personal-access-tokens/new?${p}`;
+}
+
+// 토큰 확인 후 저장. 성공하면 대기 중인 키워드 추가를 이어서 처리한다
+let pendingAdd = null;
+async function connect() {
+  const token = $("#tokenInput").value.trim();
+  if (!token) return toast("토큰을 붙여넣어 주세요.");
+  store.set("token", token);
+  try {
+    const repo = await gh("");
+    if (!repo.permissions?.push) throw new Error("토큰에 Contents 쓰기 권한이 없습니다.");
+  } catch (err) {
+    store.set("token", null);
+    renderChips();
+    return toast(`연결 실패: ${err.message}`);
+  }
+  $("#connect").classList.remove("attention");
+  renderChips();
+  toast("연결되었습니다.");
+  if (pendingAdd) { const kw = pendingAdd; pendingAdd = null; addKeyword(kw); }
+}
+
+function openSettings({ needConnect = false } = {}) {
+  $("#repoInput").value = cfg.repo;
+  $("#tokenInput").value = cfg.token;
+  $("#tokenLink").href = tokenUrl();
+  renderChips();
+  if (!$("#settings").open) $("#settings").showModal();
+  if (needConnect) {
+    $("#connect").classList.add("attention");
+    $("#connect").scrollIntoView({ block: "center" });
+  }
+}
+
+async function addKeyword(kw) {
+  kw = kw.trim();
+  if (!kw) return;
+  if (state.keywords.includes(kw)) return toast("이미 등록된 키워드입니다.");
+  if (!cfg.token) {
+    pendingAdd = kw;
+    openSettings({ needConnect: true });
+    return toast(`이 기기를 연결하면 "${kw}"가 바로 추가됩니다.`);
+  }
+  try {
+    await saveKeywords([...state.keywords, kw], `키워드 추가: ${kw}`);
+    $("#kwInput").value = "";
+    state.tab = kw; store.set("tab", kw); render();
+  } catch (err) { toast(err.message); }
 }
 
 let toastTimer;
@@ -360,6 +431,11 @@ function toast(msg) {
 
 // ---------- 이벤트 ----------
 $("#tabs").addEventListener("click", (e) => {
+  if (e.target.closest("#addTab")) {
+    const kw = prompt("추가할 키워드를 입력하세요 (예: 현대리바트)");
+    if (kw) addKeyword(kw);
+    return;
+  }
   const b = e.target.closest("[data-tab]");
   if (!b) return;
   state.tab = b.dataset.tab; store.set("tab", state.tab);
@@ -371,31 +447,23 @@ document.querySelectorAll("[data-range]").forEach((b) => b.addEventListener("cli
 $("#search").addEventListener("input", (e) => { state.q = e.target.value; render(); });
 $("#reload").addEventListener("click", () => load(true));
 
-$("#openSettings").addEventListener("click", () => {
-  $("#repoInput").value = cfg.repo;
-  $("#tokenInput").value = cfg.token;
-  renderChips();
-  $("#settings").showModal();
+$("#openSettings").addEventListener("click", () => openSettings());
+$("#closeSettings").addEventListener("click", () => { pendingAdd = null; $("#settings").close(); });
+$("#repoInput").addEventListener("change", (e) => {
+  store.set("repo", e.target.value.trim() || null);
+  $("#tokenLink").href = tokenUrl();
 });
-$("#closeSettings").addEventListener("click", () => $("#settings").close());
-$("#repoInput").addEventListener("change", (e) => store.set("repo", e.target.value.trim() || null));
-$("#tokenInput").addEventListener("input", (e) => { store.set("token", e.target.value.trim() || null); renderChips(); });
+$("#connectBtn").addEventListener("click", connect);
+$("#tokenInput").addEventListener("keydown", (e) => { if (e.key === "Enter") connect(); });
 
-$("#addForm").addEventListener("submit", async (e) => {
+$("#addForm").addEventListener("submit", (e) => {
   e.preventDefault();
-  const kw = $("#kwInput").value.trim();
-  if (!kw) return;
-  if (state.keywords.includes(kw)) return toast("이미 등록된 키워드입니다.");
-  if (!cfg.token) return editOnGitHub(`GitHub 편집 화면에서 "${kw}"를 목록에 넣고 Commit changes를 누르세요.`);
-  try {
-    await saveKeywords([...state.keywords, kw], `키워드 추가: ${kw}`);
-    $("#kwInput").value = "";
-  } catch (err) { toast(err.message); }
+  addKeyword($("#kwInput").value);
 });
 $("#kwChips").addEventListener("click", async (e) => {
   const kw = e.target.closest("[data-del]")?.dataset.del;
   if (!kw) return;
-  if (!cfg.token) return editOnGitHub(`GitHub 편집 화면에서 "${kw}" 줄을 지우고 Commit changes를 누르세요.`);
+  if (!cfg.token) return openSettings({ needConnect: true });
   if (!confirm(`'${kw}' 키워드를 삭제할까요?`)) return;
   try { await saveKeywords(state.keywords.filter((k) => k !== kw), `키워드 삭제: ${kw}`); }
   catch (err) { toast(err.message); }
