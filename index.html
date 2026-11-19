@@ -339,7 +339,15 @@ function renderChips() {
   $("#kwChips").innerHTML = state.keywords.map((k) =>
     `<span class="chip">${esc(k)}<button data-del="${esc(k)}" title="삭제">×</button></span>`
   ).join("") || '<span class="help">등록된 키워드가 없습니다.</span>';
-  $("#kwHelp").textContent = cfg.token ? "" : "키워드를 바꾸려면 아래 GitHub 연결을 먼저 설정하세요.";
+  $("#kwHelp").innerHTML = cfg.token
+    ? "추가·삭제하면 1~2분 뒤 새 기사가 수집됩니다."
+    : `토큰이 없으면 <a href="${esc(editUrl())}" target="_blank" rel="noopener">GitHub에서 keywords.json 직접 편집</a>으로 바뀝니다. (GitHub 로그인 필요)<br>매번 편하게 쓰려면 아래 토큰을 한 번 입력하세요.`;
+}
+
+const editUrl = () => `https://github.com/${cfg.repo}/edit/main/keywords.json`;
+function editOnGitHub(msg) {
+  window.open(editUrl(), "_blank", "noopener");
+  toast(msg);
 }
 
 let toastTimer;
@@ -371,13 +379,14 @@ $("#openSettings").addEventListener("click", () => {
 });
 $("#closeSettings").addEventListener("click", () => $("#settings").close());
 $("#repoInput").addEventListener("change", (e) => store.set("repo", e.target.value.trim() || null));
-$("#tokenInput").addEventListener("change", (e) => { store.set("token", e.target.value.trim() || null); renderChips(); });
+$("#tokenInput").addEventListener("input", (e) => { store.set("token", e.target.value.trim() || null); renderChips(); });
 
 $("#addForm").addEventListener("submit", async (e) => {
   e.preventDefault();
   const kw = $("#kwInput").value.trim();
   if (!kw) return;
   if (state.keywords.includes(kw)) return toast("이미 등록된 키워드입니다.");
+  if (!cfg.token) return editOnGitHub(`GitHub 편집 화면에서 "${kw}"를 목록에 넣고 Commit changes를 누르세요.`);
   try {
     await saveKeywords([...state.keywords, kw], `키워드 추가: ${kw}`);
     $("#kwInput").value = "";
@@ -385,7 +394,9 @@ $("#addForm").addEventListener("submit", async (e) => {
 });
 $("#kwChips").addEventListener("click", async (e) => {
   const kw = e.target.closest("[data-del]")?.dataset.del;
-  if (!kw || !confirm(`'${kw}' 키워드를 삭제할까요?`)) return;
+  if (!kw) return;
+  if (!cfg.token) return editOnGitHub(`GitHub 편집 화면에서 "${kw}" 줄을 지우고 Commit changes를 누르세요.`);
+  if (!confirm(`'${kw}' 키워드를 삭제할까요?`)) return;
   try { await saveKeywords(state.keywords.filter((k) => k !== kw), `키워드 삭제: ${kw}`); }
   catch (err) { toast(err.message); }
 });

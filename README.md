@@ -20,3 +20,15 @@ GitHub Pages(정적 페이지) + GitHub Actions(정기 수집)만으로 동작�
 ```bash
 node scripts/fetch.mjs
 ```
+
+## 📱 매일 아침 핸드폰 알림 (ntfy)
+`.github/workflows/morning-notify.yml` 이 매일 한국시간 07:30에 최신 뉴스를 수집하고
+최근 24시간 기사 요약을 [ntfy](https://ntfy.sh) 푸시 알림으로 보냅니다.
+
+1. 핸드폰에 **ntfy** 앱 설치 (iOS App Store / Google Play)
+2. 앱에서 `+` → 남이 추측하기 어려운 토픽 이름으로 구독 (예: `news-xxxx-랜덤문자열`)
+3. 저장소 **Settings → Secrets and variables → Actions → New repository secret**
+   - Name: `NTFY_TOPIC`, Secret: 위에서 정한 토픽 이름
+4. **Actions → 아침 알림 → Run workflow** 로 테스트
+
+토픽 이름을 아는 사람은 누구나 알림을 받을 수 있으므로 길고 랜덤하게 정하세요.
