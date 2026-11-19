@@ -202,6 +202,11 @@ async function gh(path, opts = {}) {
   });
   if (!res.ok) {
     const msg = (await res.json().catch(() => ({}))).message || res.statusText;
+    if (res.status === 403 || (res.status === 404 && opts.method)) {
+      const perm = path.startsWith("/actions") ? "Actions" : "Contents";
+      throw new Error(`토큰 권한 부족: GitHub 토큰 설정에서 ${perm} 권한을 'Read and write'로 바꿔 주세요. (${res.status})`);
+    }
+    if (res.status === 401) throw new Error("토큰이 잘못되었거나 만료되었습니다. 새 토큰을 연결해 주세요.");
     throw new Error(`GitHub ${res.status}: ${msg}`);
   }
   return res.status === 204 ? null : res.json();
