@@ -1,5 +1,5 @@
 {
- "updatedAt": "2026-11-19T09:56:32.968Z",
+ "updatedAt": "2026-11-19T11:52:49.007Z",
  "keywords": {
   "현대리바트": [
    {
@@ -64,6 +64,12 @@
    }
   ],
   "한샘": [
+   {
+    "title": "주방 상품 매출 40% ↑…한샘, ‘커스텀 키친’으로 3040 공략",
+    "link": "https://news.google.com/rss/articles/CBMiUkFVX3lxTE00OWotQmdWVGQ5Q0h5Zm5WdU9RMm5ncW1GSmM2MXFMT05ES1pLalRuazI4aXdJcUtZVmNqXzA0TmhieU8wSXBmUzdBRFUtYXJNZkHSAVNBVV95cUxNWXJhOUhDMUlyWjgwMkp3aG95Ny1lNjk3WWJxZ2hiOXNuNllMOGdZRk9XYmFsUnFGV1dBbS1SOXI5MzU4dmhDTGlzY0hmN1o3aGlmWQ?oc=5",
+    "source": "서울경제",
+    "publishedAt": "2026-11-19T02:03:20.000Z"
+   },
    {
     "title": "한샘, 커스텀 키친 강화…3040 소비자 겨냥",
     "link": "https://news.google.com/rss/articles/CBMiXkFVX3lxTFBkYndONFRBMHoteW05T3d0d0xsNHVUQnI2dWpxOWZyZmRVMkhPU3VDc0x0SXlpTHRiQV85QV9PcnZrV21KY3B4Q0R0eFNhNUdDd1ZxdFlDdmk0NXpyWVE?oc=5",
@@ -351,6 +357,54 @@
   ],
   "비트코인": [
    {
+    "title": "통화 긴축 우려에 비트코인 ‘날개 없는 추락’",
+    "link": "https://news.google.com/rss/articles/CBMia0FVX3lxTE96Y3hEaGs0UmJhYWFDUFhHcUVqMHQ4aG5ldzJHNzMxSTN2V2Q3cTlEX1BSYVk5WS1BMmx6MHM3M2ZaaGtJSlhSdXFKZGJrLWlRZXRneVZMRGdoMVFFZl9NZER1ZE13TUFnY3Rr0gFUQVVfeXFMTkY0SzJLQ0liYmI3WWZfYzl2R2RTWDlzUy13c2hpcjFfcFlwRFNWbnVoelZORXlhWmxYMUduZzR6YVlfbGZhZ2NLbnc0alBpd21fUHVZ?oc=5",
+    "source": "세계일보",
+    "publishedAt": "2026-11-19T11:25:00.000Z"
+   },
+   {
+    "title": "[코인 시황] 비트코인 6만3000달러대 약세…금 대비 상대적 강세에도 AI 자금난·해킹 악재",
+    "link": "https://news.google.com/rss/articles/CBMiXEFVX3lxTE9hNjBxbjV6RENCN1ZxWXUtVWtiOHh4T0EwVEd3WjVmM2haZi1BanFHRmd0dnFUc0ZYcHdkVnQ3Vjk4Yl90ZEFfcjVqY0RtV1RCeG9TeTUyaUxQdjM3?oc=5",
+    "source": "뉴스핌",
+    "publishedAt": "2026-11-19T11:14:00.000Z"
+   },
+   {
+    "title": "아이리스(IRYS) 28.22% 급등…업비트 비트코인·리플·이더리움은 1% 안팎 상승",
+    "link": "https://news.google.com/rss/articles/CBMiSkFVX3lxTE1HazRNbExWdEowYmc4dkFsM3dlTVZEV3g5WUF1NWlmUFN0dFhicHYyZjlveGoyVmhiRkhHeXNnTEx3d3JGSG9LZUdn?oc=5",
+    "source": "코인리더스",
+    "publishedAt": "2026-11-19T11:01:44.000Z"
+   },
+   {
+    "title": "\"2022년 폭락장과 닮았다\"…비트코인 200주선 붕괴에 연준 금리 인상 공포 확산",
+    "link": "https://news.google.com/rss/articles/CBMiSkFVX3lxTE9YWHlnS2ZqalZyamZtOXR1UDgyQTlWM0pUZlpiUHFBQ1hmWmJhVTZGRTl1MUFlNzBzaWxxTUlUSXJ6UXBSUXJtWUJB?oc=5",
+    "source": "코인리더스",
+    "publishedAt": "2026-11-19T10:52:00.000Z"
+   },
+   {
+    "title": "비트코인 6만 달러 붕괴 경고…가상자산 7주 연속 하락, 앤트로픽 IPO가 반전 이끌까?",
+    "link": "https://news.google.com/rss/articles/CBMiSkFVX3lxTE8zTXlJOWwxWV9lUHVJSmdvUWM4YVR5MmUwV2tueTA5ZUpyOG52ZHFzc0l0MmtoeDl1WXZydUVaa1BBTEZKQWhQZW1B?oc=5",
+    "source": "코인리더스",
+    "publishedAt": "2026-11-19T10:38:00.000Z"
+   },
+   {
+    "title": "앤트로픽 813억 달러 IPO에 나스닥 선물 급등! 비트코인도 6만 3,800달러 회복",
+    "link": "https://news.google.com/rss/articles/CBMiSkFVX3lxTE1uVVI0SURvYVBrdktvbFM4bmhMa0x1WENwX0NmcmZCVHUwY0RBNTVhRDA2VzFNYzZiSGtIT1VfTHZKc1hJWDRYSTNn?oc=5",
+    "source": "코인리더스",
+    "publishedAt": "2026-11-19T10:35:00.000Z"
+   },
+   {
+    "title": "[코인 예측] 비트코인(BTC) 6만 7,500달러 확률 45%…월러 50bp 발언에 12%p 하락",
+    "link": "https://news.google.com/rss/articles/CBMiSkFVX3lxTFBFbVRpWXpQWXBLcV8xS3dDZ1l3Zkw5WkNaYU9PQzRXUlZMaTBMTklxNzRiRkZFNVYtRUYtQ3VQQkd4d2kzN3FLNGd3?oc=5",
+    "source": "코인리더스",
+    "publishedAt": "2026-11-19T10:02:52.000Z"
+   },
+   {
+    "title": "4대 거래소 비트코인 김프 평균 '1.91%'",
+    "link": "https://news.google.com/rss/articles/CBMickFVX3lxTE9ybE5Md2tVVWJ1aUp0V2xEazVyYUMzc0FoajBaVWcyMDVoQWZWZloxMUJkMkhpUmo4NmZJc1p2VTJRNGdKcHdlME1XOFNoV0FQVmRuNnZPeWtrMkJoWFk3LWJ4a0VHWWRZTGdzYXBOaFhoQQ?oc=5",
+    "source": "디지털애셋",
+    "publishedAt": "2026-11-19T10:00:00.000Z"
+   },
+   {
     "title": "비트코인 28% 폭락 뒤 대반등 오나?…앤트로픽 IPO 앞두고 스페이스X 상장 당시 재조명",
     "link": "https://news.google.com/rss/articles/CBMiSkFVX3lxTE4yQnVURmhrdmt6QVd2c3dzYjlXeHRxT0JneXhmREhRamtETkJ5XzRZMkg5bDhEQ3FUSzRDM0JrTXdvSTFfb1htb2FB?oc=5",
     "source": "코인리더스",
@@ -603,12 +657,6 @@
     "publishedAt": "2026-11-19T04:26:33.000Z"
    },
    {
-    "title": "코인셰어스 CEO, AI로 비트코인 하락 설명…AI주도 하락",
-    "link": "https://news.google.com/rss/articles/CBMiakFVX3lxTE81aHkwYkdqOXZjT0dZSGRMVjBTTmE3RlR2X0VNNUtRcXVna19yYUgxVDYzWGRnTVdqRVlrQUhmOE9NSjJKaFRrU0IycWJsWXFobkw4Z1ZLZDlzb0MwNVZoMUlfcDdnLUo3cVE?oc=5",
-    "source": "BeInCrypto",
-    "publishedAt": "2026-11-19T04:10:35.000Z"
-   },
-   {
     "title": "아이리스(IRYS) 37.34% 급등…업비트 하락 우위 속 알트 거래대금 쏠렸다",
     "link": "https://news.google.com/rss/articles/CBMiSkFVX3lxTE5NTnEtTUZGZ3g0cjNvRU9NT1VMOG5iSWQtcDlDeGhhWklKMkV0dUxmSE1udVNRYnFVUmlOVkM4QWhPU1lLS3ZtWThR?oc=5",
     "source": "코인리더스",
@@ -687,6 +735,12 @@
     "publishedAt": "2026-11-19T02:20:13.000Z"
    },
    {
+    "title": "코인셰어스 CEO, AI로 비트코인 하락 설명…AI주도 하락",
+    "link": "https://news.google.com/rss/articles/CBMiakFVX3lxTE81aHkwYkdqOXZjT0dZSGRMVjBTTmE3RlR2X0VNNUtRcXVna19yYUgxVDYzWGRnTVdqRVlrQUhmOE9NSjJKaFRrU0IycWJsWXFobkw4Z1ZLZDlzb0MwNVZoMUlfcDdnLUo3cVE?oc=5",
+    "source": "BeInCrypto",
+    "publishedAt": "2026-11-19T02:10:00.000Z"
+   },
+   {
     "title": "노보그라츠 \"비트코인(BTC), 올해 9만 달러 복귀 어렵다\"",
     "link": "https://news.google.com/rss/articles/CBMiSkFVX3lxTE5SVXZxaTd0Q3VncXlVc08zRFBrOVl2azFmOWw4b3ZaQjVkZVdNN3lXNUNHbkNzOWl5Skh6X2FITTkybHFkV2RhRTZ3?oc=5",
     "source": "코인리더스",
@@ -709,6 +763,12 @@
     "link": "https://news.google.com/rss/articles/CBMiaEFVX3lxTE1pbS1sejhqeHdYclI1MkxwMmdPd0ZJVmVWd1BnMC00RnNmVm5PMzlrOVV0bmJFa3ZsOUo1ZVl3MDlOTTg1OEZuVGRnYmowRnFUTldrMEg2dWt1X1pOdThSY3ZmNWZ0NUlp?oc=5",
     "source": "데일리팝",
     "publishedAt": "2026-11-19T01:48:38.000Z"
+   },
+   {
+    "title": "[코인 브리핑] 시총 상위 암호화폐 시황",
+    "link": "https://news.google.com/rss/articles/CBMibEFVX3lxTE5kNmlkUy1QSlpuZkU1M2NoeERfbWFFbmhZaEpqRUJLNVQ5M2UwM1ZKSVIyclQ4T3lNblAyTVI5U0ZoaTZNMktwVDlnaVUtcHZxX1hYYVM3LXRnMnJZVDVXQl9lMkxrVnpEa1JyTQ?oc=5",
+    "source": "센머니",
+    "publishedAt": "2026-11-19T01:47:20.000Z"
    },
    {
     "title": "업비트 ‘코인모으기’ 누적 체결액 1조원 돌파…고객 감사 이벤트",
@@ -853,6 +913,12 @@
     "link": "https://news.google.com/rss/articles/CBMiXEFVX3lxTE4yM2dQX2x0Sy1qbWkzZkdVUWhmOFBqOXVPeDhGYzZxLXZsMUkyRHg4TktfWTBtR1RrbW54aDFEajZDUl9XaFBPdVhkTF95NHZvRmFucTQwazF1eUVQ?oc=5",
     "source": "뉴스핌",
     "publishedAt": "2026-11-18T23:53:00.000Z"
+   },
+   {
+    "title": "1조원 돌파한 업비트 ‘코인모으기’, 고객 감사 이벤트",
+    "link": "https://news.google.com/rss/articles/CBMibEFVX3lxTE9obnA0ZEVQMFZUQXNTTWZYM2J2TnRvcEtTMFdMaDc4RXFrRVJVUWNXNGJrQUFacnRsWVBqRFppVUY4WUJlRHhpV2pwNGFIYzFKMmxMTkM3d2kwaUNoRVJrQ2tXY09acFhrVC12aA?oc=5",
+    "source": "뉴스웰",
+    "publishedAt": "2026-11-18T23:51:48.000Z"
    },
    {
     "title": "아서 헤이즈 \"앤트로픽 IPO가 비트코인·위험자산 향방 가를 시험대\"",
@@ -1211,6 +1277,54 @@
   ],
   "이더리움": [
    {
+    "title": "63억달러 해킹에도 ‘이상 무’…바이낸스, 자금 유출 진정·거래량 1위 수성",
+    "link": "https://news.google.com/rss/articles/CBMiWEFVX3lxTE1VbnVpY3gzc2lvV1M3VmxpczFJM3BRTFlBMldhbGoxOXB1N1BCSnc2YjJyTU8zQTNWcEE5VG1WYW5abHA2UWRGTFlYVmdKSEs3bnNSVFBpcWM?oc=5",
+    "source": "블록미디어",
+    "publishedAt": "2026-11-19T11:30:53.000Z"
+   },
+   {
+    "title": "XRP, 2025년 10월 대비 68% 밀렸다…반등 분기점 어디?",
+    "link": "https://news.google.com/rss/articles/CBMic0FVX3lxTE95TDg5NjM3a1Vqdzk1Vl9JbGJfYW1ucXRqMTFHUXBka29UMGFCVlh0YUZSdDRZMVpCR1RSekRaaWxKYVYxNV8tOThJRmNMNkJYSy1EcDRGbTZzaW5FRjdzZ0U1Tno0eFRjVC1ueWdlZ3UtclE?oc=5",
+    "source": "디지털투데이",
+    "publishedAt": "2026-11-19T11:30:00.000Z"
+   },
+   {
+    "title": "비트코인·이더리움 등 암호화폐, 5년 내 양자컴퓨터 위협 앞에 설까 (BTC, IOSCO, 양자컴퓨터, 암호화)",
+    "link": "https://news.google.com/rss/articles/CBMibkFVX3lxTE5ra1ZaSnJHd21sNUQybDN4QmM3TUk3RDdJMzBjRzc4dEhYUnh5Y1h1VlQ5eDgzVWxlazhZNnZRck9fRC1JTkF5NzN5V1pLQzVZMDFZUkJPVjNGYTlSMlp3Q3hickUxbE1VYVlnT2Vn?oc=5",
+    "source": "민심뉴스",
+    "publishedAt": "2026-11-19T11:21:40.000Z"
+   },
+   {
+    "title": "[코인 시황] 비트코인 6만3000달러대 약세…금 대비 상대적 강세에도 AI 자금난·해킹 악재",
+    "link": "https://news.google.com/rss/articles/CBMiXEFVX3lxTE9hNjBxbjV6RENCN1ZxWXUtVWtiOHh4T0EwVEd3WjVmM2haZi1BanFHRmd0dnFUc0ZYcHdkVnQ3Vjk4Yl90ZEFfcjVqY0RtV1RCeG9TeTUyaUxQdjM3?oc=5",
+    "source": "뉴스핌",
+    "publishedAt": "2026-11-19T11:14:00.000Z"
+   },
+   {
+    "title": "아이리스(IRYS) 28.22% 급등…업비트 비트코인·리플·이더리움은 1% 안팎 상승",
+    "link": "https://news.google.com/rss/articles/CBMiSkFVX3lxTE1HazRNbExWdEowYmc4dkFsM3dlTVZEV3g5WUF1NWlmUFN0dFhicHYyZjlveGoyVmhiRkhHeXNnTEx3d3JGSG9LZUdn?oc=5",
+    "source": "코인리더스",
+    "publishedAt": "2026-11-19T11:01:44.000Z"
+   },
+   {
+    "title": "비탈릭 부테린 \"코인도 부동산처럼 여겨져야…장투 문화 필요\"",
+    "link": "https://news.google.com/rss/articles/CBMic0FVX3lxTE5aMnEwbUotY043S1RpcXoxY0pXYkp4ZTNmQldJeEVVZ1dac0d3R0VIazhiX2FLcmloaEE1X0UxTGFheHZhLXN2YjlMd0loMTR1YTNtMk1WZjFicVhod25kalRkbGFBWHp0VWRwR3R4LTlqU3M?oc=5",
+    "source": "디지털투데이",
+    "publishedAt": "2026-11-19T11:00:00.000Z"
+   },
+   {
+    "title": "파라택시스이더리움, 10억원 규모 자사주 취득 신탁계약 체결 결정",
+    "link": "https://news.google.com/rss/articles/CBMiVkFVX3lxTFA1eU1nOTdRblJXd3NBUTR5d0RSVXgtNm1nY05hdmNxTGlZOHlkT3V1LTFMQzFLNUZmR1V5SmE1MmFYRlNQZHhLN1JDOVdTVm9qTnBJdHR3?oc=5",
+    "source": "지디넷코리아",
+    "publishedAt": "2026-11-19T10:08:31.000Z"
+   },
+   {
+    "title": "이더리움, 벨로드롬과 에어로 덱스 통합 완료…새로운 AERO 계약으로 대체 (AERO, VELODROME, AERODROME, BINANCE)",
+    "link": "https://news.google.com/rss/articles/CBMibkFVX3lxTE9pVFRHMzBHeXJGT2xFdmVIVi03LW9BbUc1WjZuMmZNQnR5M2NLTVowcS1UVk1GQWxod2JUSDE1My0wdXJPbE5ZekFNLW90QlBSM2dwLVFGaWQ4ODVWa1RpRjdpbUlKdkRIV0xVaTlR?oc=5",
+    "source": "민심뉴스",
+    "publishedAt": "2026-11-19T09:51:00.000Z"
+   },
+   {
     "title": "1인치 투자 펀드, 1년 만에 이더리움 8,977.52개 이체",
     "link": "https://news.google.com/rss/articles/CBMiWEFVX3lxTE84c1lUam1jRF9lNGdwZEs0X3NZNjFOTW0tVkZ3OE8zWW44eTByZklGUmdsLVEwc29HWjNsbTFIdWlIRFlaYnlRRHBOQTdBeVVlamdEYk02Rk3SAV5BVV95cUxPV3pmckViSG5HQkpDc1Y2b01JNWt0aUh1SVNUUWFTU2QtbGd0Q2pvWnpsRXZ3VlFwLXdVWXRjR1duNTF0ZzEtSmdTa29xYklTNXl3ZWFxX2x1S0dBTmp3?oc=5",
     "source": "토큰포스트",
@@ -1499,12 +1613,6 @@
     "publishedAt": "2026-11-19T04:01:42.000Z"
    },
    {
-    "title": "유럽 최대 암호화폐 자산운용사, 이더리움 전량 매도",
-    "link": "https://news.google.com/rss/articles/CBMie0FVX3lxTE9SbGZkLVZBVEFGa2ZIOTlqRmFFZzhIc2c0MER1NXJiQjZ1UUo1c0RYOWp4RExkaG9yUzl2S0hFalpzRUtxamNKWlJEUEdYbVdrVkdyVjcxZ1UtUThUbndHWFhDRG9PNXpubmNlTWVhbG1DdUN3aDhkT1lTTQ?oc=5",
-    "source": "BeInCrypto",
-    "publishedAt": "2026-11-19T04:00:00.000Z"
-   },
-   {
     "title": "[로빈후드 온체인] 테이크투 인터랙티브 거래대금이 하루 만에 8.8배로 뛰어...래핑 이더 지갑 666개 증가",
     "link": "https://news.google.com/rss/articles/CBMiW0FVX3lxTFBGVHo0VUw0TkN3MG1SZVpOQW1CRUxBd2lpRTBNbVNtX190ZXRWNl80aExvSXVZd2hIRGdMSnFpOHlsMk00RFY3OXItSVJOaWhscE8wVEVGS3UzSUHSAWBBVV95cUxPZUtEcnpLV09UTVkyXzFrV09sZFdKVmp2a1BhcjRRSTFIQ292MlEwNElHNjdxNFFBZllWZVNmUWxEc2VOR2ZsVllOTUd0MHJWOVRZbUV3MkxnWk9adXBDb1U?oc=5",
     "source": "토큰포스트",
@@ -1569,6 +1677,12 @@
     "link": "https://news.google.com/rss/articles/CBMiWkFVX3lxTFB3TG51Y3RsbTAwVDR3SWtkMDNvekFhTHJfcHhnNVhJVWszd2xNbnNwNkNEY0F6ckFOdnB3LU93R3dHQXdwWTZrLW1pMjhlT2EzWVV5dVJuNFcxZw?oc=5",
     "source": "파이낸셜뉴스",
     "publishedAt": "2026-11-19T01:58:44.000Z"
+   },
+   {
+    "title": "[코인 브리핑] 시총 상위 암호화폐 시황",
+    "link": "https://news.google.com/rss/articles/CBMibEFVX3lxTE5kNmlkUy1QSlpuZkU1M2NoeERfbWFFbmhZaEpqRUJLNVQ5M2UwM1ZKSVIyclQ4T3lNblAyTVI5U0ZoaTZNMktwVDlnaVUtcHZxX1hYYVM3LXRnMnJZVDVXQl9lMkxrVnpEa1JyTQ?oc=5",
+    "source": "센머니",
+    "publishedAt": "2026-11-19T01:47:20.000Z"
    },
    {
     "title": "이더리움 재단 관련 지갑, 214만 달러 상당 이더리움 매도… 이유는? (ETH, 이더리움 재단, CoWSwap, Sky Protocol)",
@@ -1650,8 +1764,8 @@
    },
    {
     "title": "톰리 \"월가 가상자산 투자비중 사실상 제로…시장 초기성장단게\"",
-    "link": "https://news.google.com/rss/articles/CBMigAFBVV95cUxNaDl4SEtBZnJqdnBNZUFZUDA0czAzQWhCekFLMXQwcTJjdE91cDY1WlZqZHRDQzhPajhXWTNmZU1GeHU4NUVHRTJkWWp4cVk1b0hoVkFwZVQydWdBdl9CQ1BIaHJXN0F4NFAxZVdtN1FBQnoxeU9GUERGUVEtYnpuTQ?oc=5",
-    "source": "이데일리",
+    "link": "https://news.google.com/rss/articles/CBMic0FVX3lxTE9tdzF4YXhjLTVqVlVGQks1WjJFNlRuaDBqa01fVmF0WFpVazJwRkVfMnRLZDJtc1lXRy1aWjZzLXRrcEVmQl9sYU5kN0VZc2dlakJ4MGcta1ZXOHdXODQtY3FwTDRCSUZLSGdlMUxGZGk2UGs?oc=5",
+    "source": "마켓인",
     "publishedAt": "2026-11-18T22:41:31.000Z"
    },
    {
@@ -1683,6 +1797,12 @@
     "link": "https://news.google.com/rss/articles/CBMiSkFVX3lxTE1KcEZDanlUcHZWVGxpdUFOV1oyanRIUWVoSXNrMXVha29hREhlM1BCeG1YdmI0enVwdjludkVhelc3eG0tUDhsTHhR?oc=5",
     "source": "코인리더스",
     "publishedAt": "2026-11-18T17:00:00.000Z"
+   },
+   {
+    "title": "유럽 최대 암호화폐 자산운용사, 이더리움 전량 매도",
+    "link": "https://news.google.com/rss/articles/CBMie0FVX3lxTE9SbGZkLVZBVEFGa2ZIOTlqRmFFZzhIc2c0MER1NXJiQjZ1UUo1c0RYOWp4RExkaG9yUzl2S0hFalpzRUtxamNKWlJEUEdYbVdrVkdyVjcxZ1UtUThUbndHWFhDRG9PNXpubmNlTWVhbG1DdUN3aDhkT1lTTQ?oc=5",
+    "source": "BeInCrypto",
+    "publishedAt": "2026-11-18T16:08:59.000Z"
    },
    {
     "title": "[자정 시세브리핑] 암호화폐 시장 하락세… 비트코인 63,695달러, 이더리움 1,773달러",
