@@ -125,7 +125,7 @@
   <p class="help" id="kwHelp"></p>
 
   <h3>GitHub 연결 (기기마다 한 번)</h3>
-  <div class="field"><label>저장소 (owner/repo)</label><input id="repoInput" placeholder="storytold/news-feed"></div>
+  <div class="field"><label>저장소 (owner/repo)</label><input id="repoInput" placeholder="grandaise/news-feed"></div>
   <div class="field"><label>Personal Access Token</label><input id="tokenInput" type="password" placeholder="github_pat_..."></div>
   <p class="help">
     키워드 추가·삭제와 "지금 수집"에 필요합니다. 토큰은 이 브라우저에만 저장됩니다.<br>
@@ -147,7 +147,7 @@ const store = {
   set(k, v) { try { v == null ? localStorage.removeItem(k) : localStorage.setItem(k, v); } catch {} },
 };
 
-// 저장소 추정: storytold.github.io/news-feed → storytold/news-feed
+// 저장소 추정: storytold.github.io/news-feed → grandaise/news-feed
 function defaultRepo() {
   const h = location.hostname;
   if (h.endsWith(".github.io")) {
