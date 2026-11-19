@@ -22,7 +22,7 @@ node scripts/fetch.mjs
 ```
 
 ## 📱 매일 아침 핸드폰 알림 (ntfy)
-`.github/workflows/morning-notify.yml` 이 매일 한국시간 07:30에 최신 뉴스를 수집하고
+`.github/workflows/morning-notify.yml` 이 매일 한국시간 07:30에 최신 뉴스를 수집하고 (06:37에 미리 시작해 07:30까지 대기)
 최근 24시간 기사 요약을 [ntfy](https://ntfy.sh) 푸시 알림으로 보냅니다.
 
 1. 핸드폰에 **ntfy** 앱 설치 (iOS App Store / Google Play)

@@ -2,8 +2,9 @@ name: 아침 알림
 
 on:
   schedule:
-    # 매일 한국시간 07:30 (UTC 22:30). GitHub 사정에 따라 5~30분 늦어질 수 있음
-    - cron: "30 22 * * *"
+    # GitHub 예약 실행은 수십 분 늦게 시작되는 일이 잦아서
+    # 한국시간 06:37(UTC 21:37)에 미리 시작해 두고 07:30까지 기다렸다가 보낸다
+    - cron: "37 21 * * *"
   workflow_dispatch:
 
 permissions:
@@ -21,6 +22,17 @@ jobs:
       - uses: actions/setup-node@v5
         with:
           node-version: 24
+      - name: 한국시간 07:30까지 대기
+        if: github.event_name == 'schedule'
+        run: |
+          target=$(TZ=Asia/Seoul date -d "today 07:30" +%s)
+          wait=$(( target - $(date +%s) ))
+          if [ "$wait" -gt 0 ]; then
+            echo "$wait초 대기"
+            sleep "$wait"
+          else
+            echo "이미 07:30이 지나 바로 보냅니다"
+          fi
       - name: 최신 뉴스 수집
         run: node scripts/fetch.mjs
       - name: 변경 사항 커밋
