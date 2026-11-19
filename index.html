@@ -1,0 +1,414 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cut">
+<meta name="theme-color" content="#1f6feb">
+<title>내 뉴스 피드</title>
+<style>
+  :root {
+    --bg: #f6f7f9; --card: #fff; --text: #1b1f24; --muted: #6b7280;
+    --line: #e5e7eb; --accent: #1f6feb; --accent-soft: #e8f0fe; --new: #e5484d;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0f1115; --card: #181b21; --text: #e6e8eb; --muted: #9aa0a8;
+      --line: #2a2f37; --accent: #4c8dff; --accent-soft: #1c2840; --new: #ff6369;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--text);
+    font: 15px/1.5 -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Pretendard", "Noto Sans KR", sans-serif;
+    -webkit-text-size-adjust: 100%;
+  }
+  header {
+    position: sticky; top: 0; z-index: 10; background: var(--bg);
+    border-bottom: 1px solid var(--line); padding: 12px 16px 0;
+    padding-top: max(12px, env(safe-area-inset-top));
+  }
+  .top { display: flex; align-items: center; gap: 8px; max-width: 860px; margin: 0 auto; }
+  h1 { font-size: 18px; margin: 0; flex: 1; }
+  .updated { font-size: 12px; color: var(--muted); }
+  button {
+    font: inherit; border: 1px solid var(--line); background: var(--card); color: var(--text);
+    border-radius: 8px; padding: 6px 10px; cursor: pointer;
+  }
+  button:hover { border-color: var(--accent); }
+  button.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .tabs {
+    display: flex; gap: 6px; overflow-x: auto; max-width: 860px; margin: 10px auto 0;
+    padding-bottom: 10px; scrollbar-width: none;
+  }
+  .tabs::-webkit-scrollbar { display: none; }
+  .tab {
+    flex: none; border-radius: 999px; padding: 6px 14px; white-space: nowrap;
+  }
+  .tab.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .tab .cnt { font-size: 12px; opacity: .75; margin-left: 4px; }
+  main { max-width: 860px; margin: 0 auto; padding: 12px 16px 60px; }
+  .filters { display: flex; gap: 6px; align-items: center; margin-bottom: 10px; flex-wrap: wrap; }
+  .filters button { font-size: 13px; padding: 4px 10px; }
+  .filters button.on { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); }
+  .filters input {
+    flex: 1; min-width: 140px; font: inherit; font-size: 14px; padding: 5px 10px;
+    border: 1px solid var(--line); border-radius: 8px; background: var(--card); color: var(--text);
+  }
+  .day { font-size: 13px; font-weight: 600; color: var(--muted); margin: 18px 4px 6px; }
+  ul.list { list-style: none; margin: 0; padding: 0; background: var(--card); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+  ul.list li { border-top: 1px solid var(--line); }
+  ul.list li:first-child { border-top: 0; }
+  ul.list a { display: block; padding: 12px 14px; color: inherit; text-decoration: none; }
+  ul.list a:hover { background: var(--accent-soft); }
+  ul.list a:visited .t { color: var(--muted); }
+  .t { font-weight: 500; }
+  .meta { font-size: 12px; color: var(--muted); margin-top: 3px; display: flex; gap: 8px; flex-wrap: wrap; }
+  .kw { color: var(--accent); }
+  .badge { color: var(--new); font-weight: 700; font-size: 11px; margin-right: 6px; }
+  .empty { text-align: center; color: var(--muted); padding: 40px 0; }
+  dialog {
+    border: 1px solid var(--line); border-radius: 14px; background: var(--card); color: var(--text);
+    width: min(520px, calc(100vw - 32px)); padding: 20px;
+  }
+  dialog::backdrop { background: rgba(0,0,0,.4); }
+  dialog h2 { margin: 0 0 12px; font-size: 17px; }
+  dialog h3 { font-size: 14px; margin: 18px 0 8px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .chip { display: inline-flex; align-items: center; gap: 4px; background: var(--accent-soft); border-radius: 999px; padding: 4px 6px 4px 12px; }
+  .chip button { border: 0; background: transparent; padding: 0 6px; font-size: 16px; line-height: 1; color: var(--muted); }
+  .row { display: flex; gap: 6px; margin-top: 8px; }
+  .row input, .field input {
+    flex: 1; width: 100%; font: inherit; padding: 7px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--bg); color: var(--text);
+  }
+  .field { margin-top: 8px; }
+  .field label { font-size: 12px; color: var(--muted); display: block; margin-bottom: 3px; }
+  .help { font-size: 12px; color: var(--muted); margin-top: 6px; }
+  .help a { color: var(--accent); }
+  .actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 18px; }
+  #toast {
+    position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%);
+    background: var(--text); color: var(--bg); padding: 10px 16px; border-radius: 10px;
+    font-size: 14px; opacity: 0; transition: opacity .2s; pointer-events: none; max-width: calc(100vw - 32px);
+  }
+  #toast.show { opacity: .95; }
+</style>
+</head>
+<body>
+<header>
+  <div class="top">
+    <h1>📰 내 뉴스 피드</h1>
+    <span class="updated" id="updated"></span>
+    <button id="reload" title="새로고침">↻</button>
+    <button id="openSettings" title="키워드 관리">⚙︎</button>
+  </div>
+  <nav class="tabs" id="tabs"></nav>
+</header>
+
+<main>
+  <div class="filters">
+    <button data-range="1" class="on">오늘</button>
+    <button data-range="3">3일</button>
+    <button data-range="7">7일</button>
+    <input id="search" type="search" placeholder="제목·언론사 검색">
+  </div>
+  <div id="list"></div>
+</main>
+
+<dialog id="settings">
+  <h2>키워드 관리</h2>
+  <div class="chips" id="kwChips"></div>
+  <form class="row" id="addForm">
+    <input id="kwInput" placeholder="새 키워드 (예: 현대리바트)" autocomplete="off">
+    <button class="primary" type="submit">추가</button>
+  </form>
+  <p class="help" id="kwHelp"></p>
+
+  <h3>GitHub 연결 (기기마다 한 번)</h3>
+  <div class="field"><label>저장소 (owner/repo)</label><input id="repoInput" placeholder="storytold/news-feed"></div>
+  <div class="field"><label>Personal Access Token</label><input id="tokenInput" type="password" placeholder="github_pat_..."></div>
+  <p class="help">
+    키워드 추가·삭제와 "지금 수집"에 필요합니다. 토큰은 이 브라우저에만 저장됩니다.<br>
+    <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">Fine-grained token 만들기</a>
+    → 이 저장소만 선택 → 권한: <b>Contents</b> 읽기/쓰기, <b>Actions</b> 읽기/쓰기.
+  </p>
+  <div class="actions">
+    <button id="runNow">⚡ 지금 수집</button>
+    <button class="primary" id="closeSettings">닫기</button>
+  </div>
+</dialog>
+
+<div id="toast"></div>
+
+<script>
+const $ = (s) => document.querySelector(s);
+const store = {
+  get(k, d = null) { try { return localStorage.getItem(k) ?? d; } catch { return d; } },
+  set(k, v) { try { v == null ? localStorage.removeItem(k) : localStorage.setItem(k, v); } catch {} },
+};
+
+// 저장소 추정: storytold.github.io/news-feed → storytold/news-feed
+function defaultRepo() {
+  const h = location.hostname;
+  if (h.endsWith(".github.io")) {
+    const owner = h.split(".")[0];
+    const repo = location.pathname.split("/").filter(Boolean)[0] || `${owner}.github.io`;
+    return `${owner}/${repo}`;
+  }
+  return "";
+}
+const cfg = {
+  get repo() { return store.get("repo") || defaultRepo(); },
+  get token() { return store.get("token") || ""; },
+};
+
+const state = {
+  data: { keywords: {} },
+  keywords: [],
+  tab: store.get("tab", "__all"),
+  range: +store.get("range", "1"),
+  q: "",
+  lastVisit: +store.get("lastVisit", "0"),
+};
+
+// ---------- GitHub API ----------
+const b64encode = (s) => btoa(String.fromCharCode(...new TextEncoder().encode(s)));
+const b64decode = (s) => new TextDecoder().decode(Uint8Array.from(atob(s.replace(/\n/g, "")), (c) => c.charCodeAt(0)));
+
+async function gh(path, opts = {}) {
+  if (!cfg.repo || !cfg.token) throw new Error("설정에서 저장소와 토큰을 먼저 입력하세요.");
+  const res = await fetch(`https://api.github.com/repos/${cfg.repo}${path}`, {
+    ...opts,
+    headers: {
+      Authorization: `Bearer ${cfg.token}`,
+      Accept: "application/vnd.github+json",
+      "X-GitHub-Api-Version": "2022-11-28",
+      ...(opts.headers || {}),
+    },
+  });
+  if (!res.ok) {
+    const msg = (await res.json().catch(() => ({}))).message || res.statusText;
+    throw new Error(`GitHub ${res.status}: ${msg}`);
+  }
+  return res.status === 204 ? null : res.json();
+}
+
+async function loadJson(path) {
+  // 토큰이 있으면 API로 (캐시 없이 최신), 없으면 Pages 파일로
+  if (cfg.token && cfg.repo) {
+    try {
+      const r = await gh(`/contents/${path}?t=${Date.now()}`);
+      return JSON.parse(b64decode(r.content));
+    } catch (e) { console.warn(e); }
+  }
+  const res = await fetch(`${path}?t=${Date.now()}`, { cache: "no-store" });
+  if (!res.ok) throw new Error(`${path} 불러오기 실패`);
+  return res.json();
+}
+
+async function saveKeywords(next, message) {
+  const cur = await gh(`/contents/keywords.json`);
+  await gh(`/contents/keywords.json`, {
+    method: "PUT",
+    body: JSON.stringify({
+      message,
+      content: b64encode(JSON.stringify(next, null, 2) + "\n"),
+      sha: cur.sha,
+    }),
+  });
+  state.keywords = next;
+  render(); renderChips();
+  toast("저장했습니다. 1~2분 뒤 기사가 수집됩니다.");
+  pollForUpdate();
+}
+
+async function runWorkflow() {
+  await gh(`/actions/workflows/fetch-news.yml/dispatches`, {
+    method: "POST", body: JSON.stringify({ ref: "main" }),
+  });
+  toast("수집을 시작했습니다. 1~2분 뒤 자동으로 갱신됩니다.");
+  pollForUpdate();
+}
+
+let pollTimer;
+function pollForUpdate() {
+  clearInterval(pollTimer);
+  const before = state.data.updatedAt;
+  let n = 0;
+  pollTimer = setInterval(async () => {
+    if (++n > 20) return clearInterval(pollTimer); // 최대 약 5분
+    try {
+      const d = await loadJson("data/news.json");
+      if (d.updatedAt !== before) {
+        clearInterval(pollTimer);
+        state.data = d; render(); toast("새 기사를 불러왔습니다.");
+      }
+    } catch {}
+  }, 15000);
+}
+
+// ---------- 날짜 (한국시간 기준) ----------
+const dayFmt = new Intl.DateTimeFormat("sv-SE", { timeZone: "Asia/Seoul" });
+const timeFmt = new Intl.DateTimeFormat("ko-KR", { timeZone: "Asia/Seoul", hour: "2-digit", minute: "2-digit", hour12: false });
+const kstDay = (d) => dayFmt.format(new Date(d));
+function dayLabel(day) {
+  const today = kstDay(Date.now());
+  const yest = kstDay(Date.now() - 86400000);
+  if (day === today) return "오늘";
+  if (day === yest) return "어제";
+  const [, m, dd] = day.split("-");
+  const wd = "일월화수목금토"[new Date(day + "T00:00:00+09:00").getDay()];
+  return `${+m}월 ${+dd}일 (${wd})`;
+}
+function rel(iso) {
+  const min = Math.round((Date.now() - Date.parse(iso)) / 60000);
+  if (min < 1) return "방금";
+  if (min < 60) return `${min}분 전`;
+  if (min < 60 * 24) return `${Math.floor(min / 60)}시간 전`;
+  return timeFmt.format(new Date(iso));
+}
+
+// ---------- 렌더링 ----------
+const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+
+function itemsFor(tab) {
+  const minDay = kstDay(Date.now() - (state.range - 1) * 86400000);
+  const kws = tab === "__all" ? state.keywords : [tab];
+  const seen = new Set();
+  const out = [];
+  for (const kw of kws) {
+    for (const it of state.data.keywords?.[kw] || []) {
+      if (kstDay(it.publishedAt) < minDay) continue;
+      if (seen.has(it.link)) continue;
+      seen.add(it.link);
+      out.push({ ...it, kw });
+    }
+  }
+  const q = state.q.trim().toLowerCase();
+  return out
+    .filter((it) => !q || (it.title + " " + it.source).toLowerCase().includes(q))
+    .sort((a, b) => b.publishedAt.localeCompare(a.publishedAt));
+}
+
+function render() {
+  if (state.tab !== "__all" && !state.keywords.includes(state.tab)) state.tab = "__all";
+
+  // 탭
+  const tabs = [["__all", "전체"], ...state.keywords.map((k) => [k, k])];
+  $("#tabs").innerHTML = tabs.map(([id, label]) =>
+    `<button class="tab${id === state.tab ? " active" : ""}" data-tab="${esc(id)}">${esc(label)}<span class="cnt">${itemsFor(id).length}</span></button>`
+  ).join("");
+
+  // 필터
+  document.querySelectorAll("[data-range]").forEach((b) => b.classList.toggle("on", +b.dataset.range === state.range));
+
+  // 업데이트 시각
+  const u = state.data.updatedAt;
+  $("#updated").textContent = u ? `${dayLabel(kstDay(u))} ${timeFmt.format(new Date(u))} 업데이트` : "";
+
+  // 목록
+  const items = itemsFor(state.tab);
+  if (!items.length) {
+    const pending = state.tab !== "__all" && !state.data.keywords?.[state.tab];
+    $("#list").innerHTML = `<div class="empty">${
+      !state.keywords.length ? "⚙︎ 버튼을 눌러 키워드를 추가하세요."
+      : pending ? "아직 수집되지 않은 키워드입니다.<br>잠시 후 자동으로 표시됩니다."
+      : state.range === 1 ? "오늘 올라온 기사가 없습니다.<br>3일·7일 필터를 눌러보세요."
+      : "기사가 없습니다."
+    }</div>`;
+    return;
+  }
+  const groups = new Map();
+  for (const it of items) {
+    const d = kstDay(it.publishedAt);
+    if (!groups.has(d)) groups.set(d, []);
+    groups.get(d).push(it);
+  }
+  const showKw = state.tab === "__all";
+  $("#list").innerHTML = [...groups].map(([day, list]) => `
+    <div class="day">${dayLabel(day)} · ${list.length}건</div>
+    <ul class="list">${list.map((it) => `
+      <li><a href="${esc(it.link)}" target="_blank" rel="noopener">
+        <div class="t">${state.lastVisit && Date.parse(it.publishedAt) > state.lastVisit ? '<span class="badge">NEW</span>' : ""}${esc(it.title)}</div>
+        <div class="meta">${showKw ? `<span class="kw">#${esc(it.kw)}</span>` : ""}<span>${esc(it.source || "")}</span><span>${rel(it.publishedAt)}</span></div>
+      </a></li>`).join("")}
+    </ul>`).join("");
+}
+
+function renderChips() {
+  $("#kwChips").innerHTML = state.keywords.map((k) =>
+    `<span class="chip">${esc(k)}<button data-del="${esc(k)}" title="삭제">×</button></span>`
+  ).join("") || '<span class="help">등록된 키워드가 없습니다.</span>';
+  $("#kwHelp").textContent = cfg.token ? "" : "키워드를 바꾸려면 아래 GitHub 연결을 먼저 설정하세요.";
+}
+
+let toastTimer;
+function toast(msg) {
+  const t = $("#toast");
+  t.textContent = msg; t.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove("show"), 3500);
+}
+
+// ---------- 이벤트 ----------
+$("#tabs").addEventListener("click", (e) => {
+  const b = e.target.closest("[data-tab]");
+  if (!b) return;
+  state.tab = b.dataset.tab; store.set("tab", state.tab);
+  render(); window.scrollTo({ top: 0 });
+});
+document.querySelectorAll("[data-range]").forEach((b) => b.addEventListener("click", () => {
+  state.range = +b.dataset.range; store.set("range", state.range); render();
+}));
+$("#search").addEventListener("input", (e) => { state.q = e.target.value; render(); });
+$("#reload").addEventListener("click", () => load(true));
+
+$("#openSettings").addEventListener("click", () => {
+  $("#repoInput").value = cfg.repo;
+  $("#tokenInput").value = cfg.token;
+  renderChips();
+  $("#settings").showModal();
+});
+$("#closeSettings").addEventListener("click", () => $("#settings").close());
+$("#repoInput").addEventListener("change", (e) => store.set("repo", e.target.value.trim() || null));
+$("#tokenInput").addEventListener("change", (e) => { store.set("token", e.target.value.trim() || null); renderChips(); });
+
+$("#addForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const kw = $("#kwInput").value.trim();
+  if (!kw) return;
+  if (state.keywords.includes(kw)) return toast("이미 등록된 키워드입니다.");
+  try {
+    await saveKeywords([...state.keywords, kw], `키워드 추가: ${kw}`);
+    $("#kwInput").value = "";
+  } catch (err) { toast(err.message); }
+});
+$("#kwChips").addEventListener("click", async (e) => {
+  const kw = e.target.closest("[data-del]")?.dataset.del;
+  if (!kw || !confirm(`'${kw}' 키워드를 삭제할까요?`)) return;
+  try { await saveKeywords(state.keywords.filter((k) => k !== kw), `키워드 삭제: ${kw}`); }
+  catch (err) { toast(err.message); }
+});
+$("#runNow").addEventListener("click", async () => {
+  try { await runWorkflow(); } catch (err) { toast(err.message); }
+});
+
+async function load(manual = false) {
+  try {
+    const [kws, data] = await Promise.all([loadJson("keywords.json"), loadJson("data/news.json").catch(() => ({ keywords: {} }))]);
+    state.keywords = kws; state.data = data;
+    render();
+    if (manual) toast("최신 목록을 불러왔습니다.");
+  } catch (err) {
+    $("#list").innerHTML = `<div class="empty">불러오기 실패: ${esc(err.message)}</div>`;
+  }
+}
+
+load();
+// 다음 방문 때 NEW 표시 기준이 되도록 이번 방문 시각 기록
+window.addEventListener("pagehide", () => store.set("lastVisit", Date.now()));
+// 탭을 다시 열었을 때 자동 갱신
+document.addEventListener("visibilitychange", () => { if (!document.hidden) load(); });
+</script>
+</body>
+</html>
