@@ -377,3 +377,50 @@ dialog .field { margin-top: 10px; }
 .hl-w { display: grid; gap: 4px; justify-items: end; }
 .hl-w .gauge { width: 100%; height: 4px; }
 .hl-total { font-weight: 600; }
+
+/* ===== 메일 ===== */
+.mail-bar { display: flex; gap: 10px; align-items: flex-start; flex-wrap: wrap; }
+.mail-bar .tabs { flex: 1; min-width: 0; }
+.mail-tools { display: flex; gap: 8px; align-items: center; }
+.mail-tools input { width: 240px; background: var(--card); box-shadow: var(--shadow); }
+a.tab { text-decoration: none; color: var(--text); border-radius: 980px; display: inline-flex; align-items: center; }
+.tab .sw { margin-right: 6px; width: 8px; height: 8px; }
+.mail { display: grid; gap: 16px; grid-template-columns: minmax(0, 1fr); }
+.mail > .card { margin: 0; }
+.mail-list { padding: 8px 0; overflow: hidden; }
+.mail-reader { min-height: 420px; }
+@media (min-width: 1001px) {
+  .mail { grid-template-columns: minmax(320px, 400px) minmax(0, 1fr); align-items: start; }
+  .mail-list { position: sticky; top: 76px; max-height: calc(100vh - 100px); overflow-y: auto; }
+  .mail-reader .back { display: none; }
+}
+@media (max-width: 1000px) {
+  .mail-reader { display: none; }
+  .mail.reading .mail-list { display: none; }
+  .mail.reading .mail-reader { display: block; }
+  .mail-tools { width: 100%; }
+  .mail-tools input { flex: 1; width: auto; }
+}
+.mail-note { margin: 6px 16px 10px; padding: 10px 12px; border-radius: 12px; background: var(--fill-2); font-size: 13px; color: var(--muted); }
+.mlist { list-style: none; margin: 0; padding: 0; }
+.mlist li { padding: 12px 20px 12px 26px; border-top: 1px solid var(--line); cursor: pointer; position: relative; transition: background .12s; }
+.mlist li:first-child { border-top: 0; }
+.mlist li:hover { background: var(--fill-2); }
+.mlist li.sel { background: var(--accent-soft); }
+.mlist li.unread::before { content: ""; position: absolute; left: 10px; top: 19px; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); }
+.mlist .m1 { display: flex; gap: 8px; align-items: baseline; }
+.mfrom { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 500; }
+.mlist li.unread .mfrom, .mlist li.unread .msubj { font-weight: 700; }
+.mdate { font-size: 12px; color: var(--faint); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.msubj { font-size: 14px; margin-top: 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.msnip { font-size: 13px; color: var(--muted); margin-top: 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.msnip .sw { width: 7px; height: 7px; margin-right: 6px; }
+.rhead { display: flex; gap: 8px; align-items: center; margin-bottom: 12px; }
+.btnish { display: inline-flex; align-items: center; text-decoration: none; color: var(--text); background: var(--fill-2); border-radius: 980px; padding: 5px 12px; font-size: 13px; }
+.rsubj { font-size: clamp(20px, 2vw, 26px); line-height: 1.3; margin: 4px 0 14px; }
+.rmeta { display: flex; gap: 12px; align-items: center; padding-bottom: 14px; border-bottom: 1px solid var(--line); margin-bottom: 14px; min-width: 0; }
+.rmeta > div:last-child { min-width: 0; overflow-wrap: anywhere; }
+.avatar { width: 40px; height: 40px; border-radius: 50%; color: #fff; display: grid; place-items: center; font-weight: 600; flex: none; }
+.ratts { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+.rframe { width: 100%; border: 0; min-height: 300px; border-radius: 12px; background: #fff; display: block; }
+.reader-empty { padding: 120px 0; }

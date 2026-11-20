@@ -552,9 +552,9 @@ function renderInvest() {
 
 // ---------- 전체 렌더 ----------
 function renderAll() {
-  const v = ["home", "news", "plan", "invest"].includes(state.view) ? state.view : "home";
+  const v = ["home", "news", "mail", "plan", "invest"].includes(state.view) ? state.view : "home";
   $$("#views button").forEach((b) => b.classList.toggle("active", b.dataset.view === v));
-  const needsPriv = v === "plan" || v === "invest";
+  const needsPriv = v === "plan" || v === "invest" || v === "mail";
   const locked = needsPriv && !state.priv;
   $$(".view").forEach((s) => s.classList.toggle("active", s.id === `view-${v}` && !locked));
   $("#needConnect").hidden = !locked;
@@ -567,7 +567,8 @@ function renderAll() {
 
   renderNews();
   renderHome();
-  if (state.priv) { renderPlan(); renderInvest(); }
+  if (state.priv) { renderPlan(); renderInvest(); renderMail(); }
+  if (v === "mail" && state.priv) loadMail();
 }
 
 function go(view) {
@@ -660,6 +661,10 @@ function openSettings({ needConnect = false } = {}) {
   $("#dataRepoInput").value = cfg.dataRepo;
   $("#tokenInput").value = cfg.token;
   $("#tokenLink").href = tokenUrl();
+  $("#gmailClientId").value = state.priv?.settings?.gmailClientId || "";
+  $("#mailKeyInput").value = store.get("mailKey") || "";
+  $("#companyMailUrl").value = state.priv?.settings?.companyMailUrl || "https://webmail.ehyundai.com";
+  $("#mailSettings").hidden = !state.priv;
   renderChips();
   if (!$("#settings").open) $("#settings").showModal();
   if (needConnect) {
@@ -928,6 +933,325 @@ $("#runNow").addEventListener("click", async () => {
   } catch (err) { toast(err.message, 6000); }
 });
 
+// ---------- 메일 ----------
+// 네이버·다음: my-data/mail 의 암호화된 목록·본문을 브라우저에서 복호화
+// Gmail: 구글 로그인(OAuth) 후 Gmail API로 직접 읽음 (어디에도 저장하지 않음)
+const PROVIDER = {
+  gmail: { label: "Gmail", color: "#ea4335", web: (it) => `https://mail.google.com/mail/u/0/#inbox/${it.threadId}` },
+  naver: { label: "네이버", color: "#03c75a", web: () => "https://mail.naver.com/" },
+  daum: { label: "다음", color: "#ff5a00", web: () => "https://mail.daum.net/" },
+  imap: { label: "메일", color: "#8e8e93", web: () => "" },
+};
+const mail = {
+  loaded: false, loading: false,
+  imap: null, imapErr: "", key: null, keySalt: null,
+  gmail: { token: null, exp: 0, items: [], email: "", err: "" },
+  filter: store.get("mailFilter", "all"), q: "", sel: null, showImages: false,
+  bodies: new Map(),
+  read: new Set(JSON.parse(store.get("mailRead", "[]") || "[]")),
+};
+const mailSettings = () => state.priv?.settings || {};
+const unb64 = (s) => Uint8Array.from(atob(s), (c) => c.charCodeAt(0));
+
+async function mailKey(saltB64) {
+  const pass = store.get("mailKey") || "";
+  if (!pass) return null;
+  if (mail.key && mail.keySalt === saltB64 + pass) return mail.key;
+  const base = await crypto.subtle.importKey("raw", new TextEncoder().encode(pass), "PBKDF2", false, ["deriveKey"]);
+  mail.key = await crypto.subtle.deriveKey({ name: "PBKDF2", salt: unb64(saltB64), iterations: 200000, hash: "SHA-256" },
+    base, { name: "AES-GCM", length: 256 }, false, ["decrypt"]);
+  mail.keySalt = saltB64 + pass;
+  return mail.key;
+}
+async function openBox(box) {
+  const pt = await crypto.subtle.decrypt({ name: "AES-GCM", iv: unb64(box.iv) }, mail.key, unb64(box.ct));
+  return JSON.parse(new TextDecoder().decode(pt));
+}
+// 큰 파일도 받을 수 있게 raw 형식으로
+const ghRaw = (repo, path) => gh(repo, `/contents/${path}?ref=main&t=${Date.now()}`, { headers: { Accept: "application/vnd.github.raw+json" } });
+
+async function loadImapMail() {
+  mail.imapErr = "";
+  try {
+    const meta = await ghRaw(cfg.dataRepo, "mail/meta.json");
+    if (!(await mailKey(meta.salt))) { mail.imap = null; mail.imapErr = "nokey"; return; }
+    mail.imap = await openBox(await ghRaw(cfg.dataRepo, "mail/index.enc.json"));
+  } catch (e) {
+    mail.imap = null;
+    mail.imapErr = e.status === 404 ? "none" : e.name === "OperationError" ? "badkey" : e.message;
+  }
+}
+
+// --- Gmail ---
+function loadGis() {
+  if (window.google?.accounts?.oauth2) return Promise.resolve();
+  return new Promise((ok, fail) => {
+    const s = document.createElement("script");
+    s.src = "https://accounts.google.com/gsi/client"; s.async = true;
+    s.onload = ok; s.onerror = () => fail(new Error("구글 로그인 스크립트를 불러오지 못했습니다."));
+    document.head.appendChild(s);
+  });
+}
+function gmailSavedToken() {
+  try {
+    const t = JSON.parse(sessionStorage.getItem("gmailToken") || "null");
+    if (t && t.exp > Date.now() + 60000) { mail.gmail.token = t.token; mail.gmail.exp = t.exp; return true; }
+  } catch {}
+  return false;
+}
+async function gmailConnect() {
+  const clientId = mailSettings().gmailClientId;
+  if (!clientId) { openSettings(); $("#mailSettings").scrollIntoView({ block: "center" }); return toast("설정에서 Gmail 클라이언트 ID를 먼저 저장하세요."); }
+  await loadGis();
+  await new Promise((ok, fail) => {
+    const client = google.accounts.oauth2.initTokenClient({
+      client_id: clientId,
+      scope: "https://www.googleapis.com/auth/gmail.readonly",
+      callback: (r) => {
+        if (r.error) return fail(new Error(`Gmail 로그인 실패: ${r.error}`));
+        mail.gmail.token = r.access_token;
+        mail.gmail.exp = Date.now() + (r.expires_in || 3600) * 1000;
+        try { sessionStorage.setItem("gmailToken", JSON.stringify({ token: mail.gmail.token, exp: mail.gmail.exp })); } catch {}
+        store.set("gmailLinked", "1");
+        ok();
+      },
+      error_callback: (e) => fail(new Error(e?.type === "popup_closed" ? "로그인 창이 닫혔습니다." : "Gmail 로그인 창을 열 수 없습니다. (팝업 차단 확인)")),
+    });
+    client.requestAccessToken({ prompt: store.get("gmailLinked") ? "" : "consent" });
+  });
+  await loadGmail();
+  renderMail();
+}
+async function gapi(path) {
+  const res = await fetch(`https://gmail.googleapis.com/gmail/v1/users/me/${path}`, { headers: { Authorization: `Bearer ${mail.gmail.token}` } });
+  if (res.status === 401) { mail.gmail.token = null; sessionStorage.removeItem("gmailToken"); throw new Error("Gmail 로그인이 만료되었습니다. 다시 연결해 주세요."); }
+  if (!res.ok) throw new Error(`Gmail ${res.status}: ${(await res.json().catch(() => ({}))).error?.message || res.statusText}`);
+  return res.json();
+}
+const header = (msg, name) => (msg.payload?.headers || []).find((h) => h.name.toLowerCase() === name.toLowerCase())?.value || "";
+function parseFrom(v) {
+  const m = v.match(/^\s*"?([^"<]*?)"?\s*<([^>]+)>\s*$/);
+  return m ? { name: m[1].trim(), addr: m[2].trim() } : { name: "", addr: v.trim() };
+}
+const decodeEntities = (s) => { const t = document.createElement("textarea"); t.innerHTML = s; return t.value; };
+
+async function loadGmail() {
+  mail.gmail.err = "";
+  if (!mail.gmail.token && !gmailSavedToken()) return;
+  try {
+    if (!mail.gmail.email) mail.gmail.email = (await gapi("profile")).emailAddress || "";
+    const list = await gapi(`messages?maxResults=30&q=${encodeURIComponent("in:inbox newer_than:7d")}`);
+    const metas = await Promise.all((list.messages || []).map((m) =>
+      gapi(`messages/${m.id}?format=metadata&metadataHeaders=From&metadataHeaders=Subject&metadataHeaders=Date`)));
+    mail.gmail.items = metas.map((m) => ({
+      id: `g-${m.id}`, gid: m.id, threadId: m.threadId, provider: "gmail", label: "Gmail", account: mail.gmail.email,
+      from: parseFrom(header(m, "From")), subject: header(m, "Subject") || "(제목 없음)",
+      date: new Date(+m.internalDate).toISOString(), snippet: decodeEntities(m.snippet || ""),
+      seen: !(m.labelIds || []).includes("UNREAD"), hasAtt: false,
+    }));
+  } catch (e) { mail.gmail.err = e.message; }
+}
+function b64urlBytes(s) {
+  const b = atob(s.replace(/-/g, "+").replace(/_/g, "/"));
+  return Uint8Array.from(b, (c) => c.charCodeAt(0));
+}
+function partText(part) {
+  const ct = (part.headers || []).find((h) => h.name.toLowerCase() === "content-type")?.value || "";
+  const charset = (ct.match(/charset="?([^";]+)"?/i) || [])[1] || "utf-8";
+  try { return new TextDecoder(charset.toLowerCase()).decode(b64urlBytes(part.body.data)); }
+  catch { return new TextDecoder().decode(b64urlBytes(part.body.data)); }
+}
+async function gmailBody(it) {
+  const m = await gapi(`messages/${it.gid}?format=full`);
+  let html = "", text = "";
+  const atts = [];
+  (function walk(p) {
+    if (!p) return;
+    if (p.filename && p.body?.attachmentId) atts.push({ name: p.filename, size: p.body.size });
+    else if (p.mimeType === "text/html" && p.body?.data && !html) html = partText(p);
+    else if (p.mimeType === "text/plain" && p.body?.data && !text) text = partText(p);
+    (p.parts || []).forEach(walk);
+  })(m.payload);
+  return { from: it.from, to: header(m, "To").split(",").map((x) => parseFrom(x).addr).filter(Boolean).slice(0, 5), subject: it.subject, date: it.date, html, text, attachments: atts };
+}
+
+// --- 공통 ---
+async function loadMail(force = false) {
+  if (!state.priv || mail.loading || (mail.loaded && !force)) return;
+  mail.loading = true; renderMail();
+  await Promise.all([loadImapMail(), loadGmail()]);
+  mail.loading = false; mail.loaded = true;
+  renderMail();
+}
+function allMail() {
+  const imap = (mail.imap?.items || []).map((it) => ({ ...it, provider: it.provider || "imap" }));
+  return [...mail.gmail.items, ...imap].sort((a, b) => b.date.localeCompare(a.date));
+}
+const isUnread = (it) => !it.seen && !mail.read.has(it.id);
+function mailDate(iso) {
+  const d = kstDay(iso);
+  if (d === today()) return timeFmt.format(new Date(iso));
+  if (d === addDays(today(), -1)) return "어제";
+  return `${+d.slice(5, 7)}/${+d.slice(8)}`;
+}
+function accountsList() {
+  const map = new Map();
+  for (const it of allMail()) {
+    const k = `${it.provider}|${it.account}`;
+    if (!map.has(k)) map.set(k, { key: k, provider: it.provider, account: it.account, label: PROVIDER[it.provider]?.label || it.label, unread: 0, n: 0 });
+    const a = map.get(k); a.n++; if (isUnread(it)) a.unread++;
+  }
+  for (const a of mail.imap?.accounts || []) {
+    const k = `${a.provider}|${a.user}`;
+    if (!map.has(k)) map.set(k, { key: k, provider: a.provider, account: a.user, label: PROVIDER[a.provider]?.label || a.label, unread: 0, n: 0 });
+  }
+  return [...map.values()];
+}
+
+function renderMail() {
+  if (!$("#mailList")) return;
+  const accts = accountsList();
+  const total = allMail().filter(isUnread).length;
+  const company = mailSettings().companyMailUrl || "https://webmail.ehyundai.com";
+  $("#mailTabs").innerHTML =
+    `<button class="tab${mail.filter === "all" ? " active" : ""}" data-mfilter="all">전체 메일${total ? `<span class="cnt">${total}</span>` : ""}</button>` +
+    accts.map((a) => `<button class="tab${mail.filter === a.key ? " active" : ""}" data-mfilter="${esc(a.key)}" title="${esc(a.account)}">
+      <span class="sw" style="background:${PROVIDER[a.provider]?.color || "#8e8e93"}"></span>${esc(a.label)}${accts.filter((x) => x.provider === a.provider).length > 1 ? ` · ${esc(a.account.split("@")[0])}` : ""}${a.unread ? `<span class="cnt">${a.unread}</span>` : ""}</button>`).join("") +
+    (!mail.gmail.token ? `<button class="tab add" data-gmail-connect>＋ Gmail 연결</button>` : "") +
+    `<a class="tab" href="${esc(company)}" target="_blank" rel="noopener">회사 메일 ↗</a>`;
+
+  const q = mail.q.trim().toLowerCase();
+  const list = allMail().filter((it) => (mail.filter === "all" || `${it.provider}|${it.account}` === mail.filter) &&
+    (!q || `${it.from.name} ${it.from.addr} ${it.subject} ${it.snippet}`.toLowerCase().includes(q)));
+
+  const notes = [];
+  if (mail.loading) notes.push("메일을 불러오는 중…");
+  if (mail.gmail.err) notes.push(`Gmail: ${esc(mail.gmail.err)}`);
+  if (mail.imapErr === "nokey") notes.push(`네이버·다음 메일을 보려면 <a class="more" data-open-mailsettings>메일 암호</a>를 입력하세요.`);
+  if (mail.imapErr === "badkey") notes.push(`메일 암호가 MAIL_KEY와 다릅니다. <a class="more" data-open-mailsettings>다시 입력</a>`);
+  if (mail.imapErr && !["nokey", "badkey", "none"].includes(mail.imapErr)) notes.push(`네이버·다음: ${esc(mail.imapErr)}`);
+  for (const [acc, err] of Object.entries(mail.imap?.errors || {})) notes.push(`${esc(acc)}: ${esc(err)}`);
+  const synced = mail.imap?.updatedAt ? `네이버·다음 ${dayLabel(kstDay(mail.imap.updatedAt))} ${timeFmt.format(new Date(mail.imap.updatedAt))} 동기화` : "";
+
+  $("#mailList").innerHTML = `
+    ${notes.length ? `<div class="mail-note">${notes.join("<br>")}</div>` : ""}
+    ${list.length ? `<ul class="mlist">${list.map((it) => `
+      <li class="${isUnread(it) ? "unread" : ""}${mail.sel === it.id ? " sel" : ""}" data-mail="${esc(it.id)}">
+        <div class="m1"><span class="mfrom">${esc(it.from.name || it.from.addr)}</span><span class="mdate">${mailDate(it.date)}</span></div>
+        <div class="msubj">${it.hasAtt ? "📎 " : ""}${esc(it.subject)}</div>
+        <div class="msnip"><span class="sw" style="background:${PROVIDER[it.provider]?.color || "#8e8e93"}"></span>${esc(it.snippet)}</div>
+      </li>`).join("")}</ul>`
+      : mail.loading ? "" : `<div class="empty">${mail.imapErr === "none" && !mail.gmail.token ? "연결된 메일 계정이 없습니다.<br>＋ Gmail 연결 또는 README의 네이버·다음 설정을 참고하세요." : "최근 7일 메일이 없습니다."}</div>`}
+    ${synced ? `<p class="help" style="text-align:center">${synced}</p>` : ""}`;
+
+  renderReader();
+}
+
+async function renderReader() {
+  const box = $("#mailBox");
+  const it = allMail().find((x) => x.id === mail.sel);
+  box.classList.toggle("reading", !!it);
+  if (!it) { $("#mailReader").innerHTML = `<div class="empty reader-empty">메일을 선택하세요</div>`; return; }
+  const p = PROVIDER[it.provider] || PROVIDER.imap;
+  const web = p.web(it);
+  $("#mailReader").innerHTML = `
+    <div class="rhead">
+      <button class="sm back" data-mail-back>‹ 목록</button>
+      <span style="flex:1"></span>
+      <button class="sm" data-mail-images>${mail.showImages ? "이미지 숨기기" : "이미지 보기"}</button>
+      ${web ? `<a class="sm btnish" href="${esc(web)}" target="_blank" rel="noopener">${esc(p.label)}에서 열기 ↗</a>` : ""}
+    </div>
+    <h2 class="rsubj">${esc(it.subject)}</h2>
+    <div class="rmeta">
+      <div class="avatar" style="background:${p.color}">${esc((it.from.name || it.from.addr || "?").trim().charAt(0).toUpperCase())}</div>
+      <div><b>${esc(it.from.name || it.from.addr)}</b> <span class="muted">${esc(it.from.name ? `<${it.from.addr}>` : "")}</span>
+        <div class="muted sm">${new Intl.DateTimeFormat("ko-KR", { timeZone: TZ, dateStyle: "medium", timeStyle: "short" }).format(new Date(it.date))} · ${esc(p.label)} ${esc(it.account || "")}</div></div>
+    </div>
+    <div id="rbody"><div class="empty">본문을 불러오는 중…</div></div>`;
+
+  if (!mail.read.has(it.id)) {
+    mail.read.add(it.id);
+    store.set("mailRead", JSON.stringify([...mail.read].slice(-500)));
+    $$(`[data-mail="${CSS.escape(it.id)}"]`).forEach((li) => li.classList.remove("unread"));
+  }
+  try {
+    let body = mail.bodies.get(it.id);
+    if (!body) {
+      body = it.provider === "gmail" ? await gmailBody(it) : await openBox(await ghRaw(cfg.dataRepo, `mail/b/${it.id}.enc.json`));
+      mail.bodies.set(it.id, body);
+    }
+    if (mail.sel !== it.id) return;
+    const atts = body.attachments?.length
+      ? `<div class="ratts">${body.attachments.map((a) => `<span class="chip">📎 ${esc(a.name)} <small class="muted">${a.size ? Math.max(1, Math.round(a.size / 1024)) + "KB" : ""}</small></span>`).join("")}</div>` : "";
+    $("#rbody").innerHTML = `${atts}<iframe class="rframe" sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin" title="메일 본문"></iframe>`;
+    const frame = $("#rbody iframe");
+    const csp = mail.showImages
+      ? "default-src 'none'; img-src * data:; style-src 'unsafe-inline' *; font-src * data:"
+      : "default-src 'none'; img-src data:; style-src 'unsafe-inline'; font-src data:";
+    const dark = matchMedia("(prefers-color-scheme: dark)").matches;
+    const content = body.html || `<pre style="white-space:pre-wrap;font:inherit;margin:0">${esc(body.text || "(본문 없음)")}</pre>`;
+    frame.srcdoc = `<!doctype html><html><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="${csp}">
+      <base target="_blank"><style>
+        html,body{margin:0;padding:0;background:#fff;color:#1d1d1f;font:15px/1.6 -apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo",sans-serif;word-break:break-word}
+        body{padding:4px 2px} img{max-width:100%;height:auto} table{max-width:100%!important} a{color:#0071e3}
+        ${dark ? "html{filter:invert(.92) hue-rotate(180deg)} img{filter:invert(1) hue-rotate(180deg)}" : ""}
+      </style></head><body>${content}</body></html>`;
+    frame.onload = () => {
+      try { frame.style.height = Math.min(20000, frame.contentDocument.documentElement.scrollHeight + 8) + "px"; } catch {}
+    };
+  } catch (e) {
+    $("#rbody").innerHTML = `<div class="empty">본문을 열 수 없습니다: ${esc(e.message)}</div>`;
+  }
+}
+
+$("#mailTabs").addEventListener("click", (e) => {
+  if (e.target.closest("[data-gmail-connect]")) { gmailConnect().catch((err) => toast(err.message, 6000)); return; }
+  const b = e.target.closest("[data-mfilter]");
+  if (!b) return;
+  mail.filter = b.dataset.mfilter; store.set("mailFilter", mail.filter); renderMail();
+});
+$("#mailSearch").addEventListener("input", (e) => { mail.q = e.target.value; renderMail(); });
+$("#mailList").addEventListener("click", (e) => {
+  if (e.target.closest("[data-open-mailsettings]")) { openSettings(); $("#mailSettings").scrollIntoView({ block: "center" }); return; }
+  const li = e.target.closest("[data-mail]");
+  if (!li) return;
+  mail.sel = li.dataset.mail; mail.showImages = false;
+  $$("#mailList li.sel").forEach((x) => x.classList.remove("sel")); li.classList.add("sel");
+  renderReader();
+  if (matchMedia("(max-width: 1000px)").matches) window.scrollTo({ top: 0 });
+});
+$("#mailReader").addEventListener("click", (e) => {
+  if (e.target.closest("[data-mail-back]")) { mail.sel = null; renderMail(); return; }
+  if (e.target.closest("[data-mail-images]")) { mail.showImages = !mail.showImages; renderReader(); }
+});
+$("#mailRefresh").addEventListener("click", async () => {
+  if (state.priv && mail.imap) {
+    // 네이버·다음은 서버에서 다시 가져오도록 요청 (1~2분 소요)
+    gh(cfg.dataRepo, "/actions/workflows/mail.yml/dispatches", { method: "POST", body: JSON.stringify({ ref: "main" }) })
+      .then(() => {
+        toast("네이버·다음 메일을 새로 가져오는 중입니다. 1~2분 뒤 자동 갱신됩니다.");
+        const before = mail.imap?.updatedAt;
+        pollFor(async () => { await loadImapMail(); return mail.imap; }, (d) => d?.updatedAt !== before, () => {}, "mail");
+      }).catch((err) => toast(err.message, 6000));
+  }
+  await loadMail(true);
+});
+$("#saveGmailId").addEventListener("click", () => {
+  const v = $("#gmailClientId").value.trim();
+  mutate("메일 설정: Gmail 클라이언트 ID", (d) => { d.settings = { ...(d.settings || {}), gmailClientId: v }; })
+    .then(() => toast("저장했습니다. 메일 탭에서 ＋ Gmail 연결을 누르세요."));
+});
+$("#saveMailKey").addEventListener("click", async () => {
+  store.set("mailKey", $("#mailKeyInput").value || null);
+  mail.key = null; toast("메일 암호를 저장했습니다.");
+  await loadMail(true);
+});
+$("#saveCompanyMail").addEventListener("click", () => {
+  const v = $("#companyMailUrl").value.trim();
+  mutate("메일 설정: 회사 웹메일 주소", (d) => { d.settings = { ...(d.settings || {}), companyMailUrl: v }; })
+    .then(() => toast("저장했습니다."));
+});
+
 // ---------- 로드 ----------
 async function load(manual = false) {
   try {
@@ -937,6 +1261,7 @@ async function load(manual = false) {
       loadPrivate(),
     ]);
     state.keywords = kws; state.news = news;
+    if (state.view === "mail") mail.loaded = false;
     await loadLiveCoins();
     renderAll();
     if (manual) toast("최신 데이터를 불러왔습니다.");

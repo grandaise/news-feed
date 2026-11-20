@@ -11,7 +11,7 @@
 <link rel="icon" href="favicon-32.png" type="image/png" sizes="32x32">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
-<link rel="stylesheet" href="app.css?v=202611201050">
+<link rel="stylesheet" href="app.css?v=202611201104">
 </head>
 <body>
 <header>
@@ -28,6 +28,7 @@
     <nav class="views" id="views">
       <button data-view="home">홈</button>
       <button data-view="news">뉴스</button>
+      <button data-view="mail">메일</button>
       <button data-view="plan">일정</button>
       <button data-view="invest">투자</button>
     </nav>
@@ -113,6 +114,23 @@
     </div>
   </section>
 
+  <!-- 메일 -->
+  <section id="view-mail" class="view">
+    <div class="mail-bar">
+      <nav class="tabs" id="mailTabs"></nav>
+      <div class="mail-tools">
+        <input id="mailSearch" type="search" placeholder="보낸 사람·제목 검색">
+        <button class="icon-btn" id="mailRefresh" title="메일 새로 가져오기" aria-label="메일 새로 가져오기">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12a8 8 0 1 1-2.34-5.66M20 4v4h-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+    </div>
+    <div class="mail" id="mailBox">
+      <div class="card mail-list" id="mailList"></div>
+      <div class="card mail-reader" id="mailReader"></div>
+    </div>
+  </section>
+
   <!-- 투자 -->
   <section id="view-invest" class="view">
     <div class="metrics" id="invMetrics"></div>
@@ -170,6 +188,16 @@
       <div class="field"><label>개인 데이터 저장소 (비공개)</label><input id="dataRepoInput" placeholder="grandaise/my-data"></div>
     </details>
   </section>
+  <section id="mailSettings">
+    <h3>메일</h3>
+    <div class="field"><label>Gmail OAuth 클라이언트 ID (모든 기기 공통)</label>
+      <div class="row"><input id="gmailClientId" placeholder="1234-abcd.apps.googleusercontent.com" autocomplete="off"><button id="saveGmailId" class="sm">저장</button></div></div>
+    <div class="field"><label>네이버·다음 메일 암호 (MAIL_KEY와 같은 값, 이 기기에만 저장)</label>
+      <div class="row"><input id="mailKeyInput" type="password" placeholder="메일 암호" autocomplete="off"><button id="saveMailKey" class="sm">저장</button></div></div>
+    <div class="field"><label>회사 웹메일 주소 (바로가기)</label>
+      <div class="row"><input id="companyMailUrl" placeholder="https://webmail.ehyundai.com" autocomplete="off"><button id="saveCompanyMail" class="sm">저장</button></div></div>
+    <p class="help">설정 방법은 <a href="https://github.com/grandaise/news-feed#메일-탭-설정" target="_blank" rel="noopener">README의 메일 탭 설정</a>을 참고하세요.</p>
+  </section>
   <div class="actions">
     <button id="runNow">⚡ 뉴스 지금 수집</button>
     <button class="primary" id="closeSettings">닫기</button>
@@ -219,6 +247,6 @@
 </dialog>
 
 <div id="toast"></div>
-<script type="module" src="app.js?v=202611201050"></script>
+<script type="module" src="app.js?v=202611201104"></script>
 </body>
 </html>
