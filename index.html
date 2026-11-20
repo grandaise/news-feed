@@ -4,13 +4,23 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#1f6feb">
-<title>내 대시보드</title>
+<title>My Dashboard</title>
+<meta name="apple-mobile-web-app-title" content="My Dashboard">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="app.css">
 </head>
 <body>
 <header>
   <div class="top">
-    <h1>📊 내 대시보드</h1>
+    <h1 class="brand">
+      <svg class="logo" viewBox="0 0 32 32" aria-hidden="true">
+        <rect width="32" height="32" rx="9" fill="currentColor"/>
+        <rect x="7.5" y="17" width="4.2" height="7.5" rx="2.1" fill="#fff" fill-opacity=".55"/>
+        <rect x="13.9" y="12.5" width="4.2" height="12" rx="2.1" fill="#fff" fill-opacity=".8"/>
+        <rect x="20.3" y="7.5" width="4.2" height="17" rx="2.1" fill="#fff"/>
+      </svg>
+      <span>My Dashboard</span>
+    </h1>
     <span class="updated" id="updated"></span>
     <button id="reload" title="새로고침" aria-label="새로고침">↻</button>
     <button id="openSettings" title="설정" aria-label="설정">⚙︎</button>
