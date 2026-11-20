@@ -120,7 +120,7 @@ const state = {
   privError: null,
   prices: { prices: {}, fx: {} },
   gcal: null,            // 구글 캘린더에서 가져온 일정 (my-data/gcal.json)
-  live: {},              // 업비트 실시간 코인 시세
+  live: {},              // 빗썸 실시간 코인 시세
   selDay: today(),
   calMonth: today().slice(0, 7),
 };
@@ -175,11 +175,14 @@ function mutate(message, fn) {
 async function loadLiveCoins() {
   const coins = [...new Set((state.priv?.holdings || []).filter((h) => h.type === "coin").map((h) => h.symbol.toUpperCase()))];
   if (!coins.length) return;
-  try {
-    const res = await fetch(`https://api.upbit.com/v1/ticker?markets=${coins.map((c) => `KRW-${c}`).join(",")}`);
-    if (!res.ok) return;
+  // 빗썸 원화마켓 실시간 시세. 한 번에 실패하면(상장 안 된 코인 포함 등) 하나씩 다시 시도
+  const get = async (list) => {
+    const res = await fetch(`https://api.bithumb.com/v1/ticker?markets=${list.map((c) => `KRW-${c}`).join(",")}`);
+    if (!res.ok) throw new Error(res.status);
     for (const t of await res.json()) state.live[t.market.slice(4)] = { price: t.trade_price, changePct: t.signed_change_rate * 100 };
-  } catch {}
+  };
+  try { await get(coins); }
+  catch { await Promise.all(coins.map((c) => get([c]).catch(() => {}))); }
 }
 
 // ---------- 투자 계산 ----------
