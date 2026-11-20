@@ -1,5 +1,5 @@
 {
- "updatedAt": "2026-11-20T06:38:34.362Z",
+ "updatedAt": "2026-11-20T06:39:43.565Z",
  "basis": "20261119",
  "items": [
   {
@@ -136,6 +136,12 @@
    },
    "news": [
     {
+     "title": "[속보] 코스피 5% 급락 4869.96 마감…삼전 7%↓ ‘검은 금요일’",
+     "url": "https://n.news.naver.com/mnews/article/081/0003701632",
+     "office": "서울신문",
+     "time": "202611201538"
+    },
+    {
      "title": "앤트로픽 상장에도 거품론 '활활'…삼전닉스 7% 폭락",
      "url": "https://n.news.naver.com/mnews/article/374/0000544980",
      "office": "SBS Biz",
@@ -145,12 +151,6 @@
      "title": "반등 발목 잡는 공매도…외국인, 11월 들어 16조 쏟아냈다 [증시는 왜...",
      "url": "https://n.news.naver.com/mnews/article/014/0005607482",
      "office": "파이낸셜뉴스",
-     "time": "202611201536"
-    },
-    {
-     "title": "[속보] 코스피, 5.21% 하락 마감...삼성전자 7%, SK하이닉스 6% 급락",
-     "url": "https://n.news.naver.com/mnews/article/023/0004010809",
-     "office": "조선일보",
      "time": "202611201536"
     }
    ]
