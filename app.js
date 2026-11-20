@@ -199,9 +199,10 @@ function calc(h) {
   const price = h.manualPrice || live?.price || p?.price || null;
   const changePct = h.manualPrice ? null : live?.changePct ?? p?.changePct ?? null;
   const qty = +h.qty || 0, avg = +h.avg || 0;
-  const cost = fx ? qty * avg * fx : null;
+  // 평단가를 입력하지 않은 종목은 매입금액·손익을 계산하지 않는다
+  const cost = fx && avg ? qty * avg * fx : null;
   const value = price != null && fx ? qty * price * fx : null;
-  const pnl = value != null ? value - cost : null;
+  const pnl = value != null && cost != null ? value - cost : null;
   const annualDiv = h.dps && fx ? qty * h.dps * fx : 0;
   return {
     h, fx, price, changePct, cost, value, pnl,
@@ -214,8 +215,11 @@ function calc(h) {
 function portfolio() {
   const rows = (state.priv?.holdings || []).map(calc);
   const valued = rows.filter((r) => r.value != null);
-  const cost = valued.reduce((s, r) => s + r.cost, 0);
   const value = valued.reduce((s, r) => s + r.value, 0);
+  // 손익·수익률은 평단가가 있는 종목만으로 계산
+  const priced = valued.filter((r) => r.cost != null);
+  const cost = priced.reduce((s, r) => s + r.cost, 0);
+  const pricedValue = priced.reduce((s, r) => s + r.value, 0);
   const groups = {};
   for (const r of valued) {
     const g = TYPE[r.h.type].group;
@@ -229,9 +233,10 @@ function portfolio() {
     for (const m of ms) monthly[m - 1] += r.annualDiv / ms.length;
   }
   return {
-    rows, cost, value, pnl: value - cost, rate: cost ? ((value - cost) / cost) * 100 : 0,
+    rows, cost, value, pnl: pricedValue - cost, rate: cost ? ((pricedValue - cost) / cost) * 100 : 0,
     annualDiv: rows.reduce((s, r) => s + r.annualDiv, 0),
     groups, monthly, missing: rows.length - valued.length,
+    noAvg: rows.filter((r) => !(+r.h.avg)).length,
   };
 }
 
@@ -451,7 +456,7 @@ function renderInvest() {
       const money = (v) => (r.h.type === "us" ? `$${fmtNum(v, 2)}` : won(v));
       return `<tr class="h" data-edit-holding="${esc(r.h.id)}" title="${esc(r.h.memo || "눌러서 수정")}">
         <td><span class="nm">${esc(r.name)}</span><span class="ty">${t.label}${r.h.symbol && r.h.type !== "gold" ? ` · ${esc(r.h.symbol)}` : ""}</span></td>
-        <td>${fmtNum(r.h.qty)}${t.unit}</td><td>${money(r.h.avg)}</td>
+        <td>${fmtNum(r.h.qty)}${t.unit}</td><td>${+r.h.avg ? money(r.h.avg) : '<span class="up sm">미입력</span>'}</td>
         <td>${r.price != null ? money(r.price) : '<span class="muted">대기</span>'}${r.changePct != null ? ` <span class="${sign(r.changePct)} sm">${pct(r.changePct)}</span>` : ""}</td>
         <td>${won(r.cost)}</td><td>${won(r.value)}</td>
         <td class="${sign(r.pnl)}">${r.pnl != null ? (r.pnl > 0 ? "+" : "") + won(r.pnl) : "-"}</td>
@@ -461,6 +466,7 @@ function renderInvest() {
       <td class="${sign(pf.pnl)}">${pf.pnl > 0 ? "+" : ""}${won(pf.pnl)}</td><td class="${sign(pf.rate)}">${pct(pf.rate)}</td><td>${won(pf.annualDiv)}</td></tr></tfoot>`
     : `<tr><td class="empty" style="text-align:center">＋ 종목 추가 버튼으로 주식, 금, 코인 등을 등록하세요.</td></tr>`;
   if (pf.missing) $("#priceTime").textContent += ` · ${pf.missing}개 종목 시세 대기 중`;
+  if (pf.noAvg) $("#priceTime").textContent += ` · 평단가 미입력 ${pf.noAvg}개는 손익 계산에서 제외 (눌러서 입력)`;
 
   $("#invAlloc").innerHTML = `<div class="card-head"><h3>자산 배분</h3></div>${allocHtml(pf)}`;
   $("#invDiv").innerHTML = `<div class="card-head"><h3>월별 배당 예상</h3></div>${divChartHtml(pf)}`;
@@ -586,7 +592,7 @@ function openSettings({ needConnect = false } = {}) {
 
 // ---------- 종목 다이얼로그 ----------
 const SYMBOL_HINT = {
-  kr: ["종목 코드 (6자리)", "005930 (삼성전자)"],
+  kr: ["종목 코드 (6자리)", "005930, 0104N0"],
   us: ["티커", "SCHD, AAPL, QQQ"],
   gold: ["", ""],
   coin: ["코인 심볼", "BTC, ETH, XRP"],
@@ -722,15 +728,16 @@ $("#holdingForm").addEventListener("submit", (e) => {
   e.preventDefault();
   const type = $("#hType").value;
   let symbol = $("#hSymbol").value.trim();
-  if (type === "kr") symbol = symbol.replace(/\D/g, "").padStart(6, "0");
+  if (type === "kr") symbol = symbol.toUpperCase().replace(/[^0-9A-Z]/g, "");
   if (type === "us" || type === "coin") symbol = symbol.toUpperCase();
   if (type === "gold") symbol = "gold";
   if (type === "etc") symbol = "";
-  if (type === "kr" && !/^\d{6}$/.test(symbol)) return toast("국내 종목 코드는 6자리 숫자입니다.");
+  if (type === "kr" && /^\d{1,5}$/.test(symbol)) symbol = symbol.padStart(6, "0");
+  if (type === "kr" && !/^[0-9A-Z]{6}$/.test(symbol)) return toast("국내 종목 코드는 6자리입니다. (예: 005930, 0104N0)");
   const h = {
     id: editingId || uid(), type, symbol,
     name: $("#hName").value.trim(),
-    qty: +$("#hQty").value, avg: +$("#hAvg").value,
+    qty: +$("#hQty").value, avg: +$("#hAvg").value || null,
     dps: +$("#hDps").value || 0,
     divMonths: $$("#hMonths input:checked").map((c) => +c.value),
     manualPrice: +$("#hManual").value || null,
