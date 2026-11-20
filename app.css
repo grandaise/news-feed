@@ -356,3 +356,24 @@ dialog .field { margin-top: 10px; }
   .metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .metrics .metric:last-child:nth-child(odd) { grid-column: 1 / -1; }
 }
+
+/* ===== 모바일 투자 목록 ===== */
+.only-narrow { display: none; }
+@media (max-width: 760px) {
+  .only-wide { display: none !important; }
+  .only-narrow { display: block; }
+}
+.hl-row {
+  display: grid; grid-template-columns: minmax(0, 1fr) 50px 56px 62px 50px; gap: 6px; align-items: center;
+  padding: 11px 0; border-top: 1px solid var(--line); font-size: 13px; text-align: right; font-variant-numeric: tabular-nums;
+}
+.hl-row.h { cursor: pointer; }
+.hl-row.h:active { background: var(--fill-2); }
+.hl-head { border-top: 0; padding: 0 0 6px; font-size: 11px; color: var(--faint); font-weight: 500; }
+.hl-head span:first-child { text-align: left; }
+.hl-name { text-align: left; min-width: 0; }
+.hl-name b { display: block; font-weight: 600; font-size: 14px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.hl-name small { display: block; font-size: 11px; color: var(--faint); margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.hl-w { display: grid; gap: 4px; justify-items: end; }
+.hl-w .gauge { width: 100%; height: 4px; }
+.hl-total { font-weight: 600; }

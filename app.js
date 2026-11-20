@@ -374,6 +374,25 @@ function newsLi(it, showKw) {
   </a></li>`;
 }
 
+// 모바일 투자 목록 (종목 · 오늘 · 수익률 · 평가금액 · 비중), 긴 종목명은 … 처리
+const manwon = (n) => (n == null || isNaN(n) ? "-" : Math.abs(n) >= 1e8
+  ? `${(n / 1e8).toFixed(2).replace(/\.?0+$/, "")}억` : Math.abs(n) >= 1e4 ? `${Math.round(n / 1e4).toLocaleString("ko-KR")}만` : won(n));
+function holdingsCompact(rows, pf, { total = false } = {}) {
+  const share = (v) => (pf.value ? ((v || 0) / pf.value) * 100 : 0);
+  return `<div class="hl only-narrow">
+    <div class="hl-row hl-head"><span>종목</span><span>오늘</span><span>수익률</span><span>평가금액</span><span>비중</span></div>
+    ${rows.map((r) => `<div class="hl-row h" data-edit-holding="${esc(r.h.id)}">
+      <span class="hl-name"><b title="${esc(r.name)}">${esc(r.name)}</b><small>${TYPE[r.h.type].label}${r.h.lots?.length > 1 ? ` · ${r.h.lots.length}개 계좌` : ""}</small></span>
+      <span class="${sign(r.changePct)}">${pct(r.changePct)}</span>
+      <span class="${sign(r.rate)}">${pct(r.rate)}</span>
+      <span>${manwon(r.value)}</span>
+      <span class="hl-w">${share(r.value).toFixed(1)}%${gauge(share(r.value) / 100, TYPE[r.h.type].color)}</span>
+    </div>`).join("")}
+    ${total ? `<div class="hl-row hl-total"><span class="hl-name"><b>합계</b></span><span></span>
+      <span class="${sign(pf.rate)}">${pct(pf.rate)}</span><span>${manwon(pf.value)}</span><span>100%</span></div>` : ""}
+  </div>`;
+}
+
 // ---------- 홈 ----------
 function renderHome() {
   const connected = !!state.priv;
@@ -408,7 +427,7 @@ function renderHome() {
     $("#homeAlloc").innerHTML = `<div class="card-head"><h3>자산 배분</h3><span class="muted sm">평가금액 기준</span></div>${allocHtml(pf)}
       <h3 style="margin-top:14px">월별 배당 예상</h3>${divChartHtml(pf)}`;
     $("#homeHoldings").innerHTML = `<div class="card-head"><h3>투자 목록</h3><a class="more" data-go="invest">전체 →</a></div>
-      ${pf.rows.length ? `<div class="table-wrap"><table class="tbl" style="min-width:420px">
+      ${pf.rows.length ? `${holdingsCompact([...pf.rows].sort((a, b) => (b.value || 0) - (a.value || 0)).slice(0, 6), pf)}<div class="table-wrap only-wide"><table class="tbl" style="min-width:420px">
         <tr><th>종목</th><th>비중</th><th>평가금액</th><th>수익률</th><th>오늘</th></tr>
         ${[...pf.rows].sort((a, b) => (b.value || 0) - (a.value || 0)).slice(0, 6).map((r) => `<tr class="h" data-edit-holding="${esc(r.h.id)}">
           <td><span class="nm">${esc(r.name)}</span><span class="ty">${TYPE[r.h.type].label}</span></td>
@@ -523,6 +542,7 @@ function renderInvest() {
     <tfoot><tr><td>합계</td><td>100%</td><td></td><td></td><td></td><td>${won(pf.cost)}</td><td>${won(pf.value)}</td>
       <td class="${sign(pf.pnl)}">${pf.pnl > 0 ? "+" : ""}${won(pf.pnl)}</td><td class="${sign(pf.rate)}">${pct(pf.rate)}</td><td>${won(pf.annualDiv)}</td></tr></tfoot>`
     : `<tr><td class="empty" style="text-align:center">＋ 종목 추가 버튼으로 주식, 금, 코인 등을 등록하세요.</td></tr>`;
+  $("#holdingsCompact").innerHTML = rows.length ? holdingsCompact(rows, pf, { total: true }) : "";
   if (pf.missing) $("#priceTime").textContent += ` · ${pf.missing}개 종목 시세 대기 중`;
   if (pf.noAvg) $("#priceTime").textContent += ` · 평단가 미입력 ${pf.noAvg}개는 손익 계산에서 제외 (눌러서 입력)`;
 
