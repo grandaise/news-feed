@@ -448,9 +448,57 @@ function renderHome() {
   }
 
   renderHomeMail();
+  renderGuide();
   $("#homeNews").innerHTML = `<div class="card-head"><h3>오늘의 뉴스</h3><a class="more" data-go="news">전체 →</a></div>
     ${newsToday.length ? `<ul class="list">${newsToday.slice(0, 6).map((it) => newsLi(it, true)).join("")}</ul>` : '<div class="empty">오늘 올라온 기사가 없습니다.</div>'}`;
 }
+
+// ---------- 금일 투자 가이드 (규칙 기반 계산, data/guide.json) ----------
+function renderGuide() {
+  const el = $("#homeGuide");
+  if (!el) return;
+  const g = state.guide;
+  const head = `<div class="card-head"><h3>금일 투자 가이드</h3>${g?.basis ? `<span class="muted sm">${+g.basis.slice(4, 6)}/${+g.basis.slice(6)} 종가 기준 · 거래대금 상위</span>` : ""}</div>`;
+  if (!g?.items?.length) { el.innerHTML = head + `<div class="empty">아직 가이드가 없습니다. 평일 08:30에 만들어집니다.</div>`; return; }
+  let sel = store.get("guideSel", "");
+  const it = g.items.find((x) => x.code === sel) || g.items[0];
+  const L = it.levels;
+  const w = (n) => n == null ? "-" : Math.round(n).toLocaleString("ko-KR");
+  const tvStr = it.tv / 100 >= 10000 ? `${(it.tv / 1e6).toFixed(1)}조` : `${w(it.tv / 100)}억`;
+  const sus = { 높음: "up", 보통: "mid", 낮음: "low" }[it.sustain] || "mid";
+  const ul = (a) => `<ul>${a.map((x) => `<li>${esc(x)}</li>`).join("")}</ul>`;
+  el.innerHTML = head + `
+    <div class="tabs hs gd-tabs">${g.items.map((x) => `<button class="tab${x.code === it.code ? " active" : ""}" data-guide="${esc(x.code)}">${esc(x.name)}<span class="cnt ${sign(x.chg)}">${pct(x.chg)}</span></button>`).join("")}</div>
+    <div class="gd-top">
+      <div><div class="gd-name">${esc(it.name)} <span class="muted sm">${esc(it.code)} · ${it.market === "KOSPI" ? "코스피" : "코스닥"}</span></div>
+        <div class="gd-price">${w(it.price)}<small>원</small> <span class="${sign(it.chg)}">${pct(it.chg)}</span></div>
+        <div class="muted sm">거래대금 ${tvStr}원 · 거래량 20일 평균의 ${it.volRatio.toFixed(1)}배</div></div>
+      <span class="gd-sus ${sus}">지속 가능성 ${esc(it.sustain)}</span>
+    </div>
+    <div class="gd-levels">
+      <div><span>돌파 기준</span><b>${w(L.high)}</b></div>
+      <div><span>피벗</span><b>${w(L.pivot)}</b></div>
+      <div><span>1차 지지</span><b class="down">${w(L.s1)}</b></div>
+      <div><span>1차 저항</span><b class="up">${w(L.r1)}</b></div>
+    </div>
+    <ol class="gd-sec">
+      <li><h4>핵심 모멘텀</h4>${ul(it.sections.momentum)}
+        ${it.news?.length ? `<div class="gd-news">${it.news.map((n) => `<a href="${esc(n.url)}" target="_blank" rel="noopener">${esc(n.title)}<span class="muted"> · ${esc(n.office)}</span></a>`).join("")}</div>` : ""}</li>
+      <li><h4>진입 후보 구간과 조건</h4>${ul(it.sections.entry)}</li>
+      <li><h4>손절 기준 및 무효화 조건</h4>${ul(it.sections.stop)}</li>
+      <li><h4>분할 익절 기준 및 리스크</h4>${ul(it.sections.take)}<div class="gd-risk"><b>주의할 리스크</b>${ul(it.sections.risk)}</div></li>
+    </ol>
+    <p class="gd-note">전일 시세를 정해진 공식(전일 고가·저가, 피벗, 이동평균, ATR, 거래량)으로 자동 계산한 참고 자료이며 투자 권유가 아닙니다. 실제 매매 판단과 책임은 본인에게 있습니다.</p>`;
+}
+$("#homeGuide")?.addEventListener("click", (e) => {
+  const b = e.target.closest("[data-guide]");
+  if (!b) return;
+  store.set("guideSel", b.dataset.guide);
+  renderGuide();
+  const bar = $("#homeGuide .gd-tabs");
+  keepInView(bar, bar?.querySelector(".active"));
+  hsUpdate();
+});
 
 // ---------- 뉴스 ----------
 function renderNews() {
@@ -1421,6 +1469,7 @@ async function load(manual = false) {
       loadPublic("keywords.json"),
       loadPublic("data/news.json").catch(() => ({ keywords: {} })),
       loadPrivate(),
+      loadPublic("data/guide.json").then((g) => { state.guide = g; }).catch(() => {}),
     ]);
     state.keywords = kws; state.news = news;
     if (state.view === "mail") mail.loaded = false;

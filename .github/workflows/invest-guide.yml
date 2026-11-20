@@ -1,0 +1,41 @@
+name: 금일 투자 가이드
+
+on:
+  schedule:
+    # 평일(월~금) 한국시간 07:40(UTC 22:40, 일~목)에 미리 시작해 08:30까지 기다렸다가 만든다
+    - cron: "40 22 * * 0-4"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: invest-guide
+  cancel-in-progress: false
+
+jobs:
+  guide:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+      - name: 한국시간 08:30까지 대기
+        if: github.event_name == 'schedule'
+        run: |
+          target=$(TZ=Asia/Seoul date -d "today 08:30" +%s)
+          wait=$(( target - $(date +%s) ))
+          if [ "$wait" -gt 0 ]; then echo "$wait초 대기"; sleep "$wait"; else echo "이미 08:30이 지나 바로 만듭니다"; fi
+      - name: 가이드 계산
+        run: node scripts/guide.mjs
+      - name: 커밋
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/guide.json
+          if ! git diff --cached --quiet; then
+            git commit -m "투자 가이드 $(TZ=Asia/Seoul date '+%Y-%m-%d %H:%M')"
+            git pull --rebase
+            git push
+          fi
