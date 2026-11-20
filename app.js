@@ -246,7 +246,33 @@ function portfolio() {
 }
 
 // ---------- 공통 렌더 조각 ----------
-const metric = (lb, v, cls = "") => `<div class="metric"><div class="lb">${lb}</div><div class="v ${cls}">${v}</div></div>`;
+const metric = (lb, v, cls = "", sub = "") =>
+  `<div class="metric"><div class="lb">${lb}</div><div class="v ${cls}">${v}</div>${sub ? `<div class="sub">${sub}</div>` : ""}</div>`;
+const clamp01 = (x) => Math.max(0, Math.min(1, x || 0));
+// 캡슐 진행 바
+const gauge = (ratio, color = "var(--accent)") =>
+  `<div class="gauge"><i style="width:${(clamp01(ratio) * 100).toFixed(1)}%;background:${color}"></i></div>`;
+// Apple Watch 스타일 링
+function ring(ratio, { size = 76, stroke = 9, color = "var(--green)", center = "" } = {}) {
+  const r = (size - stroke) / 2, c = 2 * Math.PI * r;
+  return `<div class="ring" style="width:${size}px;height:${size}px">
+    <svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" aria-hidden="true">
+      <circle class="track" cx="${size / 2}" cy="${size / 2}" r="${r}" fill="none" stroke-width="${stroke}"/>
+      <circle class="val" cx="${size / 2}" cy="${size / 2}" r="${r}" fill="none" stroke="${color}" stroke-width="${stroke}"
+        stroke-linecap="round" stroke-dasharray="${c}" stroke-dashoffset="${c * (1 - clamp01(ratio))}"/>
+    </svg><div class="center" style="font-size:${Math.round(size / 4.6)}px">${center}</div></div>`;
+}
+// 자산 그룹 미니 바
+const miniBar = (pf) => {
+  const e = Object.values(pf.groups);
+  return e.length ? `<div class="bar" style="height:6px;margin:0;gap:2px">${e.map((g) => `<div style="width:${(g.value / pf.value) * 100}%;background:${g.color};min-width:3px"></div>`).join("")}</div>` : "";
+};
+// 올해 지난 달까지 받은(예상) 배당 비율
+const ytdDiv = (pf) => {
+  const m = +today().slice(5, 7);
+  const past = pf.monthly.slice(0, m - 1).reduce((a, b) => a + b, 0);
+  return { past, ratio: pf.annualDiv ? past / pf.annualDiv : 0 };
+};
 
 function allocHtml(pf) {
   const entries = Object.entries(pf.groups).sort((a, b) => b[1].value - a[1].value);
@@ -261,8 +287,8 @@ function divChartHtml(pf) {
   if (!max) return `<div class="empty">종목에 배당금과 지급 월을 넣으면 월별 예상이 표시됩니다.</div>`;
   const nowM = +today().slice(5, 7);
   return `<div class="divchart">${pf.monthly.map((v, i) =>
-      `<div class="${i + 1 === nowM ? "now" : ""}" style="height:${Math.max(2, (v / max) * 90)}px" title="${i + 1}월 ${won(v)}원"></div>`).join("")}</div>
-    <div class="divlbl">${pf.monthly.map((_, i) => `<span>${i + 1}</span>`).join("")}</div>
+      `<div class="${i + 1 === nowM ? "now" : i + 1 < nowM ? "past" : ""}" style="height:${Math.max(6, (v / max) * 120)}px" title="${i + 1}월 ${won(v)}원"></div>`).join("")}</div>
+    <div class="divlbl">${pf.monthly.map((_, i) => `<span class="${i + 1 === nowM ? "now" : ""}">${i + 1}</span>`).join("")}</div>
     <p class="muted sm" style="margin:8px 0 0">이번 달 ${won(pf.monthly[nowM - 1])}원 · 연간 ${won(pf.annualDiv)}원 (세전)</p>`;
 }
 
@@ -309,6 +335,11 @@ function todoHtml(t) {
     <button class="x" data-del-todo="${esc(t.id)}" title="삭제" aria-label="삭제">×</button></li>`;
 }
 
+function todoRatio() {
+  const t = state.priv?.todos || [];
+  return t.length ? t.filter((x) => x.done).length / t.length : 0;
+}
+
 function sortedTodos() {
   return [...(state.priv?.todos || [])].sort((a, b) =>
     (a.done - b.done) || (a.due || "9999").localeCompare(b.due || "9999") || (a.created || "").localeCompare(b.created || ""));
@@ -348,24 +379,37 @@ function renderHome() {
   const newsToday = newsItems("__all", 1, "");
 
   $("#homeMetrics").innerHTML = connected
-    ? metric("총 평가금액", `${won(pf.value)}<small>원</small>`) +
-      metric("총 수익 (수익률)", `${pf.pnl > 0 ? "+" : ""}${won(pf.pnl)} <small>${pct(pf.rate)}</small>`, sign(pf.pnl)) +
-      metric("연 배당 예상", `${won(pf.annualDiv)}<small>원</small>`) +
-      metric("오늘 일정", `${tEvents.length}건 <small class="muted">· 할 일 ${openTodos.length}</small>`)
+    ? metric("총 평가금액", `${won(pf.value)}<small>원</small>`, "", miniBar(pf)) +
+      metric("총 수익 (수익률)", `${pf.pnl > 0 ? "+" : ""}${won(pf.pnl)} <small>${pct(pf.rate)}</small>`, sign(pf.pnl),
+        pf.cost ? gauge(Math.abs(pf.rate) / 30, pf.pnl >= 0 ? "var(--up)" : "var(--down)") : "") +
+      metric("연 배당 예상", `${won(pf.annualDiv)}<small>원</small>`, "",
+        gauge(ytdDiv(pf).ratio, "var(--green)") + `<div class="muted sm" style="margin-top:6px">올해 ${Math.round(ytdDiv(pf).ratio * 100)}% 수령 예상</div>`) +
+      metric("오늘 일정", `${tEvents.length}건 <small class="muted">· 할 일 ${openTodos.length}</small>`, "",
+        gauge(todoRatio(), "var(--indigo)"))
     : metric("오늘 뉴스", `${newsToday.length}건`) + metric("키워드", `${state.keywords.length}개`);
 
   $("#homeToday").hidden = $("#homeAlloc").hidden = $("#homeHoldings").hidden = !connected;
   if (connected) {
+    const allTodos = state.priv.todos || [];
+    const doneCnt = allTodos.filter((t) => t.done).length;
+    const ytd = ytdDiv(pf);
     $("#homeToday").innerHTML = `<div class="card-head"><h3>오늘 · ${+today().slice(5, 7)}월 ${+today().slice(8)}일 (${weekday(today())})</h3><a class="more" data-go="plan">일정 →</a></div>
+      <div class="rings">
+        <div class="ring-item">${ring(todoRatio(), { size: 68, color: "var(--indigo)", center: `${Math.round(todoRatio() * 100)}%` })}
+          <div class="ring-legend"><b>${doneCnt}/${allTodos.length}</b><span>할 일 완료</span></div></div>
+        <div class="ring-item">${ring(ytd.ratio, { size: 68, color: "var(--green)", center: `${Math.round(ytd.ratio * 100)}%` })}
+          <div class="ring-legend"><b>${won(ytd.past)}원</b><span>올해 배당 (예상)</span></div></div>
+      </div>
       ${tEvents.map((e) => eventHtml(e, { del: false })).join("") || '<div class="empty" style="padding:10px 0">오늘 일정이 없습니다.</div>'}
       ${openTodos.length ? `<ul class="todos" style="border-top:1px solid var(--line);margin-top:6px;padding-top:4px">${openTodos.slice(0, 5).map(todoHtml).join("")}</ul>` : ""}`;
     $("#homeAlloc").innerHTML = `<div class="card-head"><h3>자산 배분</h3><span class="muted sm">평가금액 기준</span></div>${allocHtml(pf)}
       <h3 style="margin-top:14px">월별 배당 예상</h3>${divChartHtml(pf)}`;
     $("#homeHoldings").innerHTML = `<div class="card-head"><h3>투자 목록</h3><a class="more" data-go="invest">전체 →</a></div>
       ${pf.rows.length ? `<div class="table-wrap"><table class="tbl" style="min-width:420px">
-        <tr><th>종목</th><th>평가금액</th><th>수익률</th><th>오늘</th></tr>
+        <tr><th>종목</th><th>비중</th><th>평가금액</th><th>수익률</th><th>오늘</th></tr>
         ${[...pf.rows].sort((a, b) => (b.value || 0) - (a.value || 0)).slice(0, 6).map((r) => `<tr class="h" data-edit-holding="${esc(r.h.id)}">
           <td><span class="nm">${esc(r.name)}</span><span class="ty">${TYPE[r.h.type].label}</span></td>
+          <td class="w">${gauge((r.value || 0) / pf.value, TYPE[r.h.type].color)}${pf.value ? (((r.value || 0) / pf.value) * 100).toFixed(1) : "0"}%</td>
           <td>${won(r.value)}</td><td class="${sign(r.rate)}">${pct(r.rate)}</td><td class="${sign(r.changePct)}">${pct(r.changePct)}</td></tr>`).join("")}
       </table></div>` : `<div class="empty">아직 종목이 없습니다. <a class="more" data-go="invest">종목 추가 →</a></div>`}`;
   }
@@ -455,7 +499,7 @@ function renderInvest() {
 
   const rows = [...pf.rows].sort((a, b) => (b.value || 0) - (a.value || 0));
   $("#holdings").innerHTML = rows.length ? `
-    <tr><th>종목</th><th>수량</th><th>평단가</th><th>현재가</th><th>매입금액</th><th>평가금액</th><th>손익</th><th>수익률</th><th>연 배당</th></tr>
+    <tr><th>종목</th><th>비중</th><th>수량</th><th>평단가</th><th>현재가</th><th>매입금액</th><th>평가금액</th><th>손익</th><th>수익률</th><th>연 배당</th></tr>
     ${rows.map((r) => {
       const t = TYPE[r.h.type];
       const money = (v) => (r.h.type === "us" ? `$${fmtNum(v, 2)}` : won(v));
@@ -463,13 +507,14 @@ function renderInvest() {
       return `<tr class="h" data-edit-holding="${esc(r.h.id)}" title="${esc(r.h.memo || "눌러서 수정")}">
         <td><span class="nm">${esc(r.name)}</span><span class="ty">${t.label}${r.h.symbol && r.h.type !== "gold" ? ` · ${esc(r.h.symbol)}` : ""}</span>
           ${r.h.lots?.length > 1 ? `<span class="lots">${r.h.lots.map((l) => `${esc(l.account)} ${fmtNum(l.qty)}${t.unit}${l.avg ? ` @${avgMoney(l.avg)}` : ""}`).join(" · ")}</span>` : ""}</td>
+        <td class="w">${gauge((r.value || 0) / pf.value, t.color)}${pf.value ? (((r.value || 0) / pf.value) * 100).toFixed(1) : "0"}%</td>
         <td>${fmtNum(r.h.qty)}${t.unit}</td><td>${+r.h.avg ? avgMoney(r.h.avg) : '<span class="up sm">미입력</span>'}</td>
         <td>${r.price != null ? money(r.price) : '<span class="muted">대기</span>'}${r.changePct != null ? ` <span class="${sign(r.changePct)} sm">${pct(r.changePct)}</span>` : ""}</td>
         <td>${won(r.cost)}</td><td>${won(r.value)}</td>
         <td class="${sign(r.pnl)}">${r.pnl != null ? (r.pnl > 0 ? "+" : "") + won(r.pnl) : "-"}</td>
         <td class="${sign(r.rate)}">${pct(r.rate)}</td><td>${r.annualDiv ? won(r.annualDiv) : "-"}</td></tr>`;
     }).join("")}
-    <tfoot><tr><td>합계</td><td></td><td></td><td></td><td>${won(pf.cost)}</td><td>${won(pf.value)}</td>
+    <tfoot><tr><td>합계</td><td>100%</td><td></td><td></td><td></td><td>${won(pf.cost)}</td><td>${won(pf.value)}</td>
       <td class="${sign(pf.pnl)}">${pf.pnl > 0 ? "+" : ""}${won(pf.pnl)}</td><td class="${sign(pf.rate)}">${pct(pf.rate)}</td><td>${won(pf.annualDiv)}</td></tr></tfoot>`
     : `<tr><td class="empty" style="text-align:center">＋ 종목 추가 버튼으로 주식, 금, 코인 등을 등록하세요.</td></tr>`;
   if (pf.missing) $("#priceTime").textContent += ` · ${pf.missing}개 종목 시세 대기 중`;
