@@ -334,7 +334,7 @@ function todoHtml(t) {
   const late = t.due && !t.done && t.due < today();
   return `<li class="${t.done ? "done" : ""}">
     <input type="checkbox" data-toggle-todo="${esc(t.id)}" ${t.done ? "checked" : ""} aria-label="완료">
-    <span class="tt">${esc(t.title)}</span>
+    <span class="tt${t.note ? " has-note" : ""}"${t.note ? ` data-todo-note title="눌러서 내용 펼치기"` : ""}>${esc(t.title)}${t.note ? `<span class="tnote">${esc(t.note)}</span>` : ""}</span>
     ${t.due ? `<span class="due ${late ? "late" : ""}">${dayLabel(t.due)}</span>` : ""}
     <button class="x" data-del-todo="${esc(t.id)}" title="삭제" aria-label="삭제">×</button></li>`;
 }
@@ -787,6 +787,8 @@ document.addEventListener("click", (e) => {
     if (confirm("이 일정을 삭제할까요?")) mutate("일정 삭제", (d) => { d.events = d.events.filter((x) => x.id !== id); });
     return;
   }
+  const tn = e.target.closest("[data-todo-note]");
+  if (tn) { tn.classList.toggle("open"); return; }
   const dt = e.target.closest("[data-del-todo]");
   if (dt) {
     const id = dt.dataset.delTodo;
@@ -845,9 +847,10 @@ $("#eventForm").addEventListener("submit", (e) => {
 });
 $("#todoForm").addEventListener("submit", (e) => {
   e.preventDefault();
-  const t = { id: uid(), title: $("#todoTitle").value.trim(), due: $("#todoDue").value || "", done: false, created: new Date().toISOString() };
+  const note = $("#todoNote").value.trim();
+  const t = { id: uid(), title: $("#todoTitle").value.trim(), ...(note ? { note } : {}), due: $("#todoDue").value || "", done: false, created: new Date().toISOString() };
   if (!t.title) return;
-  $("#todoTitle").value = ""; $("#todoDue").value = "";
+  $("#todoTitle").value = ""; $("#todoNote").value = ""; $("#todoDue").value = "";
   mutate(`할 일 추가: ${t.title}`, (d) => { d.todos.push(t); });
 });
 

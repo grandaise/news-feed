@@ -58,12 +58,12 @@ button.primary:hover { opacity: .88; background: var(--accent); }
 button.danger { color: var(--danger); }
 button.sm { padding: 5px 12px; font-size: 13px; }
 select { border-radius: 10px; padding: 8px 10px; }
-input {
+input, textarea {
   font: inherit; color: var(--text); background: var(--fill-2);
   border: 1px solid transparent; border-radius: 10px; padding: 9px 12px; min-width: 0;
   transition: border-color .15s, box-shadow .15s, background .15s;
 }
-input:focus, select:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 4px var(--accent-soft); background: var(--card); }
+input:focus, select:focus, textarea:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 4px var(--accent-soft); background: var(--card); }
 input[readonly] { opacity: .65; }
 input[type=checkbox] { accent-color: var(--accent); width: 18px; height: 18px; margin: 0; }
 a.more { font-size: 14px; color: var(--accent); text-decoration: none; cursor: pointer; white-space: nowrap; }
@@ -462,3 +462,13 @@ a.tab { text-decoration: none; color: var(--text); border-radius: 980px; display
 .hs.fade-r { -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 40px), transparent); mask-image: linear-gradient(to right, #000 calc(100% - 40px), transparent); }
 .hs.fade-l { -webkit-mask-image: linear-gradient(to right, transparent, #000 40px); mask-image: linear-gradient(to right, transparent, #000 40px); }
 .hs.fade-l.fade-r { -webkit-mask-image: linear-gradient(to right, transparent, #000 40px, #000 calc(100% - 40px), transparent); mask-image: linear-gradient(to right, transparent, #000 40px, #000 calc(100% - 40px), transparent); }
+
+/* ===== 할 일 내용 ===== */
+#todoForm #todoNote { flex-basis: 100%; resize: vertical; min-height: 44px; line-height: 1.5; }
+.todos li { align-items: flex-start; }
+.todos li > input[type=checkbox], .todos .due, .todos .x { margin-top: 2px; }
+.todos .tt.has-note { cursor: pointer; }
+.todos .tnote { display: block; margin-top: 2px; font-size: 13px; color: var(--muted); white-space: pre-wrap; overflow-wrap: anywhere;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.todos .tt.open .tnote { -webkit-line-clamp: unset; display: block; }
+.todos li.done .tnote { text-decoration: none; }
