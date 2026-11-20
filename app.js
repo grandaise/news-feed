@@ -455,7 +455,8 @@ function renderInvest() {
       const t = TYPE[r.h.type];
       const money = (v) => (r.h.type === "us" ? `$${fmtNum(v, 2)}` : won(v));
       return `<tr class="h" data-edit-holding="${esc(r.h.id)}" title="${esc(r.h.memo || "눌러서 수정")}">
-        <td><span class="nm">${esc(r.name)}</span><span class="ty">${t.label}${r.h.symbol && r.h.type !== "gold" ? ` · ${esc(r.h.symbol)}` : ""}</span></td>
+        <td><span class="nm">${esc(r.name)}</span><span class="ty">${t.label}${r.h.symbol && r.h.type !== "gold" ? ` · ${esc(r.h.symbol)}` : ""}</span>
+          ${r.h.lots?.length > 1 ? `<span class="lots">${r.h.lots.map((l) => `${esc(l.account)} ${fmtNum(l.qty)}${t.unit}${l.avg ? ` @${money(l.avg)}` : ""}`).join(" · ")}</span>` : ""}</td>
         <td>${fmtNum(r.h.qty)}${t.unit}</td><td>${+r.h.avg ? money(r.h.avg) : '<span class="up sm">미입력</span>'}</td>
         <td>${r.price != null ? money(r.price) : '<span class="muted">대기</span>'}${r.changePct != null ? ` <span class="${sign(r.changePct)} sm">${pct(r.changePct)}</span>` : ""}</td>
         <td>${won(r.cost)}</td><td>${won(r.value)}</td>
@@ -611,6 +612,7 @@ function syncHoldingForm() {
   $("#hDpsLabel").textContent = t === "etc" ? "연 이자 (원)" : `연간 주당 배당금 (${cur})`;
   $("#hManualLabel").textContent = t === "etc" ? "현재 평가액 (원)" : `현재가 직접 입력 (${cur}, 선택)`;
   $("#hManual").required = t === "etc";
+  $("#hLotsField").hidden = t === "etc";
 }
 
 let editingId = null;
@@ -631,10 +633,56 @@ function openHolding(id = null) {
   $("#hMemo").value = h.memo || "";
   $("#hMonths").innerHTML = Array.from({ length: 12 }, (_, i) =>
     `<label><input type="checkbox" value="${i + 1}" ${(h.divMonths || []).includes(i + 1) ? "checked" : ""}>${i + 1}월</label>`).join("");
+  $("#hLots").innerHTML = (h.lots || []).map(lotRowHtml).join("");
   $("#holdingDelete").hidden = !id;
   syncHoldingForm();
+  syncLots();
   $("#holdingDlg").showModal();
 }
+
+// ---------- 계좌별 보유 (연금저축·ISA 등) ----------
+function lotRowHtml(l = {}) {
+  return `<div class="row lot">
+    <input class="lot-acc" list="accList" placeholder="계좌 (예: ISA)" value="${esc(l.account || "")}">
+    <input class="lot-qty" type="number" step="any" min="0" placeholder="수량" value="${l.qty ?? ""}">
+    <input class="lot-avg" type="number" step="any" min="0" placeholder="평단가" value="${l.avg ?? ""}">
+    <button type="button" class="lot-del" title="계좌 삭제" aria-label="계좌 삭제">×</button></div>`;
+}
+function readLots() {
+  return $$("#hLots .lot").map((r) => ({
+    account: $(".lot-acc", r).value.trim() || "계좌",
+    qty: +$(".lot-qty", r).value || 0,
+    avg: +$(".lot-avg", r).value || null,
+  })).filter((l) => l.qty > 0);
+}
+// 합계 수량, 전체 평단가(수량 가중평균). 평단가가 빠진 계좌가 있으면 전체 평단가는 비운다
+function lotTotals(lots) {
+  const qty = lots.reduce((s, l) => s + l.qty, 0);
+  const avg = lots.length && lots.every((l) => l.avg) ? lots.reduce((s, l) => s + l.qty * l.avg, 0) / qty : null;
+  return { qty, avg };
+}
+function syncLots() {
+  const hasRows = $$("#hLots .lot").length > 0;
+  $("#hQty").readOnly = $("#hAvg").readOnly = hasRows;
+  if (!hasRows) return;
+  const t = lotTotals(readLots());
+  $("#hQty").value = t.qty ? +t.qty.toFixed(6) : "";
+  $("#hAvg").value = t.avg ? +t.avg.toFixed(4) : "";
+}
+$("#addLot").addEventListener("click", () => {
+  // 처음 나눌 때는 지금 입력된 수량·평단가를 첫 계좌로 옮겨 준다
+  const first = !$$("#hLots .lot").length && $("#hQty").value
+    ? { qty: $("#hQty").value, avg: $("#hAvg").value } : {};
+  $("#hLots").insertAdjacentHTML("beforeend", lotRowHtml(first));
+  syncLots();
+  $$("#hLots .lot-acc").at(-1).focus();
+});
+$("#hLots").addEventListener("input", syncLots);
+$("#hLots").addEventListener("click", (e) => {
+  if (!e.target.closest(".lot-del")) return;
+  e.target.closest(".lot").remove();
+  syncLots();
+});
 
 // ---------- 이벤트 연결 ----------
 $("#views").addEventListener("click", (e) => { const b = e.target.closest("[data-view]"); if (b) go(b.dataset.view); });
@@ -743,6 +791,9 @@ $("#holdingForm").addEventListener("submit", (e) => {
     manualPrice: +$("#hManual").value || null,
     memo: $("#hMemo").value.trim(),
   };
+  const lots = type === "etc" ? [] : readLots();
+  if (lots.length) Object.assign(h, { lots }, lotTotals(lots));
+  if (!(h.qty > 0)) return toast("수량을 입력해 주세요.");
   if (type === "etc" && h.qty) { h.avg /= h.qty; h.dps /= h.qty; if (h.manualPrice) h.manualPrice /= h.qty; }
   $("#holdingDlg").close();
   const isNew = !editingId;

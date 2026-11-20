@@ -154,6 +154,12 @@ ul.list a:visited .t { color: var(--muted); }
 .divchart div.now { opacity: 1; }
 .divlbl { display: flex; gap: 4px; font-size: 11px; color: var(--muted); }
 .divlbl span { flex: 1; text-align: center; }
+.lots-edit { display: grid; gap: 6px; margin-bottom: 6px; }
+.lots-edit .row input { width: 100%; }
+.lots-edit .row .lot-acc { flex: 1.2; }
+.lots-edit .row button { flex: none; border: 0; background: none; color: var(--muted); font-size: 16px; padding: 0 6px; }
+input[readonly] { opacity: .7; }
+.tbl .lots { display: block; font-size: 11px; color: var(--muted); font-weight: 400; margin-top: 2px; }
 .months { display: grid; grid-template-columns: repeat(6, 1fr); gap: 4px; }
 .months label { font-size: 13px; display: flex; align-items: center; gap: 3px; justify-content: center; border: 1px solid var(--line); border-radius: 6px; padding: 4px 0; }
 .connect-card { text-align: center; padding: 28px 16px; }
