@@ -21,11 +21,22 @@ let todoCount = 0;
 if (process.env.MY_DATA_DIR) {
   try {
     const priv = JSON.parse(await readFile(`${process.env.MY_DATA_DIR}/data.json`, "utf8"));
-    const events = (priv.events || []).filter((e) => e.date === todayStr)
-      .sort((a, b) => (a.time || "99").localeCompare(b.time || "99"));
+    // 구글 캘린더에서 가져온 일정도 합친다 (여러 날 일정은 기간 중이면 포함)
+    let google = [];
+    try {
+      const g = JSON.parse(await readFile(`${process.env.MY_DATA_DIR}/gcal.json`, "utf8"));
+      google = (g.events || [])
+        .filter((e) => e.date === todayStr || (e.endDate && e.date <= todayStr && todayStr <= e.endDate))
+        .map((e) => ({ ...e, cat: "구글" }));
+    } catch {}
+    const events = [...(priv.events || []).filter((e) => e.date === todayStr), ...google]
+      .sort((a, b) => (a.time || "00").localeCompare(b.time || "00"));
     eventCount = events.length;
     lines.push(`📅 오늘 일정 ${events.length ? `${events.length}건` : "없음"}`);
-    for (const e of events) lines.push(`  ${e.time || "종일"}  ${e.title}${e.cat ? ` [${e.cat}]` : ""}`);
+    for (const e of events) {
+      const time = e.time ? `${e.time}${e.endTime ? `~${e.endTime}` : ""}` : "종일";
+      lines.push(`  ${time}  ${e.title}${e.location ? ` @${e.location}` : ""}${e.cat ? ` [${e.cat}]` : ""}`);
+    }
 
     const todos = (priv.todos || []).filter((t) => !t.done)
       .sort((a, b) => (a.due || "9999").localeCompare(b.due || "9999"));

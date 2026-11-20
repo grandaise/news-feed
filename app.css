@@ -3,7 +3,7 @@
   --line: #e5e7eb; --accent: #1f6feb; --accent-soft: #e8f0fe; --new: #e5484d;
   --up: #d93025; --down: #1a73e8; --danger: #d93025;
   --c-stock: #378add; --c-gold: #ef9f27; --c-coin: #7f77dd; --c-etc: #9aa0a8;
-  --cat-work: #7f77dd; --cat-life: #1d9e75; --cat-money: #ef9f27;
+  --cat-work: #7f77dd; --cat-life: #1d9e75; --cat-money: #ef9f27; --cat-google: #4285f4;
 }
 @media (prefers-color-scheme: dark) {
   :root {
@@ -119,6 +119,8 @@ ul.list a:visited .t { color: var(--muted); }
 .ev .tt { flex: 1; min-width: 0; }
 .ev .x, .todos .x { border: 0; background: none; color: var(--muted); padding: 0 4px; font-size: 16px; }
 .cat { font-size: 11px; padding: 1px 7px; border-radius: 6px; margin-left: 6px; white-space: nowrap; color: #fff; }
+.cat-구글 { background: var(--cat-google); }
+.gadd { font-size: 11px; font-weight: 700; color: var(--cat-google); text-decoration: none; border: 1px solid var(--line); border-radius: 6px; padding: 1px 5px; }
 .cat-업무 { background: var(--cat-work); } .cat-개인 { background: var(--cat-life); } .cat-재테크 { background: var(--cat-money); }
 #eventForm { margin-top: 12px; border-top: 1px solid var(--line); padding-top: 12px; }
 .todos { list-style: none; margin: 10px 0 0; padding: 0; }

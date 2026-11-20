@@ -119,6 +119,7 @@ const state = {
   priv: null,            // { events, todos, holdings }
   privError: null,
   prices: { prices: {}, fx: {} },
+  gcal: null,            // 구글 캘린더에서 가져온 일정 (my-data/gcal.json)
   live: {},              // 업비트 실시간 코인 시세
   selDay: today(),
   calMonth: today().slice(0, 7),
@@ -138,12 +139,14 @@ const EMPTY = () => ({ events: [], todos: [], holdings: [] });
 async function loadPrivate() {
   if (!cfg.token || !cfg.dataRepo) { state.priv = null; return; }
   try {
-    const [d, p] = await Promise.all([
+    const [d, p, g] = await Promise.all([
       ghFile(cfg.dataRepo, "data.json"),
       ghFile(cfg.dataRepo, "prices.json").catch(() => null),
+      ghFile(cfg.dataRepo, "gcal.json").catch(() => null),
     ]);
     state.priv = { ...EMPTY(), ...d.json };
     if (p) state.prices = p.json;
+    state.gcal = g ? g.json : null;
     state.privError = null;
   } catch (e) {
     state.priv = null;
@@ -253,12 +256,38 @@ function divChartHtml(pf) {
     <p class="muted sm" style="margin:8px 0 0">이번 달 ${won(pf.monthly[nowM - 1])}원 · 연간 ${won(pf.annualDiv)}원 (세전)</p>`;
 }
 
-const eventsOn = (day) => (state.priv?.events || []).filter((e) => e.date === day).sort((a, b) => (a.time || "99").localeCompare(b.time || "99"));
+// 내 일정 + 구글 캘린더 일정 (여러 날 일정은 기간 내 매일 표시)
+function eventsOn(day) {
+  const mine = (state.priv?.events || []).filter((e) => e.date === day);
+  const google = (state.gcal?.events || [])
+    .filter((e) => e.date === day || (e.endDate && e.date <= day && day <= e.endDate))
+    .map((e) => ({ ...e, cat: "구글", src: "google" }));
+  return [...mine, ...google].sort((a, b) => (a.time || "00").localeCompare(b.time || "00"));
+}
+
+// 구글 캘린더 "일정 만들기" 화면 주소 (내용이 미리 채워짐)
+function gcalAddUrl(e) {
+  const d = e.date.replace(/-/g, "");
+  let dates;
+  if (e.time) {
+    const [h, m] = e.time.split(":").map(Number);
+    const end = `${String((h + 1) % 24).padStart(2, "0")}${String(m).padStart(2, "0")}00`;
+    dates = `${d}T${e.time.replace(":", "")}00/${h === 23 ? addDays(e.date, 1).replace(/-/g, "") : d}T${end}`;
+  } else {
+    dates = `${d}/${addDays(e.date, 1).replace(/-/g, "")}`;
+  }
+  const p = new URLSearchParams({ action: "TEMPLATE", text: e.title, dates, ctz: TZ, details: `분류: ${e.cat}` });
+  return `https://calendar.google.com/calendar/render?${p}`;
+}
 
 function eventHtml(e, { del = true } = {}) {
+  const google = e.src === "google";
+  const range = google && e.endDate ? `~${+e.endDate.slice(5, 7)}/${+e.endDate.slice(8)}` : google && e.endTime ? `~${e.endTime}` : "";
   return `<div class="ev"><span class="tm">${esc(e.time || "종일")}</span>
-    <span class="tt">${esc(e.title)}<span class="cat cat-${esc(e.cat)}">${esc(e.cat)}</span></span>
-    ${del ? `<button class="x" data-del-event="${esc(e.id)}" title="삭제" aria-label="삭제">×</button>` : ""}</div>`;
+    <span class="tt">${esc(e.title)}<span class="cat cat-${esc(e.cat)}">${esc(e.cat)}</span>
+      ${range || e.location ? `<span class="muted sm" style="display:block">${esc([range, e.location].filter(Boolean).join(" · "))}</span>` : ""}</span>
+    ${!google && del ? `<a class="gadd" href="${esc(gcalAddUrl(e))}" target="_blank" rel="noopener" title="구글 캘린더에 추가">G+</a>` : ""}
+    ${!google && del ? `<button class="x" data-del-event="${esc(e.id)}" title="삭제" aria-label="삭제">×</button>` : ""}</div>`;
 }
 
 function todoHtml(t) {
@@ -369,19 +398,21 @@ function renderPlan() {
   $("#calTitle").textContent = `${y}년 ${m}월`;
   const first = `${state.calMonth}-01`;
   const start = addDays(first, -new Date(first + "T12:00:00+09:00").getUTCDay());
-  const byDay = {};
-  for (const e of state.priv?.events || []) (byDay[e.date] = byDay[e.date] || []).push(e);
-  const catColor = { 업무: "var(--cat-work)", 개인: "var(--cat-life)", 재테크: "var(--cat-money)" };
+  const catColor = { 업무: "var(--cat-work)", 개인: "var(--cat-life)", 재테크: "var(--cat-money)", 구글: "var(--cat-google)" };
   let html = [...WD].map((w) => `<div class="wd">${w}</div>`).join("");
   for (let i = 0; i < 42; i++) {
     const d = addDays(start, i);
     const dow = i % 7;
     const cls = ["d", d.slice(0, 7) !== state.calMonth && "other", d === today() && "today", d === state.selDay && "sel", dow === 0 && "sun", dow === 6 && "sat"].filter(Boolean).join(" ");
-    const dots = (byDay[d] || []).slice(0, 3).map((e) => `<i style="background:${catColor[e.cat] || "var(--accent)"}"></i>`).join("");
+    const dots = eventsOn(d).slice(0, 3).map((e) => `<i style="background:${catColor[e.cat] || "var(--accent)"}"></i>`).join("");
     html += `<button class="${cls}" data-day="${d}">${+d.slice(8)}<span class="dots">${dots}</span></button>`;
     if (i >= 34 && addDays(start, i + 1).slice(0, 7) !== state.calMonth && dow === 6) break;
   }
   $("#cal").innerHTML = html;
+  const g = state.gcal;
+  $("#gcalStatus").innerHTML = g?.updatedAt
+    ? `<span class="sw" style="background:var(--cat-google)"></span>구글 캘린더 ${dayLabel(kstDay(g.updatedAt))} ${timeFmt.format(new Date(g.updatedAt))} 동기화 · ${g.events.length}건${g.errors ? ` · <span class="up">${esc(g.errors.join(", "))}</span>` : ""}`
+    : `구글 캘린더 미연동 · <a href="https://github.com/${esc(cfg.repo)}#구글-캘린더-연동" target="_blank" rel="noopener">연동 방법</a>`;
 
   $("#dayTitle").textContent = `${dayLabel(state.selDay) === "오늘" ? "오늘 · " : ""}${+state.selDay.slice(5, 7)}월 ${+state.selDay.slice(8)}일 (${weekday(state.selDay)})`;
   const evs = eventsOn(state.selDay);

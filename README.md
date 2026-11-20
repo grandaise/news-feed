@@ -37,3 +37,15 @@ node scripts/fetch.mjs
 4. **Actions → 아침 알림 → Run workflow** 로 테스트
 
 토픽 이름을 아는 사람은 누구나 알림을 받을 수 있으므로 길고 랜덤하게 정하세요.
+
+## 구글 캘린더 연동
+구글 캘린더 일정이 대시보드 달력·홈·아침 알림에 함께 표시됩니다. (구글 → 대시보드 방향, 2시간마다 동기화)
+대시보드에서 만든 일정은 옆의 **G+** 버튼으로 구글 캘린더에 바로 추가할 수 있습니다.
+
+1. PC에서 [구글 캘린더 설정](https://calendar.google.com/calendar/r/settings) → 왼쪽 **내 캘린더의 설정**에서 캘린더 선택
+2. **캘린더 통합** → **iCal 형식의 비밀 주소** 복사 (`https://calendar.google.com/calendar/ical/.../private-.../basic.ics`)
+3. `my-data` 저장소 **Settings → Secrets and variables → Actions → New repository secret**
+   - Name: `GCAL_ICS_URL`, Secret: 복사한 주소 (캘린더가 여러 개면 줄바꿈으로 여러 줄)
+4. `my-data` → **Actions → 구글 캘린더 가져오기 → Run workflow**
+
+비밀 주소를 아는 사람은 캘린더를 볼 수 있으니 다른 곳에 공유하지 마세요. 유출되면 같은 화면에서 **재설정**하면 됩니다.
