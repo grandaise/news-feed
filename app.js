@@ -203,7 +203,9 @@ function calc(h) {
   const changePct = h.manualPrice ? null : live?.changePct ?? p?.changePct ?? null;
   const qty = +h.qty || 0, avg = +h.avg || 0;
   // 평단가를 입력하지 않은 종목은 매입금액·손익을 계산하지 않는다
-  const cost = fx && avg ? qty * avg * fx : null;
+  // 해외 종목을 원화 평단으로 넣었으면 환율을 곱하지 않는다 (환차손익이 손익에 포함됨)
+  const avgKrw = h.type === "us" && h.avgCur === "KRW";
+  const cost = fx && avg ? qty * avg * (avgKrw ? 1 : fx) : null;
   const value = price != null && fx ? qty * price * fx : null;
   const pnl = value != null && cost != null ? value - cost : null;
   const annualDiv = h.dps && fx ? qty * h.dps * fx : 0;
@@ -457,10 +459,11 @@ function renderInvest() {
     ${rows.map((r) => {
       const t = TYPE[r.h.type];
       const money = (v) => (r.h.type === "us" ? `$${fmtNum(v, 2)}` : won(v));
+      const avgMoney = (v) => (r.h.type === "us" && r.h.avgCur === "KRW" ? `${won(v)}원` : money(v));
       return `<tr class="h" data-edit-holding="${esc(r.h.id)}" title="${esc(r.h.memo || "눌러서 수정")}">
         <td><span class="nm">${esc(r.name)}</span><span class="ty">${t.label}${r.h.symbol && r.h.type !== "gold" ? ` · ${esc(r.h.symbol)}` : ""}</span>
-          ${r.h.lots?.length > 1 ? `<span class="lots">${r.h.lots.map((l) => `${esc(l.account)} ${fmtNum(l.qty)}${t.unit}${l.avg ? ` @${money(l.avg)}` : ""}`).join(" · ")}</span>` : ""}</td>
-        <td>${fmtNum(r.h.qty)}${t.unit}</td><td>${+r.h.avg ? money(r.h.avg) : '<span class="up sm">미입력</span>'}</td>
+          ${r.h.lots?.length > 1 ? `<span class="lots">${r.h.lots.map((l) => `${esc(l.account)} ${fmtNum(l.qty)}${t.unit}${l.avg ? ` @${avgMoney(l.avg)}` : ""}`).join(" · ")}</span>` : ""}</td>
+        <td>${fmtNum(r.h.qty)}${t.unit}</td><td>${+r.h.avg ? avgMoney(r.h.avg) : '<span class="up sm">미입력</span>'}</td>
         <td>${r.price != null ? money(r.price) : '<span class="muted">대기</span>'}${r.changePct != null ? ` <span class="${sign(r.changePct)} sm">${pct(r.changePct)}</span>` : ""}</td>
         <td>${won(r.cost)}</td><td>${won(r.value)}</td>
         <td class="${sign(r.pnl)}">${r.pnl != null ? (r.pnl > 0 ? "+" : "") + won(r.pnl) : "-"}</td>
@@ -611,7 +614,10 @@ function syncHoldingForm() {
   $("#hSymbol").required = !!label;
   const cur = t === "us" ? "달러" : "원";
   $("#hQtyLabel").textContent = t === "gold" ? "보유량 (g)" : t === "etc" ? "수량 (예금·현금은 1)" : "수량";
-  $("#hAvgLabel").textContent = t === "gold" ? `평균 매입가 (원/g)` : t === "etc" ? "매입금액 (원)" : `평단가 (${cur})`;
+  $("#hAvgCur").hidden = t !== "us";
+  const avgCur = t === "us" && $("#hAvgCur").value === "KRW" ? "원" : cur;
+  $("#hAvgLabel").textContent = t === "gold" ? `평균 매입가 (원/g)` : t === "etc" ? "매입금액 (원)" : `평단가 (${avgCur})`;
+  $$("#hLots .lot-avg").forEach((i) => { i.placeholder = `평단가 (${avgCur})`; });
   $("#hDpsLabel").textContent = t === "etc" ? "연 이자 (원)" : `연간 주당 배당금 (${cur})`;
   $("#hManualLabel").textContent = t === "etc" ? "현재 평가액 (원)" : `현재가 직접 입력 (${cur}, 선택)`;
   $("#hManual").required = t === "etc";
@@ -631,6 +637,7 @@ function openHolding(id = null) {
   // 기타 자산은 총액으로 입력받고 1단위 가격으로 저장하므로 다시 총액으로 보여준다
   const k = h.type === "etc" ? +h.qty || 1 : 1;
   $("#hAvg").value = h.avg != null ? +(h.avg * k).toFixed(4) : "";
+  $("#hAvgCur").value = h.avgCur === "KRW" ? "KRW" : "USD";
   $("#hDps").value = h.dps ? +(h.dps * k).toFixed(4) : "";
   $("#hManual").value = h.manualPrice ? +(h.manualPrice * k).toFixed(4) : "";
   $("#hMemo").value = h.memo || "";
@@ -677,6 +684,7 @@ $("#addLot").addEventListener("click", () => {
   const first = !$$("#hLots .lot").length && $("#hQty").value
     ? { qty: $("#hQty").value, avg: $("#hAvg").value } : {};
   $("#hLots").insertAdjacentHTML("beforeend", lotRowHtml(first));
+  syncHoldingForm();
   syncLots();
   $$("#hLots .lot-acc").at(-1).focus();
 });
@@ -768,6 +776,7 @@ $("#todoForm").addEventListener("submit", (e) => {
 // 투자
 $("#addHolding").addEventListener("click", () => openHolding());
 $("#hType").addEventListener("change", syncHoldingForm);
+$("#hAvgCur").addEventListener("change", syncHoldingForm);
 $("#holdingCancel").addEventListener("click", () => $("#holdingDlg").close());
 $("#holdingDelete").addEventListener("click", () => {
   const id = editingId;
@@ -789,6 +798,7 @@ $("#holdingForm").addEventListener("submit", (e) => {
     id: editingId || uid(), type, symbol,
     name: $("#hName").value.trim(),
     qty: +$("#hQty").value, avg: +$("#hAvg").value || null,
+    ...(type === "us" && { avgCur: $("#hAvgCur").value }),
     dps: +$("#hDps").value || 0,
     divMonths: $$("#hMonths input:checked").map((c) => +c.value),
     manualPrice: +$("#hManual").value || null,

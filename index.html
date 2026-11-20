@@ -111,7 +111,7 @@
       <div class="card" id="invAlloc"></div>
       <div class="card" id="invDiv"></div>
     </div>
-    <p class="muted sm">현재가: 국내 주식·금은 네이버 증권, 해외 주식·환율은 Yahoo Finance, 코인은 빗썸 기준입니다. 해외 종목의 매입금액은 현재 환율로 환산합니다. 이 화면은 기록·계산용이며 투자 권유가 아닙니다.</p>
+    <p class="muted sm">현재가: 국내 주식·금은 네이버 증권, 해외 주식·환율은 Yahoo Finance, 코인은 빗썸 기준입니다. 해외 종목은 평단가를 달러로 넣으면 매입금액을 현재 환율로 환산하고, 원화로 넣으면 그대로 써서 환율 변동까지 손익에 반영합니다. 이 화면은 기록·계산용이며 투자 권유가 아닙니다.</p>
   </section>
 
   <div class="card connect-card" id="needConnect" hidden>
@@ -174,7 +174,9 @@
     <div class="field"><label>이름 (비우면 자동)</label><input id="hName" autocomplete="off"></div>
     <div class="row">
       <div class="field"><label id="hQtyLabel">수량</label><input id="hQty" type="number" step="any" min="0" required></div>
-      <div class="field"><label id="hAvgLabel">평단가 (원)</label><input id="hAvg" type="number" step="any" min="0" placeholder="모르면 비움"></div>
+      <div class="field"><label id="hAvgLabel">평단가 (원)</label>
+        <div class="row"><input id="hAvg" type="number" step="any" min="0" placeholder="모르면 비움">
+          <select id="hAvgCur" title="평단가 통화"><option value="USD">달러</option><option value="KRW">원화</option></select></div></div>
     </div>
     <div class="field" id="hLotsField">
       <label>계좌별 보유 <span class="muted">(여러 계좌에 나눠 샀다면 — 합계 수량·전체 평단가가 자동 계산됩니다)</span></label>
