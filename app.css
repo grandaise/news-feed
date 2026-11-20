@@ -115,11 +115,11 @@ main { padding: clamp(16px, 2.4vw, 32px) var(--gutter) 64px; max-width: 1600px; 
 .home-grid { display: grid; gap: 16px; grid-template-columns: minmax(0, 1fr); }
 .home-grid > .card { margin: 0; }
 @media (min-width: 760px) {
-  .home-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-areas: "today alloc" "mail mail" "hold hold" "news news" "guide guide"; }
-  .a-today { grid-area: today; } .a-alloc { grid-area: alloc; } .a-hold { grid-area: hold; } .a-news { grid-area: news; } .a-mail { grid-area: mail; } .a-guide { grid-area: guide; }
+  .home-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-areas: "today alloc" "mail mail" "hold hold" "apt apt" "news news" "guide guide"; }
+  .a-today { grid-area: today; } .a-alloc { grid-area: alloc; } .a-hold { grid-area: hold; } .a-news { grid-area: news; } .a-mail { grid-area: mail; } .a-guide { grid-area: guide; } .a-apt { grid-area: apt; }
 }
 @media (min-width: 1200px) {
-  .home-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.15fr); grid-template-areas: "today alloc news" "mail mail news" "hold hold guide"; }
+  .home-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.15fr); grid-template-areas: "today alloc news" "mail mail news" "hold hold guide" "apt apt guide"; }
   .a-hold, .a-guide { align-self: start; }
 }
 
@@ -541,7 +541,7 @@ a.tab { text-decoration: none; color: var(--text); border-radius: 980px; display
 #invHistory { margin-bottom: 16px; }
 
 /* ===== 아파트 실거래가 ===== */
-#invApt { margin-bottom: 16px; }
+#aptBox { margin-bottom: 16px; }
 .apt-top { display: flex; flex-wrap: wrap; gap: 16px; justify-content: space-between; align-items: flex-end; margin-bottom: 12px; }
 .apt-avg { font-size: 28px; font-weight: 700; letter-spacing: -.02em; margin: 2px 0; font-variant-numeric: tabular-nums; }
 .apt-avg small { font-size: 14px; font-weight: 500; margin-left: 2px; }
@@ -555,3 +555,15 @@ a.tab { text-decoration: none; color: var(--text); border-radius: 980px; display
 .apt-tbl tr.cx .apt-tag { text-decoration: none; display: inline-block; }
 .apt-tag { font-size: 11px; padding: 1px 6px; border-radius: 6px; background: var(--fill-2); color: var(--muted); }
 .apt-more { margin-top: 8px; }
+
+/* ===== 홈 실거래가 카드 · 6개 탭 ===== */
+.ha-top { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; cursor: pointer; margin-bottom: 6px; }
+.ha-top .muted { flex-basis: 100%; }
+.ha-top b { font-size: 24px; letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
+.ha-list { list-style: none; margin: 0; padding: 0; }
+.ha-list li { display: grid; grid-template-columns: 3.2em minmax(0, 1fr) auto; gap: 8px; padding: 7px 0; border-top: 1px solid var(--line); font-size: 14px; cursor: pointer; }
+.ha-list b { font-variant-numeric: tabular-nums; }
+@media (max-width: 760px) {
+  .views { width: 100%; }
+  .views button { flex: 1; padding: 6px 0; min-width: 0; }
+}

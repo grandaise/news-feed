@@ -498,6 +498,7 @@ function renderHome() {
   }
 
   renderHomeMail();
+  renderHomeApt();
   renderGuide();
   $("#homeNews").innerHTML = `<div class="card-head"><h3>오늘의 뉴스</h3><a class="more" data-go="news">전체 →</a></div>
     ${newsToday.length ? `<ul class="list">${newsToday.slice(0, 6).map((it) => newsLi(it, true)).join("")}</ul>` : '<div class="empty">오늘 올라온 기사가 없습니다.</div>'}`;
@@ -713,15 +714,31 @@ function aptCard() {
       <p class="muted sm" style="margin:8px 0 0">국토교통부 실거래가 공개 자료 기준 · 신고 기한(계약 후 30일) 때문에 최근 거래는 늦게 올라올 수 있습니다.</p>`;
   }).join("");
 }
+function renderHomeApt() {
+  const el = $("#homeApt");
+  if (!el) return;
+  const t = state.apt?.targets?.[0];
+  el.hidden = !state.priv || !t;
+  if (el.hidden) return;
+  const deals = (t.deals || []).filter((x) => !x.canceled).slice(0, 3);
+  el.innerHTML = `<div class="card-head"><h3>실거래가 · ${esc(t.name)}</h3><a class="more" data-go="apt">부동산 →</a></div>
+    ${!t.found ? `<div class="empty" style="padding:10px 0">단지를 찾지 못했습니다.</div>` : `
+    <div class="ha-top" data-go="apt"><span class="muted sm">34·35평 최근 1개월 평균</span>
+      <b>${t.avg1m?.n ? eokStr(t.avg1m.avg) : "거래 없음"}</b>${t.avg1m?.n ? `<span class="muted sm">${t.avg1m.n}건</span>` : ""}</div>
+    <ul class="ha-list">${deals.map((x) => `<li data-go="apt"><span class="muted">${+x.date.slice(5, 7)}/${+x.date.slice(8)}</span>
+      <span>${esc([(x.apt.match(/(\d+)\s*단지/) || [])[1] ? `${x.apt.match(/(\d+)\s*단지/)[1]}단지` : "", `${x.floor ?? "-"}층`].filter(Boolean).join(" · "))}</span>
+      <b>${eokStr(x.price)}</b></li>`).join("")}</ul>`}`;
+}
+
 document.addEventListener("click", (e) => {
   if (!e.target.closest("[data-apt-more]")) return;
   aptMore = !aptMore;
-  $("#invApt").innerHTML = aptCard();
+  $("#aptBox").innerHTML = aptCard();
 });
 
 function renderInvest() {
   const pf = portfolio();
-  $("#invApt").innerHTML = aptCard();
+  $("#aptBox").innerHTML = aptCard();
   $("#invHistory").innerHTML = historyChart();
   $("#invMetrics").innerHTML =
     metric("매입금액", `${won(pf.cost)}<small>원</small>`, "",
@@ -767,9 +784,9 @@ function renderInvest() {
 // ---------- 전체 렌더 ----------
 function renderAll() {
   divCache = null;
-  const v = ["home", "news", "mail", "plan", "invest"].includes(state.view) ? state.view : "home";
+  const v = ["home", "news", "mail", "plan", "invest", "apt"].includes(state.view) ? state.view : "home";
   $$("#views button").forEach((b) => b.classList.toggle("active", b.dataset.view === v));
-  const needsPriv = v === "plan" || v === "invest" || v === "mail";
+  const needsPriv = v === "plan" || v === "invest" || v === "mail" || v === "apt";
   const locked = needsPriv && !state.priv;
   $$(".view").forEach((s) => s.classList.toggle("active", s.id === `view-${v}` && !locked));
   $("#needConnect").hidden = !locked;
