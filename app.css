@@ -424,3 +424,7 @@ a.tab { text-decoration: none; color: var(--text); border-radius: 980px; display
 .ratts { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
 .rframe { width: 100%; border: 0; min-height: 300px; border-radius: 12px; background: #fff; display: block; }
 .reader-empty { padding: 120px 0; }
+/* 메일: 검색줄과 목록 사이 간격 */
+.mail-bar { margin-bottom: 16px; row-gap: 4px; }
+.mail-bar .tabs { padding-bottom: 6px; }
+.mail-tools { padding-top: 2px; }
