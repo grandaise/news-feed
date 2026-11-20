@@ -267,6 +267,10 @@ const miniBar = (pf) => {
   const e = Object.values(pf.groups);
   return e.length ? `<div class="bar" style="height:6px;margin:0;gap:2px">${e.map((g) => `<div style="width:${(g.value / pf.value) * 100}%;background:${g.color};min-width:3px"></div>`).join("")}</div>` : "";
 };
+// 손익 게이지: 수익률 ±30%를 가득 찬 바로 표시. 평단가가 없으면 안내 문구
+const pnlGauge = (pf) => pf.cost
+  ? gauge(Math.abs(pf.rate) / 30, pf.pnl >= 0 ? "var(--up)" : "var(--down)")
+  : gauge(0) + `<div class="muted sm" style="margin-top:6px">평단가를 넣으면 계산됩니다</div>`;
 // 올해 지난 달까지 받은(예상) 배당 비율
 const ytdDiv = (pf) => {
   const m = +today().slice(5, 7);
@@ -380,8 +384,7 @@ function renderHome() {
 
   $("#homeMetrics").innerHTML = connected
     ? metric("총 평가금액", `${won(pf.value)}<small>원</small>`, "", miniBar(pf)) +
-      metric("총 수익 (수익률)", `${pf.pnl > 0 ? "+" : ""}${won(pf.pnl)} <small>${pct(pf.rate)}</small>`, sign(pf.pnl),
-        pf.cost ? gauge(Math.abs(pf.rate) / 30, pf.pnl >= 0 ? "var(--up)" : "var(--down)") : "") +
+      metric("총 수익 (수익률)", `${pf.pnl > 0 ? "+" : ""}${won(pf.pnl)} <small>${pct(pf.rate)}</small>`, sign(pf.pnl), pnlGauge(pf)) +
       metric("연 배당 예상", `${won(pf.annualDiv)}<small>원</small>`, "",
         gauge(ytdDiv(pf).ratio, "var(--green)") + `<div class="muted sm" style="margin-top:6px">올해 ${Math.round(ytdDiv(pf).ratio * 100)}% 수령 예상</div>`) +
       metric("오늘 일정", `${tEvents.length}건 <small class="muted">· 할 일 ${openTodos.length}</small>`, "",
@@ -488,11 +491,14 @@ function renderPlan() {
 function renderInvest() {
   const pf = portfolio();
   $("#invMetrics").innerHTML =
-    metric("매입금액", `${won(pf.cost)}<small>원</small>`) +
-    metric("평가금액", `${won(pf.value)}<small>원</small>`) +
-    metric("평가손익", `${pf.pnl > 0 ? "+" : ""}${won(pf.pnl)}<small>원</small>`, sign(pf.pnl)) +
-    metric("수익률", pct(pf.rate), sign(pf.rate)) +
-    metric("연 배당 예상", `${won(pf.annualDiv)}<small>원</small>`);
+    metric("매입금액", `${won(pf.cost)}<small>원</small>`, "",
+      gauge(pf.value ? pf.cost / Math.max(pf.cost, pf.value) : 0, "var(--faint)") +
+      `<div class="muted sm" style="margin-top:6px">평단 입력 ${pf.rows.length - pf.noAvg}/${pf.rows.length}종목</div>`) +
+    metric("평가금액", `${won(pf.value)}<small>원</small>`, "", miniBar(pf)) +
+    metric("평가손익", `${pf.pnl > 0 ? "+" : ""}${won(pf.pnl)}<small>원</small>`, sign(pf.pnl), pnlGauge(pf)) +
+    metric("수익률", pct(pf.rate), sign(pf.rate), pnlGauge(pf)) +
+    metric("연 배당 예상", `${won(pf.annualDiv)}<small>원</small>`, "",
+      gauge(ytdDiv(pf).ratio, "var(--green)") + `<div class="muted sm" style="margin-top:6px">올해 ${Math.round(ytdDiv(pf).ratio * 100)}% 수령 예상</div>`);
 
   const u = state.prices.updatedAt;
   $("#priceTime").textContent = u ? `시세 ${dayLabel(kstDay(u))} ${timeFmt.format(new Date(u))}` : "시세 수집 전";
