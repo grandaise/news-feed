@@ -193,3 +193,16 @@ dialog .field { margin-top: 8px; }
   font-size: 14px; opacity: 0; transition: opacity .2s; pointer-events: none; max-width: calc(100vw - 32px);
 }
 #toast.show { opacity: .95; }
+
+/* 평단가 + 통화 선택 */
+.avg-row { gap: 4px; }
+.field .avg-row input { flex: 1; min-width: 0; width: auto; }
+.field .avg-row select { flex: none; width: auto; padding: 6px 6px; }
+dialog .row > .field { min-width: 0; }
+.months label { white-space: nowrap; font-size: 12px; gap: 2px; }
+@media (max-width: 480px) {
+  .months { grid-template-columns: repeat(4, 1fr); }
+}
+.field { grid-template-columns: minmax(0, 1fr); }
+.field > *, .row > * { min-width: 0; }
+.field .months input, .field input[type=checkbox] { width: auto; flex: none; }
