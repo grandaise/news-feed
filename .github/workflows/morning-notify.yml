@@ -17,6 +17,8 @@ concurrency:
 jobs:
   notify:
     runs-on: ubuntu-latest
+    env:
+      HAS_KEY: ${{ secrets.MY_DATA_DEPLOY_KEY != '' }}
     steps:
       - uses: actions/checkout@v5
       - uses: actions/setup-node@v5
@@ -45,8 +47,18 @@ jobs:
             git pull --rebase
             git push
           fi
+      - name: 개인 일정 읽기 (비공개 my-data, 읽기 전용 키)
+        id: mydata
+        if: env.HAS_KEY == 'true'
+        continue-on-error: true
+        uses: actions/checkout@v5
+        with:
+          repository: ${{ github.repository_owner }}/my-data
+          ssh-key: ${{ secrets.MY_DATA_DEPLOY_KEY }}
+          path: my-data
       - name: 핸드폰으로 알림 보내기
         env:
+          MY_DATA_DIR: ${{ steps.mydata.outcome == 'success' && 'my-data' || '' }}
           NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}
           SITE_URL: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/
         run: node scripts/notify.mjs
