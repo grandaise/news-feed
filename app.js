@@ -696,19 +696,17 @@ function aptCard() {
     if (!t.found) return head(t.name) + `<div class="empty" style="padding:16px 0">단지를 찾지 못했습니다.${t.hints?.length ? `<br><span class="sm">비슷한 이름: ${t.hints.map(esc).join(", ")}</span>` : ""}</div>`;
     const deals = t.deals || [];
     const shown = aptMore ? deals.slice(0, 60) : deals.slice(0, 10);
-    const areas = Object.entries(t.avg1mByArea || {}).sort((x, y) => +x[0] - +y[0]);
     const last = deals.find((x) => !x.canceled);
     return head(t.name) + `
       <div class="apt-top">
-        <div><span class="muted sm">최근 1개월 평균 (전용 ${t.minArea}~${t.maxArea}㎡)</span>
+        <div><span class="muted sm">34·35평 최근 1개월 평균</span>
           <div class="apt-avg">${t.avg1m?.n ? `${eokStr(t.avg1m.avg)}` : "<small>최근 1개월 거래 없음</small>"}</div>
           <span class="muted sm">${t.avg1m?.n ? `${t.avg1m.n}건 · ${+t.avg1m.since.slice(5, 7)}/${+t.avg1m.since.slice(8)} 이후 계약` : last ? `마지막 거래 ${last.date} ${eokStr(last.price)}` : ""}</span></div>
-        ${areas.length ? `<div class="apt-areas">${areas.map(([ar, v]) => `<div><span>전용 ${(+ar).toFixed(2)}㎡</span><b>${eokStr(v.avg)}</b><span>${v.n}건</span></div>`).join("")}</div>` : ""}
       </div>
       ${deals.length ? `<div class="table-wrap"><table class="tbl apt-tbl">
-        <tr><th>계약일</th><th>전용</th><th>동·층</th><th>거래가</th></tr>
-        ${shown.map((x) => `<tr class="${x.canceled ? "cx" : ""}"><td>${x.date.slice(2).replace(/-/g, ".")}</td><td>${x.area.toFixed(2)}㎡</td>
-          <td>${x.dong ? `${esc(x.dong)}동 ` : ""}${x.floor ?? "-"}층</td>
+        <tr><th>계약일</th><th>단지·동</th><th>층</th><th>거래가</th></tr>
+        ${shown.map((x) => `<tr class="${x.canceled ? "cx" : ""}"><td>${x.date.slice(2).replace(/-/g, ".")}</td><td>${esc([(x.apt.match(/(\d+)\s*단지/) || [])[1] ? `${(x.apt.match(/(\d+)\s*단지/))[1]}단지` : "", x.dong ? `${x.dong}동` : ""].filter(Boolean).join(" ") || "-")}</td>
+          <td>${x.floor ?? "-"}층</td>
           <td><b>${eokStr(x.price)}</b>${x.canceled ? ' <span class="apt-tag">해제</span>' : x.kind === "직거래" ? ' <span class="apt-tag">직거래</span>' : ""}</td></tr>`).join("")}
       </table></div>
       ${deals.length > 10 ? `<button class="sm apt-more" data-apt-more>${aptMore ? "접기" : `더 보기 (${Math.min(deals.length, 60)}건)`}</button>` : ""}` : `<div class="empty">최근 12개월 거래가 없습니다.</div>`}
