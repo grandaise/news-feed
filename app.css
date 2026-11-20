@@ -472,3 +472,16 @@ a.tab { text-decoration: none; color: var(--text); border-radius: 980px; display
   display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 .todos .tt.open .tnote { -webkit-line-clamp: unset; display: block; }
 .todos li.done .tnote { text-decoration: none; }
+
+/* ===== 할 일 수정 ===== */
+.todos .x.ed { font-size: 15px; margin-top: 3px; }
+.todos li.editing { display: block; padding: 12px 0; }
+.todo-edit { display: grid; gap: 8px; }
+.todo-edit input[name=title], .todo-edit textarea { width: 100%; }
+.todo-edit textarea { resize: vertical; line-height: 1.5; }
+.todo-edit .row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.todo-edit input[type=date] { min-width: 0; }
+.todos li.editing { padding: 12px; margin: 6px 0; border: 1px solid var(--accent); border-radius: 14px; background: var(--accent-soft); }
+.todos li.editing + li { border-top: 0; }
+.te-head { font-size: 13px; font-weight: 600; color: var(--accent); }
+.todo-edit input, .todo-edit textarea { background: var(--card); }

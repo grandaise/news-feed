@@ -330,12 +330,23 @@ function eventHtml(e, { del = true } = {}) {
     ${!google && del ? `<button class="x" data-del-event="${esc(e.id)}" title="삭제" aria-label="삭제">×</button>` : ""}</div>`;
 }
 
-function todoHtml(t) {
+let editTodo = null; // 수정 중인 할 일 id (일정 탭 목록에서만)
+function todoHtml(t, editable = false) {
+  if (editable && editTodo === t.id) {
+    return `<li class="editing"><form class="todo-edit" data-todo-edit="${esc(t.id)}">
+      <div class="te-head">✎ 할 일 수정</div>
+      <input name="title" value="${esc(t.title)}" placeholder="할 일" required>
+      <textarea name="note" rows="3" placeholder="내용 (선택)">${esc(t.note || "")}</textarea>
+      <div class="row"><input name="due" type="date" value="${esc(t.due || "")}" title="마감일 (선택)">
+        <span style="flex:1"></span><button type="button" data-cancel-todo>취소</button><button class="primary" type="submit">저장</button></div>
+    </form></li>`;
+  }
   const late = t.due && !t.done && t.due < today();
   return `<li class="${t.done ? "done" : ""}">
     <input type="checkbox" data-toggle-todo="${esc(t.id)}" ${t.done ? "checked" : ""} aria-label="완료">
     <span class="tt${t.note ? " has-note" : ""}"${t.note ? ` data-todo-note title="눌러서 내용 펼치기"` : ""}>${esc(t.title)}${t.note ? `<span class="tnote">${esc(t.note)}</span>` : ""}</span>
     ${t.due ? `<span class="due ${late ? "late" : ""}">${dayLabel(t.due)}</span>` : ""}
+    ${editable ? `<button class="x ed" data-edit-todo="${esc(t.id)}" title="수정" aria-label="수정">✎</button>` : ""}
     <button class="x" data-del-todo="${esc(t.id)}" title="삭제" aria-label="삭제">×</button></li>`;
 }
 
@@ -496,7 +507,7 @@ function renderPlan() {
   $("#dayEvents").innerHTML = evs.map((e) => eventHtml(e)).join("") || '<div class="empty" style="padding:10px 0">일정이 없습니다.</div>';
   if (!$("#evDate").matches(":focus")) $("#evDate").value = state.selDay;
 
-  $("#todos").innerHTML = sortedTodos().map(todoHtml).join("") || '<li class="muted" style="justify-content:center">할 일이 없습니다.</li>';
+  $("#todos").innerHTML = sortedTodos().map((t) => todoHtml(t, true)).join("") || '<li class="muted" style="justify-content:center">할 일이 없습니다.</li>';
 
   const up = [];
   for (let i = 0; i < 14; i++) {
@@ -787,6 +798,14 @@ document.addEventListener("click", (e) => {
     if (confirm("이 일정을 삭제할까요?")) mutate("일정 삭제", (d) => { d.events = d.events.filter((x) => x.id !== id); });
     return;
   }
+  const et = e.target.closest("[data-edit-todo]");
+  if (et) {
+    editTodo = et.dataset.editTodo; renderPlan();
+    const f = $(`[data-todo-edit="${CSS.escape(editTodo)}"]`);
+    if (f) { f.elements.title.focus(); f.elements.title.setSelectionRange(f.elements.title.value.length, f.elements.title.value.length); }
+    return;
+  }
+  if (e.target.closest("[data-cancel-todo]")) { editTodo = null; renderPlan(); return; }
   const tn = e.target.closest("[data-todo-note]");
   if (tn) { tn.classList.toggle("open"); return; }
   const dt = e.target.closest("[data-del-todo]");
@@ -845,6 +864,26 @@ $("#eventForm").addEventListener("submit", (e) => {
   $("#evTitle").value = ""; $("#evTime").value = "";
   mutate(`일정 추가: ${ev.title}`, (d) => { d.events.push(ev); }).then(() => toast("일정을 추가했습니다."));
 });
+// 할 일 수정 저장
+document.addEventListener("submit", (e) => {
+  const f = e.target.closest("[data-todo-edit]");
+  if (!f) return;
+  e.preventDefault();
+  const id = f.dataset.todoEdit;
+  const title = f.elements.title.value.trim();
+  if (!title) return;
+  const note = f.elements.note.value.trim(), due = f.elements.due.value || "";
+  const apply = (x) => { x.title = title; x.due = due; if (note) x.note = note; else delete x.note; };
+  // 화면 먼저 반영하고 저장
+  const local = state.priv?.todos.find((x) => x.id === id);
+  if (local) apply(local);
+  editTodo = null; renderAll();
+  mutate(`할 일 수정: ${title}`, (d) => { const x = d.todos.find((y) => y.id === id); if (x) apply(x); });
+});
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape" && editTodo && e.target.closest?.("[data-todo-edit]")) { editTodo = null; renderPlan(); }
+});
+
 $("#todoForm").addEventListener("submit", (e) => {
   e.preventDefault();
   const note = $("#todoNote").value.trim();
