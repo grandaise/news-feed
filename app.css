@@ -115,11 +115,11 @@ main { padding: clamp(16px, 2.4vw, 32px) var(--gutter) 64px; max-width: 1600px; 
 .home-grid { display: grid; gap: 16px; grid-template-columns: minmax(0, 1fr); }
 .home-grid > .card { margin: 0; }
 @media (min-width: 760px) {
-  .home-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-areas: "today alloc" "hold hold" "news news"; }
-  .a-today { grid-area: today; } .a-alloc { grid-area: alloc; } .a-hold { grid-area: hold; } .a-news { grid-area: news; }
+  .home-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-areas: "today alloc" "mail mail" "hold hold" "news news"; }
+  .a-today { grid-area: today; } .a-alloc { grid-area: alloc; } .a-hold { grid-area: hold; } .a-news { grid-area: news; } .a-mail { grid-area: mail; }
 }
 @media (min-width: 1200px) {
-  .home-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.15fr); grid-template-areas: "today alloc news" "hold hold news"; }
+  .home-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.15fr); grid-template-areas: "today alloc news" "mail mail news" "hold hold news"; }
 }
 
 /* 일정 */
@@ -428,3 +428,29 @@ a.tab { text-decoration: none; color: var(--text); border-radius: 980px; display
 .mail-bar { margin-bottom: 16px; row-gap: 4px; }
 .mail-bar .tabs { padding-bottom: 6px; }
 .mail-tools { padding-top: 2px; }
+
+/* ===== 메일 폴더 · 홈 메일 카드 ===== */
+.home-grid > .card[hidden] { display: none; }
+.mfolders { display: flex; gap: 6px; overflow-x: auto; padding: 4px 16px 10px; border-bottom: 1px solid var(--line); scrollbar-width: none; }
+.mfolders::-webkit-scrollbar { display: none; }
+.fchip { flex: none; border: 0; background: var(--fill-2); color: var(--text); border-radius: 980px; padding: 5px 12px; font: inherit; font-size: 13px; cursor: pointer; white-space: nowrap; }
+.fchip.on { background: var(--text); color: var(--bg); }
+.fchip .cnt { margin-left: 5px; font-size: 11px; opacity: .7; font-variant-numeric: tabular-nums; }
+.mfold { display: inline-block; font-size: 11px; line-height: 1.5; padding: 0 6px; margin-right: 6px; border-radius: 6px; background: var(--fill-2); color: var(--muted); vertical-align: 1px; }
+.hm-badge { display: inline-block; min-width: 20px; padding: 0 6px; border-radius: 980px; background: var(--up); color: #fff; font-size: 12px; line-height: 20px; text-align: center; vertical-align: 2px; font-variant-numeric: tabular-nums; }
+.a-mail { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0 24px; align-content: start; }
+.a-mail > .card-head, .a-mail > .hm-notes, .a-mail > .empty { grid-column: 1 / -1; }
+@media (min-width: 760px) { .a-mail { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); } }
+.hm-acc { padding: 8px 0 4px; border-top: 1px solid var(--line); min-width: 0; }
+.hm-head { display: flex; align-items: center; gap: 6px; margin-bottom: 4px; }
+.hm-head .sw { width: 8px; height: 8px; }
+.hm-cnt { margin-left: auto; font-size: 12px; color: var(--faint); }
+.hm-cnt.on { color: var(--accent); font-weight: 600; }
+.hm-list { list-style: none; margin: 0; padding: 0; }
+.hm-list li { display: grid; grid-template-columns: minmax(0, 7em) minmax(0, 1fr) auto; gap: 8px; align-items: baseline; padding: 6px 0; cursor: pointer; font-size: 14px; border-radius: 8px; }
+.hm-list li:hover { background: var(--fill-2); }
+.hm-from, .hm-subj { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.hm-from { color: var(--muted); }
+.hm-list li.unread .hm-from, .hm-list li.unread .hm-subj { font-weight: 700; color: var(--text); }
+.hm-empty { padding: 6px 0; }
+.hm-notes { padding-top: 8px; font-size: 13px; color: var(--muted); }

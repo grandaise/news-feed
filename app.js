@@ -436,6 +436,7 @@ function renderHome() {
       </table></div>` : `<div class="empty">아직 종목이 없습니다. <a class="more" data-go="invest">종목 추가 →</a></div>`}`;
   }
 
+  renderHomeMail();
   $("#homeNews").innerHTML = `<div class="card-head"><h3>오늘의 뉴스</h3><a class="more" data-go="news">전체 →</a></div>
     ${newsToday.length ? `<ul class="list">${newsToday.slice(0, 6).map((it) => newsLi(it, true)).join("")}</ul>` : '<div class="empty">오늘 올라온 기사가 없습니다.</div>'}`;
 }
@@ -568,7 +569,7 @@ function renderAll() {
   renderNews();
   renderHome();
   if (state.priv) { renderPlan(); renderInvest(); renderMail(); }
-  if (v === "mail" && state.priv) loadMail();
+  if ((v === "mail" || v === "home") && state.priv) loadMail();
 }
 
 function go(view) {
@@ -946,7 +947,7 @@ const mail = {
   loaded: false, loading: false,
   imap: null, imapErr: "", key: null, keySalt: null,
   gmail: { token: null, exp: 0, items: [], email: "", err: "" },
-  filter: store.get("mailFilter", "all"), q: "", sel: null, showImages: false,
+  filter: store.get("mailFilter", "all"), folder: "", q: "", sel: null, showImages: store.get("mailImages", "1") === "1",
   bodies: new Map(),
   read: new Set(JSON.parse(store.get("mailRead", "[]") || "[]")),
 };
@@ -1020,7 +1021,7 @@ async function gmailConnect() {
     client.requestAccessToken({ prompt: store.get("gmailLinked") ? "" : "consent" });
   });
   await loadGmail();
-  renderMail();
+  renderMail(); renderHomeMail();
 }
 async function gapi(path) {
   const res = await fetch(`https://gmail.googleapis.com/gmail/v1/users/me/${path}`, { headers: { Authorization: `Bearer ${mail.gmail.token}` } });
@@ -1064,16 +1065,68 @@ function partText(part) {
 async function gmailBody(it) {
   const m = await gapi(`messages/${it.gid}?format=full`);
   let html = "", text = "";
-  const atts = [];
+  const atts = [], inline = [];
+  const hdr = (p, n) => (p.headers || []).find((h) => h.name.toLowerCase() === n)?.value || "";
   (function walk(p) {
     if (!p) return;
-    if (p.filename && p.body?.attachmentId) atts.push({ name: p.filename, size: p.body.size });
+    const cid = hdr(p, "content-id").replace(/[<>]/g, "");
+    if (cid && p.mimeType?.startsWith("image/") && (p.body?.attachmentId || p.body?.data)) inline.push({ cid, p });
+    else if (p.filename && p.body?.attachmentId) atts.push({ name: p.filename, size: p.body.size });
     else if (p.mimeType === "text/html" && p.body?.data && !html) html = partText(p);
     else if (p.mimeType === "text/plain" && p.body?.data && !text) text = partText(p);
     (p.parts || []).forEach(walk);
   })(m.payload);
+  const reCid = (cid) => new RegExp(`cid:${cid.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}`, "gi");
+  for (const { cid, p } of inline) {
+    if (!reCid(cid).test(html)) { if (p.filename) atts.push({ name: p.filename, size: p.body.size }); continue; }
+    try {
+      const data = p.body.data || (await gapi(`messages/${it.gid}/attachments/${p.body.attachmentId}`)).data;
+      html = html.replace(reCid(cid), `data:${p.mimeType};base64,${data.replace(/-/g, "+").replace(/_/g, "/")}`);
+    } catch {}
+  }
   return { from: it.from, to: header(m, "To").split(",").map((x) => parseFrom(x).addr).filter(Boolean).slice(0, 5), subject: it.subject, date: it.date, html, text, attachments: atts };
 }
+
+// --- 홈 카드 ---
+function renderHomeMail() {
+  const el = $("#homeMail");
+  if (!el) return;
+  el.hidden = !state.priv;
+  if (!state.priv) return;
+  const accts = accountsList();
+  const all = allMail();
+  const unread = all.filter(isUnread).length;
+  const groups = accts.map((a) => {
+    const items = all.filter((it) => `${it.provider}|${it.account}` === a.key).slice(0, 3);
+    const color = PROVIDER[a.provider]?.color || "#8e8e93";
+    const many = accts.filter((x) => x.provider === a.provider).length > 1;
+    return `<div class="hm-acc">
+      <div class="hm-head"><span class="sw" style="background:${color}"></span><b>${esc(a.label)}</b>${many ? `<span class="muted sm">${esc(a.account.split("@")[0])}</span>` : ""}
+        <span class="hm-cnt${a.unread ? " on" : ""}">${a.unread ? `안 읽음 ${a.unread}` : "모두 읽음"}</span></div>
+      ${items.length ? `<ul class="hm-list">${items.map((it) => `<li class="${isUnread(it) ? "unread" : ""}" data-home-mail="${esc(it.id)}">
+        <span class="hm-from">${esc(it.from.name || it.from.addr)}</span>
+        <span class="hm-subj">${folderLabel(it) ? `<span class="mfold">${esc(folderLabel(it))}</span>` : ""}${esc(it.subject)}</span>
+        <span class="mdate">${mailDate(it.date)}</span></li>`).join("")}</ul>` : `<div class="muted sm hm-empty">최근 메일이 없습니다.</div>`}
+    </div>`;
+  }).join("");
+  const notes = [];
+  if (mail.loading && !all.length) notes.push("메일을 불러오는 중…");
+  if (!mail.gmail.token && mailSettings().gmailClientId) notes.push(`<button class="sm" data-gmail-connect>＋ Gmail 연결</button>`);
+  if (mail.imapErr === "nokey") notes.push(`네이버·다음은 <a class="more" data-open-mailsettings>메일 암호</a>를 입력하면 보입니다.`);
+  if (mail.imapErr === "badkey") notes.push(`메일 암호가 MAIL_KEY와 다릅니다. <a class="more" data-open-mailsettings>다시 입력</a>`);
+  el.innerHTML = `<div class="card-head"><h3>새 메일${unread ? ` <span class="hm-badge">${unread}</span>` : ""}</h3><a class="more" data-go="mail">메일 →</a></div>
+    ${groups || (notes.length ? "" : `<div class="empty" style="padding:10px 0">연결된 메일 계정이 없습니다.</div>`)}
+    ${notes.length ? `<div class="hm-notes">${notes.join(" ")}</div>` : ""}`;
+}
+$("#homeMail")?.addEventListener("click", (e) => {
+  if (e.target.closest("[data-gmail-connect]")) { gmailConnect().catch((err) => toast(err.message, 6000)); return; }
+  if (e.target.closest("[data-open-mailsettings]")) { openSettings(); $("#mailSettings").scrollIntoView({ block: "center" }); return; }
+  const li = e.target.closest("[data-home-mail]");
+  if (!li) return;
+  mail.filter = "all"; mail.folder = ""; mail.q = ""; $("#mailSearch").value = "";
+  mail.sel = li.dataset.homeMail;
+  go("mail");
+});
 
 // --- 공통 ---
 async function loadMail(force = false) {
@@ -1081,13 +1134,18 @@ async function loadMail(force = false) {
   mail.loading = true; renderMail();
   await Promise.all([loadImapMail(), loadGmail()]);
   mail.loading = false; mail.loaded = true;
-  renderMail();
+  renderMail(); renderHomeMail();
 }
 function allMail() {
   const imap = (mail.imap?.items || []).map((it) => ({ ...it, provider: it.provider || "imap" }));
   return [...mail.gmail.items, ...imap].sort((a, b) => b.date.localeCompare(a.date));
 }
 const isUnread = (it) => !it.seen && !mail.read.has(it.id);
+const isInboxPath = (f) => !f || f.toUpperCase() === "INBOX";
+function folderLabel(it) {
+  if (isInboxPath(it.folder)) return "";
+  return (mail.imap?.folders || []).find((f) => f.account === it.account && f.path === it.folder)?.name || it.folder;
+}
 function mailDate(iso) {
   const d = kstDay(iso);
   if (d === today()) return timeFmt.format(new Date(iso));
@@ -1121,8 +1179,17 @@ function renderMail() {
     `<a class="tab" href="${esc(company)}" target="_blank" rel="noopener">회사 메일 ↗</a>`;
 
   const q = mail.q.trim().toLowerCase();
+  if (mail.filter !== "all" && !accts.some((a) => a.key === mail.filter)) mail.filter = "all";
+  const cur = accts.find((a) => a.key === mail.filter);
+  const folders = cur ? (mail.imap?.folders || []).filter((f) => f.account === cur.account && f.provider === cur.provider) : [];
+  if (!folders.some((f) => f.path === mail.folder)) mail.folder = "";
   const list = allMail().filter((it) => (mail.filter === "all" || `${it.provider}|${it.account}` === mail.filter) &&
+    (!mail.folder || (it.folder || "INBOX") === mail.folder) &&
     (!q || `${it.from.name} ${it.from.addr} ${it.subject} ${it.snippet}`.toLowerCase().includes(q)));
+  const folderBar = folders.length > 1 ? `<div class="mfolders">
+      <button class="fchip${!mail.folder ? " on" : ""}" data-mfolder="">전체</button>
+      ${folders.map((f) => `<button class="fchip${mail.folder === f.path ? " on" : ""}" data-mfolder="${esc(f.path)}" title="${esc(f.name)}${f.total != null ? ` · 전체 ${f.total}통` : ""}">${esc(f.name)}${f.unread ? `<span class="cnt">${f.unread}</span>` : ""}</button>`).join("")}
+    </div>` : "";
 
   const notes = [];
   if (mail.loading) notes.push("메일을 불러오는 중…");
@@ -1134,14 +1201,15 @@ function renderMail() {
   const synced = mail.imap?.updatedAt ? `네이버·다음 ${dayLabel(kstDay(mail.imap.updatedAt))} ${timeFmt.format(new Date(mail.imap.updatedAt))} 동기화` : "";
 
   $("#mailList").innerHTML = `
+    ${folderBar}
     ${notes.length ? `<div class="mail-note">${notes.join("<br>")}</div>` : ""}
     ${list.length ? `<ul class="mlist">${list.map((it) => `
       <li class="${isUnread(it) ? "unread" : ""}${mail.sel === it.id ? " sel" : ""}" data-mail="${esc(it.id)}">
         <div class="m1"><span class="mfrom">${esc(it.from.name || it.from.addr)}</span><span class="mdate">${mailDate(it.date)}</span></div>
         <div class="msubj">${it.hasAtt ? "📎 " : ""}${esc(it.subject)}</div>
-        <div class="msnip"><span class="sw" style="background:${PROVIDER[it.provider]?.color || "#8e8e93"}"></span>${esc(it.snippet)}</div>
+        <div class="msnip"><span class="sw" style="background:${PROVIDER[it.provider]?.color || "#8e8e93"}"></span>${folderLabel(it) ? `<span class="mfold">${esc(folderLabel(it))}</span>` : ""}${esc(it.snippet)}</div>
       </li>`).join("")}</ul>`
-      : mail.loading ? "" : `<div class="empty">${mail.imapErr === "none" && !mail.gmail.token ? "연결된 메일 계정이 없습니다.<br>＋ Gmail 연결 또는 README의 네이버·다음 설정을 참고하세요." : "최근 7일 메일이 없습니다."}</div>`}
+      : mail.loading ? "" : `<div class="empty">${mail.imapErr === "none" && !mail.gmail.token ? "연결된 메일 계정이 없습니다.<br>＋ Gmail 연결 또는 README의 네이버·다음 설정을 참고하세요." : mail.folder ? "이 폴더에 받아 온 메일이 없습니다." : "최근 7일 메일이 없습니다."}</div>`}
     ${synced ? `<p class="help" style="text-align:center">${synced}</p>` : ""}`;
 
   renderReader();
@@ -1186,18 +1254,21 @@ async function renderReader() {
     $("#rbody").innerHTML = `${atts}<iframe class="rframe" sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin" title="메일 본문"></iframe>`;
     const frame = $("#rbody iframe");
     const csp = mail.showImages
-      ? "default-src 'none'; img-src * data:; style-src 'unsafe-inline' *; font-src * data:"
+      ? "default-src 'none'; img-src * data: blob: http: https:; style-src 'unsafe-inline' * http: https:; font-src * data: http: https:"
       : "default-src 'none'; img-src data:; style-src 'unsafe-inline'; font-src data:";
     const dark = matchMedia("(prefers-color-scheme: dark)").matches;
     const content = body.html || `<pre style="white-space:pre-wrap;font:inherit;margin:0">${esc(body.text || "(본문 없음)")}</pre>`;
-    frame.srcdoc = `<!doctype html><html><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="${csp}">
+    frame.srcdoc = `<!doctype html><html><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="${csp}"><meta name="referrer" content="no-referrer">
       <base target="_blank"><style>
         html,body{margin:0;padding:0;background:#fff;color:#1d1d1f;font:15px/1.6 -apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo",sans-serif;word-break:break-word}
         body{padding:4px 2px} img{max-width:100%;height:auto} table{max-width:100%!important} a{color:#0071e3}
         ${dark ? "html{filter:invert(.92) hue-rotate(180deg)} img{filter:invert(1) hue-rotate(180deg)}" : ""}
       </style></head><body>${content}</body></html>`;
+    const fit = () => { try { frame.style.height = Math.min(20000, frame.contentDocument.documentElement.scrollHeight + 8) + "px"; } catch {} };
     frame.onload = () => {
-      try { frame.style.height = Math.min(20000, frame.contentDocument.documentElement.scrollHeight + 8) + "px"; } catch {}
+      fit();
+      // 이미지가 늦게 뜨면 높이를 다시 맞춤
+      try { frame.contentDocument.querySelectorAll("img").forEach((im) => im.addEventListener("load", fit)); } catch {}
     };
   } catch (e) {
     $("#rbody").innerHTML = `<div class="empty">본문을 열 수 없습니다: ${esc(e.message)}</div>`;
@@ -1208,21 +1279,23 @@ $("#mailTabs").addEventListener("click", (e) => {
   if (e.target.closest("[data-gmail-connect]")) { gmailConnect().catch((err) => toast(err.message, 6000)); return; }
   const b = e.target.closest("[data-mfilter]");
   if (!b) return;
-  mail.filter = b.dataset.mfilter; store.set("mailFilter", mail.filter); renderMail();
+  mail.filter = b.dataset.mfilter; mail.folder = ""; store.set("mailFilter", mail.filter); renderMail();
 });
 $("#mailSearch").addEventListener("input", (e) => { mail.q = e.target.value; renderMail(); });
 $("#mailList").addEventListener("click", (e) => {
   if (e.target.closest("[data-open-mailsettings]")) { openSettings(); $("#mailSettings").scrollIntoView({ block: "center" }); return; }
+  const fb = e.target.closest("[data-mfolder]");
+  if (fb) { mail.folder = fb.dataset.mfolder; mail.sel = null; renderMail(); return; }
   const li = e.target.closest("[data-mail]");
   if (!li) return;
-  mail.sel = li.dataset.mail; mail.showImages = false;
+  mail.sel = li.dataset.mail;
   $$("#mailList li.sel").forEach((x) => x.classList.remove("sel")); li.classList.add("sel");
   renderReader();
   if (matchMedia("(max-width: 1000px)").matches) window.scrollTo({ top: 0 });
 });
 $("#mailReader").addEventListener("click", (e) => {
   if (e.target.closest("[data-mail-back]")) { mail.sel = null; renderMail(); return; }
-  if (e.target.closest("[data-mail-images]")) { mail.showImages = !mail.showImages; renderReader(); }
+  if (e.target.closest("[data-mail-images]")) { mail.showImages = !mail.showImages; store.set("mailImages", mail.showImages ? "1" : "0"); renderReader(); }
 });
 $("#mailRefresh").addEventListener("click", async () => {
   if (state.priv && mail.imap) {
