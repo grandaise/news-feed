@@ -454,3 +454,11 @@ a.tab { text-decoration: none; color: var(--text); border-radius: 980px; display
 .hm-list li.unread .hm-from, .hm-list li.unread .hm-subj { font-weight: 700; color: var(--text); }
 .hm-empty { padding: 6px 0; }
 .hm-notes { padding-top: 8px; font-size: 13px; color: var(--muted); }
+
+/* ===== 가로 스크롤 줄 ===== */
+.hs { -webkit-overflow-scrolling: touch; overscroll-behavior-x: contain; touch-action: pan-x pan-y; cursor: grab; }
+.hs.dragging { cursor: grabbing; user-select: none; }
+.hs.dragging * { pointer-events: none; }
+.hs.fade-r { -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 40px), transparent); mask-image: linear-gradient(to right, #000 calc(100% - 40px), transparent); }
+.hs.fade-l { -webkit-mask-image: linear-gradient(to right, transparent, #000 40px); mask-image: linear-gradient(to right, transparent, #000 40px); }
+.hs.fade-l.fade-r { -webkit-mask-image: linear-gradient(to right, transparent, #000 40px, #000 calc(100% - 40px), transparent); mask-image: linear-gradient(to right, transparent, #000 40px, #000 calc(100% - 40px), transparent); }

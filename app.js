@@ -570,6 +570,7 @@ function renderAll() {
   renderHome();
   if (state.priv) { renderPlan(); renderInvest(); renderMail(); }
   if ((v === "mail" || v === "home") && state.priv) loadMail();
+  hsUpdate();
 }
 
 function go(view) {
@@ -1186,7 +1187,7 @@ function renderMail() {
   const list = allMail().filter((it) => (mail.filter === "all" || `${it.provider}|${it.account}` === mail.filter) &&
     (!mail.folder || (it.folder || "INBOX") === mail.folder) &&
     (!q || `${it.from.name} ${it.from.addr} ${it.subject} ${it.snippet}`.toLowerCase().includes(q)));
-  const folderBar = folders.length > 1 ? `<div class="mfolders">
+  const folderBar = folders.length > 1 ? `<div class="mfolders hs">
       <button class="fchip${!mail.folder ? " on" : ""}" data-mfolder="">전체</button>
       ${folders.map((f) => `<button class="fchip${mail.folder === f.path ? " on" : ""}" data-mfolder="${esc(f.path)}" title="${esc(f.name)}${f.total != null ? ` · 전체 ${f.total}통` : ""}">${esc(f.name)}${f.unread ? `<span class="cnt">${f.unread}</span>` : ""}</button>`).join("")}
     </div>` : "";
@@ -1200,6 +1201,7 @@ function renderMail() {
   for (const [acc, err] of Object.entries(mail.imap?.errors || {})) notes.push(`${esc(acc)}: ${esc(err)}`);
   const synced = mail.imap?.updatedAt ? `네이버·다음 ${dayLabel(kstDay(mail.imap.updatedAt))} ${timeFmt.format(new Date(mail.imap.updatedAt))} 동기화` : "";
 
+  const prevLeft = $("#mailList .mfolders")?.scrollLeft || 0;
   $("#mailList").innerHTML = `
     ${folderBar}
     ${notes.length ? `<div class="mail-note">${notes.join("<br>")}</div>` : ""}
@@ -1211,6 +1213,9 @@ function renderMail() {
       </li>`).join("")}</ul>`
       : mail.loading ? "" : `<div class="empty">${mail.imapErr === "none" && !mail.gmail.token ? "연결된 메일 계정이 없습니다.<br>＋ Gmail 연결 또는 README의 네이버·다음 설정을 참고하세요." : mail.folder ? "이 폴더에 받아 온 메일이 없습니다." : "최근 7일 메일이 없습니다."}</div>`}
     ${synced ? `<p class="help" style="text-align:center">${synced}</p>` : ""}`;
+  const fbar = $("#mailList .mfolders");
+  if (fbar) { fbar.scrollLeft = prevLeft; keepInView(fbar, fbar.querySelector(".on")); }
+  hsUpdate();
 
   renderReader();
 }
@@ -1323,6 +1328,48 @@ $("#saveCompanyMail").addEventListener("click", () => {
   const v = $("#companyMailUrl").value.trim();
   mutate("메일 설정: 회사 웹메일 주소", (d) => { d.settings = { ...(d.settings || {}), companyMailUrl: v }; })
     .then(() => toast("저장했습니다."));
+});
+
+
+// ---------- 가로 스크롤 줄 (탭·폴더) : 마우스 휠·드래그, 양끝 흐림 표시 ----------
+function keepInView(bar, el) {
+  if (!bar || !el) return;
+  const l = el.getBoundingClientRect().left - bar.getBoundingClientRect().left + bar.scrollLeft, r = l + el.offsetWidth;
+  if (l < bar.scrollLeft + 24) bar.scrollLeft = l - 24;
+  else if (r > bar.scrollLeft + bar.clientWidth - 24) bar.scrollLeft = r - bar.clientWidth + 24;
+}
+function hsMark(el) {
+  const max = el.scrollWidth - el.clientWidth;
+  el.classList.toggle("fade-l", el.scrollLeft > 2);
+  el.classList.toggle("fade-r", max > 2 && el.scrollLeft < max - 2);
+}
+function hsUpdate() { requestAnimationFrame(() => $$(".hs").forEach(hsMark)); }
+document.addEventListener("scroll", (e) => { if (e.target.classList?.contains("hs")) hsMark(e.target); }, true);
+window.addEventListener("resize", hsUpdate);
+document.addEventListener("wheel", (e) => {
+  const el = e.target.closest?.(".hs");
+  if (!el || el.scrollWidth <= el.clientWidth || Math.abs(e.deltaX) > Math.abs(e.deltaY)) return;
+  e.preventDefault();
+  el.scrollLeft += e.deltaY;
+}, { passive: false });
+let hsDrag = null;
+document.addEventListener("pointerdown", (e) => {
+  if (e.pointerType !== "mouse" || e.button !== 0) return;
+  const el = e.target.closest(".hs");
+  if (el && el.scrollWidth > el.clientWidth) hsDrag = { el, x: e.clientX, left: el.scrollLeft, moved: false };
+});
+document.addEventListener("pointermove", (e) => {
+  if (!hsDrag) return;
+  const dx = e.clientX - hsDrag.x;
+  if (Math.abs(dx) > 5) { hsDrag.moved = true; hsDrag.el.classList.add("dragging"); }
+  if (hsDrag.moved) hsDrag.el.scrollLeft = hsDrag.left - dx;
+});
+document.addEventListener("pointerup", () => {
+  if (!hsDrag) return;
+  const d = hsDrag; hsDrag = null;
+  d.el.classList.remove("dragging");
+  // 드래그했을 때는 손을 뗀 곳의 버튼이 눌리지 않게
+  if (d.moved) document.addEventListener("click", (ev) => { ev.stopPropagation(); ev.preventDefault(); }, { capture: true, once: true });
 });
 
 // ---------- 로드 ----------
