@@ -3,7 +3,7 @@ name: 아침 알림
 on:
   schedule:
     # GitHub 예약 실행은 수십 분 늦게 시작되는 일이 잦아서
-    # 한국시간 06:37(UTC 21:37)에 미리 시작해 두고 07:30까지 기다렸다가 보낸다
+    # 한국시간 06:37(UTC 21:37)에 미리 시작해 두고 08:00까지 기다렸다가 보낸다
     - cron: "37 21 * * *"
   workflow_dispatch:
 
@@ -24,16 +24,16 @@ jobs:
       - uses: actions/setup-node@v5
         with:
           node-version: 24
-      - name: 한국시간 07:30까지 대기
+      - name: 한국시간 08:00까지 대기
         if: github.event_name == 'schedule'
         run: |
-          target=$(TZ=Asia/Seoul date -d "today 07:30" +%s)
+          target=$(TZ=Asia/Seoul date -d "today 08:00" +%s)
           wait=$(( target - $(date +%s) ))
           if [ "$wait" -gt 0 ]; then
             echo "$wait초 대기"
             sleep "$wait"
           else
-            echo "이미 07:30이 지나 바로 보냅니다"
+            echo "이미 08:00이 지나 바로 보냅니다"
           fi
       - name: 최신 뉴스 수집
         run: node scripts/fetch.mjs
@@ -47,6 +47,8 @@ jobs:
             git pull --rebase
             git push
           fi
+      - name: 최신 투자 가이드 받기
+        run: git pull --rebase || true
       - name: 개인 일정 읽기 (비공개 my-data, 읽기 전용 키)
         id: mydata
         if: env.HAS_KEY == 'true'
@@ -62,3 +64,10 @@ jobs:
           NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}
           SITE_URL: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/
         run: node scripts/notify.mjs
+      - name: 자산·시장 알림 (평일)
+        env:
+          MY_DATA_DIR: ${{ steps.mydata.outcome == 'success' && 'my-data' || '' }}
+          NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}
+          SITE_URL: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/
+          FORCE: ${{ github.event_name == 'workflow_dispatch' && '1' || '' }}
+        run: node scripts/notify-market.mjs

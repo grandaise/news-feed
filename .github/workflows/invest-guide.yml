@@ -2,8 +2,8 @@ name: 금일 투자 가이드
 
 on:
   schedule:
-    # 평일(월~금) 한국시간 07:40(UTC 22:40, 일~목)에 미리 시작해 08:30까지 기다렸다가 만든다
-    - cron: "40 22 * * 0-4"
+    # 평일(월~금) 한국시간 07:10(UTC 22:10, 일~목)에 미리 시작해 07:50까지 기다렸다가 만든다 (08:00 알림 전에 준비)
+    - cron: "10 22 * * 0-4"
   workflow_dispatch:
 
 permissions:
@@ -21,12 +21,12 @@ jobs:
       - uses: actions/setup-node@v5
         with:
           node-version: 24
-      - name: 한국시간 08:30까지 대기
+      - name: 한국시간 07:50까지 대기
         if: github.event_name == 'schedule'
         run: |
-          target=$(TZ=Asia/Seoul date -d "today 08:30" +%s)
+          target=$(TZ=Asia/Seoul date -d "today 07:50" +%s)
           wait=$(( target - $(date +%s) ))
-          if [ "$wait" -gt 0 ]; then echo "$wait초 대기"; sleep "$wait"; else echo "이미 08:30이 지나 바로 만듭니다"; fi
+          if [ "$wait" -gt 0 ]; then echo "$wait초 대기"; sleep "$wait"; else echo "이미 07:50이 지나 바로 만듭니다"; fi
       - name: 가이드 계산
         run: node scripts/guide.mjs
       - name: 커밋

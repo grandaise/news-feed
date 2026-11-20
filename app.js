@@ -510,7 +510,7 @@ function renderGuide() {
   if (!el) return;
   const g = state.guide;
   const head = `<div class="card-head"><h3>금일 투자 가이드</h3>${g?.basis ? `<span class="muted sm">${+g.basis.slice(4, 6)}/${+g.basis.slice(6)} 종가 기준 · 거래대금 상위</span>` : ""}</div>`;
-  if (!g?.items?.length) { el.innerHTML = head + `<div class="empty">아직 가이드가 없습니다. 평일 08:30에 만들어집니다.</div>`; return; }
+  if (!g?.items?.length) { el.innerHTML = head + `<div class="empty">아직 가이드가 없습니다. 평일 07:50에 만들어집니다.</div>`; return; }
   let sel = store.get("guideSel", "");
   const it = g.items.find((x) => x.code === sel) || g.items[0];
   const L = it.levels;
