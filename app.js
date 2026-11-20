@@ -139,14 +139,18 @@ const EMPTY = () => ({ events: [], todos: [], holdings: [] });
 async function loadPrivate() {
   if (!cfg.token || !cfg.dataRepo) { state.priv = null; return; }
   try {
-    const [d, p, g] = await Promise.all([
+    const [d, p, g, hi, ap] = await Promise.all([
       ghFile(cfg.dataRepo, "data.json"),
       ghFile(cfg.dataRepo, "prices.json").catch(() => null),
       ghFile(cfg.dataRepo, "gcal.json").catch(() => null),
+      ghFile(cfg.dataRepo, "history.json").catch(() => null),
+      ghFile(cfg.dataRepo, "apt.json").catch(() => null),
     ]);
     state.priv = { ...EMPTY(), ...d.json };
     if (p) state.prices = p.json;
     state.gcal = g ? g.json : null;
+    state.history = hi ? hi.json : null;
+    state.apt = ap ? ap.json : null;
     state.privError = null;
   } catch (e) {
     state.priv = null;
@@ -297,12 +301,57 @@ function divChartHtml(pf) {
 }
 
 // 내 일정 + 구글 캘린더 일정 (여러 날 일정은 기간 내 매일 표시)
+// 배당 일정 (예상): 국내 ETF는 '매월(분기) 마지막 영업일 기준일 → 전 영업일 배당락 → 다음 달 둘째 영업일 지급' 규칙,
+// 해외 종목은 Yahoo 배당락 기록을 1년(52주) 뒤로 옮겨 다음 배당락을 추정한다
+const pad2 = (n) => String(n).padStart(2, "0");
+const isBizDay = (d) => { const w = new Date(d + "T12:00:00+09:00").getUTCDay(); return w > 0 && w < 6 && !d.endsWith("-12-31") && !d.endsWith("-01-01"); };
+function addBiz(day, n) { let d = day, k = Math.abs(n); const st = n < 0 ? -1 : 1; while (k > 0) { d = addDays(d, st); if (isBizDay(d)) k--; } return d; }
+function lastBiz(y, m) { let d = `${y}-${pad2(m)}-${pad2(new Date(Date.UTC(y, m, 0)).getUTCDate())}`; while (!isBizDay(d)) d = addDays(d, -1); return d; }
+let divCache = null;
+function divMap() {
+  if (divCache) return divCache;
+  const map = {};
+  const add = (date, e) => { (map[date] = map[date] || []).push({ date, time: "", cat: "배당", src: "div", ...e }); };
+  const from = addDays(today(), -45), to = addDays(today(), 100);
+  const w = (n) => `≈ ${Math.round(n).toLocaleString("ko-KR")}원`;
+  for (const h of state.priv?.holdings || []) {
+    if (!(+h.dps > 0) || !h.qty) continue;
+    const r = calc(h);
+    if (h.type === "kr" && h.divMonths?.length) {
+      const per = r.annualDiv / h.divMonths.length;
+      // ETF는 월말 기준일 → 다음 달 초 지급, 개별 주식은 지급까지 1~2개월 걸려 배당락만 표시
+      const etf = /^(TIGER|KODEX|SOL|ACE|RISE|KBSTAR|HANARO|PLUS|KIWOOM|ARIRANG|TIMEFOLIO|WON|1Q|BNK|마이티|파워)(?=\s|$)/i.test(r.name);
+      const t = new Date(today() + "T12:00:00+09:00");
+      for (let k = -2; k <= 4; k++) {
+        const dt = new Date(Date.UTC(t.getUTCFullYear(), t.getUTCMonth() + k, 1));
+        const y = dt.getUTCFullYear(), m = dt.getUTCMonth() + 1;
+        if (!h.divMonths.includes(m)) continue;
+        const rec = lastBiz(y, m), ex = addBiz(rec, -1);
+        const pay = addBiz(addDays(`${m === 12 ? y + 1 : y}-${pad2(m === 12 ? 1 : m + 1)}-01`, -1), 2);
+        if (ex >= from && ex <= to) add(ex, { title: `${r.name} 배당락`, location: `예상 · 기준일 ${+rec.slice(5, 7)}/${+rec.slice(8)} 전 영업일까지 보유${etf ? "" : " · 지급은 보통 1~2개월 뒤"} · ${w(per)}` });
+        if (etf && pay >= from && pay <= to) add(pay, { title: `${r.name} 분배금 지급`, location: `예상 · ${w(per)}` });
+      }
+    } else if (h.type === "us") {
+      const hist = state.prices.divs?.[h.symbol.toUpperCase()] || [];
+      if (!hist.length) continue;
+      const amt = (hist.at(-1).amt || 0) * (+h.qty || 0) * (r.fx || 0);
+      const lastActual = hist.at(-1).d;
+      for (const x of hist) {
+        if (x.d >= from && x.d <= to) add(x.d, { title: `${r.name} 배당락`, location: `확정 · 지급은 보통 며칠~1주 뒤 · ${w((x.amt || 0) * (+h.qty || 0) * (r.fx || 0))}` });
+        const proj = addDays(x.d, 364);
+        if (proj > lastActual && proj >= from && proj <= to) add(proj, { title: `${r.name} 배당락`, location: `예상 · 지급은 보통 며칠~1주 뒤 · ${w(amt)}` });
+      }
+    }
+  }
+  return (divCache = map);
+}
+
 function eventsOn(day) {
   const mine = (state.priv?.events || []).filter((e) => e.date === day);
   const google = (state.gcal?.events || [])
     .filter((e) => e.date === day || (e.endDate && e.date <= day && day <= e.endDate))
     .map((e) => ({ ...e, cat: "구글", src: "google" }));
-  return [...mine, ...google].sort((a, b) => (a.time || "00").localeCompare(b.time || "00"));
+  return [...mine, ...google, ...(divMap()[day] || [])].sort((a, b) => (a.time || "00").localeCompare(b.time || "00"));
 }
 
 // 구글 캘린더 "일정 만들기" 화면 주소 (내용이 미리 채워짐)
@@ -322,6 +371,7 @@ function gcalAddUrl(e) {
 
 function eventHtml(e, { del = true } = {}) {
   const google = e.src === "google";
+  if (e.src === "div") del = false;
   const range = google && e.endDate ? `~${+e.endDate.slice(5, 7)}/${+e.endDate.slice(8)}` : google && e.endTime ? `~${e.endTime}` : "";
   return `<div class="ev"><span class="tm">${esc(e.time || "종일")}</span>
     <span class="tt">${esc(e.title)}<span class="cat cat-${esc(e.cat)}">${esc(e.cat)}</span>
@@ -567,8 +617,114 @@ function renderPlan() {
 }
 
 // ---------- 투자 ----------
+function historyChart() {
+  const days = state.history?.days || [];
+  const range = store.get("histRange", "3m");
+  const cut = { "1m": addDays(today(), -31), "3m": addDays(today(), -92), "1y": addDays(today(), -366), all: "0000" }[range] || "0000";
+  const pts = days.filter((x) => x.d >= cut);
+  const btns = [["1m", "1개월"], ["3m", "3개월"], ["1y", "1년"], ["all", "전체"]].map(([k, l]) =>
+    `<button class="seg${range === k ? " on" : ""}" data-hist-range="${k}">${l}</button>`).join("");
+  const head = `<div class="card-head"><h3>자산 추이</h3><div class="segs">${btns}</div></div>`;
+  if (pts.length < 2) {
+    const last = days.at(-1);
+    return head + `<div class="empty" style="padding:28px 0">${last ? `오늘부터 기록을 시작했습니다 (${won(last.value)}원).<br>매일 한 점씩 쌓여 내일부터 그래프가 그려집니다.` : "아직 기록이 없습니다. 시세가 수집되면 매일 기록됩니다."}</div>`;
+  }
+  const W = 640, H = 200, P = { l: 8, r: 8, t: 14, b: 22 };
+  const vals = pts.flatMap((x) => [x.value, x.cost || x.value]);
+  let lo = Math.min(...vals), hi = Math.max(...vals);
+  const padv = (hi - lo) * 0.12 || hi * 0.02 || 1; lo -= padv; hi += padv;
+  const X = (i) => P.l + (i / (pts.length - 1)) * (W - P.l - P.r);
+  const Y = (v) => P.t + (1 - (v - lo) / (hi - lo)) * (H - P.t - P.b);
+  const line = (k) => pts.map((x, i) => `${i ? "L" : "M"}${X(i).toFixed(1)},${Y(x[k] || x.value).toFixed(1)}`).join("");
+  const first = pts[0], last = pts.at(-1);
+  const diff = last.value - first.value, dr = first.value ? (diff / first.value) * 100 : 0;
+  const lbl = (d) => `${+d.slice(5, 7)}/${+d.slice(8)}`;
+  return head + `
+    <div class="hist-sum"><b>${won(last.value)}<small>원</small></b>
+      <span class="${sign(diff)}">${diff > 0 ? "+" : ""}${won(diff)}원 (${pct(dr)})</span><span class="muted sm"> · ${lbl(first.d)} 대비</span></div>
+    <div class="hist-wrap" data-hist='${esc(JSON.stringify(pts.map((x) => [x.d, x.value, x.cost])))}'>
+      <svg viewBox="0 0 ${W} ${H}" class="hist" preserveAspectRatio="none" role="img" aria-label="자산 추이 그래프">
+        <path d="${line("value")}L${X(pts.length - 1)},${H - P.b}L${X(0)},${H - P.b}Z" class="hist-area"/>
+        <path d="${line("cost")}" class="hist-cost"/>
+        <path d="${line("value")}" class="hist-line"/>
+        <line class="hist-cursor" x1="0" x2="0" y1="${P.t}" y2="${H - P.b}" style="display:none"/>
+      </svg>
+      <div class="hist-axis"><span>${lbl(first.d)}</span><span>${lbl(last.d)}</span></div>
+      <div class="hist-tip" hidden></div>
+    </div>
+    <div class="hist-legend"><span><i class="lg-v"></i>평가금액</span><span><i class="lg-c"></i>매입금액</span></div>`;
+}
+document.addEventListener("click", (e) => {
+  const b = e.target.closest("[data-hist-range]");
+  if (!b) return;
+  store.set("histRange", b.dataset.histRange);
+  $("#invHistory").innerHTML = historyChart();
+});
+document.addEventListener("pointermove", (e) => {
+  const wrap = e.target.closest?.(".hist-wrap");
+  if (!wrap) return;
+  const pts = JSON.parse(wrap.dataset.hist);
+  const r = wrap.querySelector("svg").getBoundingClientRect();
+  const i = Math.max(0, Math.min(pts.length - 1, Math.round(((e.clientX - r.left) / r.width) * (pts.length - 1))));
+  const [d, v, c] = pts[i];
+  const x = (8 + (i / (pts.length - 1)) * (640 - 16));
+  const cur = wrap.querySelector(".hist-cursor");
+  cur.setAttribute("x1", x); cur.setAttribute("x2", x); cur.style.display = "";
+  const tip = wrap.querySelector(".hist-tip");
+  tip.hidden = false;
+  tip.innerHTML = `<b>${+d.slice(5, 7)}/${+d.slice(8)}</b> ${won(v)}원${c ? `<span class="muted"> · 손익 ${v - c > 0 ? "+" : ""}${won(v - c)}</span>` : ""}`;
+  tip.style.left = `${Math.min(Math.max((x / 640) * 100, 12), 88)}%`;
+});
+document.addEventListener("pointerleave", (e) => {
+  if (!e.target.classList?.contains("hist-wrap")) return;
+  e.target.querySelector(".hist-cursor").style.display = "none";
+  e.target.querySelector(".hist-tip").hidden = true;
+}, true);
+
+// ---------- 아파트 실거래가 (my-data/apt.json) ----------
+const eokStr = (won) => {
+  if (won == null) return "-";
+  const man = Math.round(won / 10000), eok = Math.floor(man / 10000), rest = man % 10000;
+  return eok ? `${eok}억${rest ? ` ${rest.toLocaleString("ko-KR")}` : ""}` : `${rest.toLocaleString("ko-KR")}만`;
+};
+let aptMore = false;
+function aptCard() {
+  const a = state.apt;
+  const head = (t) => `<div class="card-head"><h3>아파트 실거래가${t ? ` · ${esc(t)}` : ""}</h3><span class="muted sm">${a?.updatedAt ? `${dayLabel(kstDay(a.updatedAt))} ${timeFmt.format(new Date(a.updatedAt))} 갱신` : "매일 07:10 갱신"}</span></div>`;
+  if (!a?.targets?.length) return head() + `<div class="empty" style="padding:20px 0">공공데이터포털 인증키(APT_API_KEY)를 등록하면 매일 실거래 내역이 표시됩니다.</div>`;
+  return a.targets.map((t) => {
+    if (!t.found) return head(t.name) + `<div class="empty" style="padding:16px 0">단지를 찾지 못했습니다.${t.hints?.length ? `<br><span class="sm">비슷한 이름: ${t.hints.map(esc).join(", ")}</span>` : ""}</div>`;
+    const deals = t.deals || [];
+    const shown = aptMore ? deals.slice(0, 60) : deals.slice(0, 10);
+    const areas = Object.entries(t.avg1mByArea || {}).sort((x, y) => +x[0] - +y[0]);
+    const last = deals.find((x) => !x.canceled);
+    return head(t.name) + `
+      <div class="apt-top">
+        <div><span class="muted sm">최근 1개월 평균 (전용 ${t.minArea}~${t.maxArea}㎡)</span>
+          <div class="apt-avg">${t.avg1m?.n ? `${eokStr(t.avg1m.avg)}` : "<small>최근 1개월 거래 없음</small>"}</div>
+          <span class="muted sm">${t.avg1m?.n ? `${t.avg1m.n}건 · ${+t.avg1m.since.slice(5, 7)}/${+t.avg1m.since.slice(8)} 이후 계약` : last ? `마지막 거래 ${last.date} ${eokStr(last.price)}` : ""}</span></div>
+        ${areas.length ? `<div class="apt-areas">${areas.map(([ar, v]) => `<div><span>전용 ${(+ar).toFixed(2)}㎡</span><b>${eokStr(v.avg)}</b><span>${v.n}건</span></div>`).join("")}</div>` : ""}
+      </div>
+      ${deals.length ? `<div class="table-wrap"><table class="tbl apt-tbl">
+        <tr><th>계약일</th><th>전용</th><th>동·층</th><th>거래가</th></tr>
+        ${shown.map((x) => `<tr class="${x.canceled ? "cx" : ""}"><td>${x.date.slice(2).replace(/-/g, ".")}</td><td>${x.area.toFixed(2)}㎡</td>
+          <td>${x.dong ? `${esc(x.dong)}동 ` : ""}${x.floor ?? "-"}층</td>
+          <td><b>${eokStr(x.price)}</b>${x.canceled ? ' <span class="apt-tag">해제</span>' : x.kind === "직거래" ? ' <span class="apt-tag">직거래</span>' : ""}</td></tr>`).join("")}
+      </table></div>
+      ${deals.length > 10 ? `<button class="sm apt-more" data-apt-more>${aptMore ? "접기" : `더 보기 (${Math.min(deals.length, 60)}건)`}</button>` : ""}` : `<div class="empty">최근 12개월 거래가 없습니다.</div>`}
+      <p class="muted sm" style="margin:8px 0 0">국토교통부 실거래가 공개 자료 기준 · 신고 기한(계약 후 30일) 때문에 최근 거래는 늦게 올라올 수 있습니다.</p>`;
+  }).join("");
+}
+document.addEventListener("click", (e) => {
+  if (!e.target.closest("[data-apt-more]")) return;
+  aptMore = !aptMore;
+  $("#invApt").innerHTML = aptCard();
+});
+
 function renderInvest() {
   const pf = portfolio();
+  $("#invApt").innerHTML = aptCard();
+  $("#invHistory").innerHTML = historyChart();
   $("#invMetrics").innerHTML =
     metric("매입금액", `${won(pf.cost)}<small>원</small>`, "",
       gauge(pf.value ? pf.cost / Math.max(pf.cost, pf.value) : 0, "var(--faint)") +
@@ -612,6 +768,7 @@ function renderInvest() {
 
 // ---------- 전체 렌더 ----------
 function renderAll() {
+  divCache = null;
   const v = ["home", "news", "mail", "plan", "invest"].includes(state.view) ? state.view : "home";
   $$("#views button").forEach((b) => b.classList.toggle("active", b.dataset.view === v));
   const needsPriv = v === "plan" || v === "invest" || v === "mail";
