@@ -1259,10 +1259,11 @@ function loadGis() {
 function gmailSavedToken() {
   try {
     const t = JSON.parse(sessionStorage.getItem("gmailToken") || "null");
-    if (t && t.exp > Date.now() + 60000) { mail.gmail.token = t.token; mail.gmail.exp = t.exp; return true; }
+    if (t && t.exp > Date.now() + 60000) { mail.gmail.token = t.token; mail.gmail.exp = t.exp; mail.gmail.canModify = !!t.modify; return true; }
   } catch {}
   return false;
 }
+const GMAIL_SCOPE = "https://www.googleapis.com/auth/gmail.modify";
 async function gmailConnect() {
   const clientId = mailSettings().gmailClientId;
   if (!clientId) { openSettings(); $("#mailSettings").scrollIntoView({ block: "center" }); return toast("설정에서 Gmail 클라이언트 ID를 먼저 저장하세요."); }
@@ -1270,18 +1271,20 @@ async function gmailConnect() {
   await new Promise((ok, fail) => {
     const client = google.accounts.oauth2.initTokenClient({
       client_id: clientId,
-      scope: "https://www.googleapis.com/auth/gmail.readonly",
+      // 읽음 표시 동기화를 위해 '메일 수정' 권한 (대시보드는 읽음 표시만 바꾼다)
+      scope: GMAIL_SCOPE,
       callback: (r) => {
         if (r.error) return fail(new Error(`Gmail 로그인 실패: ${r.error}`));
         mail.gmail.token = r.access_token;
         mail.gmail.exp = Date.now() + (r.expires_in || 3600) * 1000;
-        try { sessionStorage.setItem("gmailToken", JSON.stringify({ token: mail.gmail.token, exp: mail.gmail.exp })); } catch {}
-        store.set("gmailLinked", "1");
+        mail.gmail.canModify = (r.scope || "").includes("gmail.modify");
+        try { sessionStorage.setItem("gmailToken", JSON.stringify({ token: mail.gmail.token, exp: mail.gmail.exp, modify: mail.gmail.canModify })); } catch {}
+        store.set("gmailLinked", "modify");
         ok();
       },
       error_callback: (e) => fail(new Error(e?.type === "popup_closed" ? "로그인 창이 닫혔습니다." : "Gmail 로그인 창을 열 수 없습니다. (팝업 차단 확인)")),
     });
-    client.requestAccessToken({ prompt: store.get("gmailLinked") ? "" : "consent" });
+    client.requestAccessToken({ prompt: store.get("gmailLinked") === "modify" ? "" : "consent" });
   });
   await loadGmail();
   renderMail(); renderHomeMail();
@@ -1391,6 +1394,50 @@ $("#homeMail")?.addEventListener("click", (e) => {
   go("mail");
 });
 
+// --- 읽음 표시를 원래 메일함에도 반영 ---
+// Gmail: 바로 UNREAD 라벨 제거 / 네이버·다음: my-data/mail/seen-queue.json 에 모아 두면 메일 수집 작업이 IMAP으로 읽음 처리
+const seenQ = { pending: new Set(JSON.parse(store.get("mailSeenPending", "[]") || "[]")), writeTimer: null, dispatchTimer: null };
+const saveSeenPending = () => store.set("mailSeenPending", JSON.stringify([...seenQ.pending]));
+async function syncRead(it) {
+  if (it.provider === "gmail") {
+    if (!mail.gmail.canModify || !mail.gmail.token) return;
+    try {
+      const res = await fetch(`https://gmail.googleapis.com/gmail/v1/users/me/messages/${it.gid}/modify`, {
+        method: "POST", headers: { Authorization: `Bearer ${mail.gmail.token}`, "Content-Type": "application/json" },
+        body: JSON.stringify({ removeLabelIds: ["UNREAD"] }),
+      });
+      if (res.ok) it.seen = true;
+    } catch {}
+    return;
+  }
+  seenQ.pending.add(it.id); saveSeenPending();
+  clearTimeout(seenQ.writeTimer);
+  seenQ.writeTimer = setTimeout(flushSeenQueue, 5000);          // 5초 모아서 저장
+  if (!seenQ.dispatchTimer) seenQ.dispatchTimer = setTimeout(dispatchSeen, 10 * 60_000); // 10분 뒤 한 번 반영
+}
+async function flushSeenQueue() {
+  if (!seenQ.pending.size || !state.priv) return;
+  const ids = [...seenQ.pending];
+  try {
+    let cur = { ids: [] }, sha;
+    try { const f = await ghFile(cfg.dataRepo, "mail/seen-queue.json"); cur = f.json; sha = f.sha; } catch (e) { if (e.status !== 404) throw e; }
+    // 이미 처리된 것(seen-done.json)은 빼서 파일이 커지지 않게
+    let done = new Set();
+    try { done = new Set((await ghFile(cfg.dataRepo, "mail/seen-done.json")).json.ids || []); } catch {}
+    const next = [...new Set([...(cur.ids || []), ...ids])].filter((x) => !done.has(x)).slice(-500);
+    await ghPut(cfg.dataRepo, "mail/seen-queue.json", { ids: next, updatedAt: new Date().toISOString() }, sha, "메일 읽음 표시 대기열");
+    ids.forEach((x) => seenQ.pending.delete(x)); saveSeenPending();
+  } catch (e) { console.warn("읽음 대기열 저장 실패", e); }
+}
+async function dispatchSeen() {
+  seenQ.dispatchTimer = null;
+  await flushSeenQueue();
+  try { await gh(cfg.dataRepo, "/actions/workflows/mail.yml/dispatches", { method: "POST", body: JSON.stringify({ ref: "main" }) }); } catch {}
+}
+// 페이지를 닫거나 다른 앱으로 갈 때 모아 둔 읽음 표시를 저장 (반영은 다음 메일 수집 때)
+document.addEventListener("visibilitychange", () => { if (document.hidden && seenQ.pending.size) flushSeenQueue(); });
+setTimeout(() => { if (seenQ.pending.size) flushSeenQueue(); }, 8000); // 지난번에 저장 못 한 것
+
 // --- 공통 ---
 async function loadMail(force = false) {
   if (!state.priv || mail.loading || (mail.loaded && !force)) return;
@@ -1429,8 +1476,7 @@ function accountsList() {
   return [...map.values()];
 }
 
-function renderMail() {
-  if (!$("#mailList")) return;
+function renderMailTabs() {
   const accts = accountsList();
   const total = allMail().filter(isUnread).length;
   const company = mailSettings().companyMailUrl || "https://webmail.ehyundai.com";
@@ -1440,6 +1486,12 @@ function renderMail() {
       <span class="sw" style="background:${PROVIDER[a.provider]?.color || "#8e8e93"}"></span>${esc(a.label)}${accts.filter((x) => x.provider === a.provider).length > 1 ? ` · ${esc(a.account.split("@")[0])}` : ""}${a.unread ? `<span class="cnt">${a.unread}</span>` : ""}</button>`).join("") +
     (!mail.gmail.token ? `<button class="tab add" data-gmail-connect>＋ Gmail 연결</button>` : "") +
     `<a class="tab" href="${esc(company)}" target="_blank" rel="noopener">회사 메일 ↗</a>`;
+  return accts;
+}
+
+function renderMail() {
+  if (!$("#mailList")) return;
+  const accts = renderMailTabs();
 
   const q = mail.q.trim().toLowerCase();
   if (mail.filter !== "all" && !accts.some((a) => a.key === mail.filter)) mail.filter = "all";
@@ -1457,6 +1509,7 @@ function renderMail() {
   const notes = [];
   if (mail.loading) notes.push("메일을 불러오는 중…");
   if (mail.gmail.err) notes.push(`Gmail: ${esc(mail.gmail.err)}`);
+  if (mail.gmail.token && !mail.gmail.canModify) notes.push(`Gmail 읽음 표시를 Gmail에도 반영하려면 <a class="more" data-gmail-connect>Gmail 다시 연결</a>을 눌러 '메일 수정' 권한을 허용하세요.`);
   if (mail.imapErr === "nokey") notes.push(`네이버·다음 메일을 보려면 <a class="more" data-open-mailsettings>메일 암호</a>를 입력하세요.`);
   if (mail.imapErr === "badkey") notes.push(`메일 암호가 MAIL_KEY와 다릅니다. <a class="more" data-open-mailsettings>다시 입력</a>`);
   if (mail.imapErr && !["nokey", "badkey", "none"].includes(mail.imapErr)) notes.push(`네이버·다음: ${esc(mail.imapErr)}`);
@@ -1505,9 +1558,12 @@ async function renderReader() {
     <div id="rbody"><div class="empty">본문을 불러오는 중…</div></div>`;
 
   if (!mail.read.has(it.id)) {
+    const wasUnread = isUnread(it);
     mail.read.add(it.id);
     store.set("mailRead", JSON.stringify([...mail.read].slice(-500)));
     $$(`[data-mail="${CSS.escape(it.id)}"]`).forEach((li) => li.classList.remove("unread"));
+    renderMailTabs(); renderHomeMail();
+    if (wasUnread) syncRead(it);
   }
   try {
     let body = mail.bodies.get(it.id);
@@ -1550,6 +1606,7 @@ $("#mailTabs").addEventListener("click", (e) => {
 });
 $("#mailSearch").addEventListener("input", (e) => { mail.q = e.target.value; renderMail(); });
 $("#mailList").addEventListener("click", (e) => {
+  if (e.target.closest("[data-gmail-connect]")) { gmailConnect().catch((err) => toast(err.message, 6000)); return; }
   if (e.target.closest("[data-open-mailsettings]")) { openSettings(); $("#mailSettings").scrollIntoView({ block: "center" }); return; }
   const fb = e.target.closest("[data-mfolder]");
   if (fb) { mail.folder = fb.dataset.mfolder; mail.sel = null; renderMail(); return; }
