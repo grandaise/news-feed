@@ -569,3 +569,10 @@ a.tab { text-decoration: none; color: var(--text); border-radius: 980px; display
   .views { width: 100%; }
   .views button { flex: 1; padding: 6px 0; min-width: 0; }
 }
+
+/* ===== 투자 목록 정렬 ===== */
+.sort-bar { display: flex; align-items: center; gap: 8px; margin: -2px 0 10px; }
+.sort-bar select { font: inherit; font-size: 14px; color: var(--text); background: var(--fill-2); border: 0; padding: 6px 10px; }
+.tbl th.sortable { cursor: pointer; user-select: none; white-space: nowrap; }
+.tbl th.sortable:hover { color: var(--text); }
+.tbl th.sortable.on { color: var(--accent); }

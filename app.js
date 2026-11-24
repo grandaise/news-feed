@@ -736,6 +736,43 @@ document.addEventListener("click", (e) => {
   $("#aptBox").innerHTML = aptCard();
 });
 
+// 투자 목록 정렬 (값이 없는 종목은 항상 맨 아래). 평단가·현재가는 해외 종목도 원화로 환산해 비교
+const HOLD_SORTS = {
+  value: { label: "비중", get: (r) => r.value },
+  avg: { label: "평단가", get: (r) => (+r.h.avg ? +r.h.avg * (r.h.type === "us" && r.h.avgCur !== "KRW" ? r.fx || 0 : 1) : null) },
+  price: { label: "현재가", get: (r) => (r.price != null ? r.price * (r.fx || 1) : null) },
+  cost: { label: "매입금액", get: (r) => r.cost },
+  valueAmt: { label: "평가금액", get: (r) => r.value },
+  pnl: { label: "손익", get: (r) => r.pnl },
+  rate: { label: "수익률", get: (r) => r.rate },
+  div: { label: "연 배당", get: (r) => r.annualDiv || null },
+};
+function sortHoldings(rows, key, dir) {
+  const get = HOLD_SORTS[key].get, m = dir === "asc" ? 1 : -1;
+  return [...rows].sort((a, b) => {
+    const x = get(a), y = get(b);
+    if (x == null && y == null) return (b.value || 0) - (a.value || 0);
+    if (x == null) return 1;
+    if (y == null) return -1;
+    return (x - y) * m || (b.value || 0) - (a.value || 0);
+  });
+}
+function setHoldSort(key, dir) {
+  store.set("holdSort", key);
+  store.set("holdDir", dir);
+  renderInvest();
+}
+$("#holdSort").addEventListener("change", (e) => setHoldSort(e.target.value, "desc")); // 기준을 바꾸면 높은 순부터
+$("#holdDir").addEventListener("click", () => setHoldSort(store.get("holdSort", "value"), store.get("holdDir", "desc") === "desc" ? "asc" : "desc"));
+$("#holdings").addEventListener("click", (e) => {
+  const t = e.target.closest("[data-sort]");
+  if (!t) return;
+  e.stopPropagation();
+  const key = t.dataset.sort, cur = store.get("holdSort", "value");
+  // 같은 열을 다시 누르면 방향만 바꿈
+  setHoldSort(key, key === cur && store.get("holdDir", "desc") === "desc" ? "asc" : "desc");
+});
+
 function renderInvest() {
   const pf = portfolio();
   $("#aptBox").innerHTML = aptCard();
@@ -753,9 +790,16 @@ function renderInvest() {
   const u = state.prices.updatedAt;
   $("#priceTime").textContent = u ? `시세 ${dayLabel(kstDay(u))} ${timeFmt.format(new Date(u))}` : "시세 수집 전";
 
-  const rows = [...pf.rows].sort((a, b) => (b.value || 0) - (a.value || 0));
+  const sk = HOLD_SORTS[store.get("holdSort", "value")] ? store.get("holdSort", "value") : "value";
+  const dir = store.get("holdDir", "desc");
+  const rows = sortHoldings(pf.rows, sk, dir);
+  $("#holdSort").value = sk;
+  $("#holdDir").textContent = dir === "desc" ? "높은 순 ↓" : "낮은 순 ↑";
+  const th = (label, key) => key
+    ? `<th class="sortable${sk === key ? " on" : ""}" data-sort="${key}">${label}${sk === key ? (dir === "desc" ? " ↓" : " ↑") : ""}</th>`
+    : `<th>${label}</th>`;
   $("#holdings").innerHTML = rows.length ? `
-    <tr><th>종목</th><th>비중</th><th>수량</th><th>평단가</th><th>현재가</th><th>매입금액</th><th>평가금액</th><th>손익</th><th>수익률</th><th>연 배당</th></tr>
+    <tr>${th("종목")}${th("비중", "value")}${th("수량")}${th("평단가", "avg")}${th("현재가", "price")}${th("매입금액", "cost")}${th("평가금액", "valueAmt")}${th("손익", "pnl")}${th("수익률", "rate")}${th("연 배당", "div")}</tr>
     ${rows.map((r) => {
       const t = TYPE[r.h.type];
       const money = (v) => (r.h.type === "us" ? `$${fmtNum(v, 2)}` : won(v));
