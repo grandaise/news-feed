@@ -510,7 +510,7 @@ function renderGuide() {
   if (!el) return;
   const g = state.guide;
   const head = `<div class="card-head"><h3>금일 투자 가이드</h3>${g?.basis ? `<span class="muted sm">${+g.basis.slice(4, 6)}/${+g.basis.slice(6)} 종가 기준 · 거래대금 상위</span>` : ""}</div>`;
-  if (!g?.items?.length) { el.innerHTML = head + `<div class="empty">아직 가이드가 없습니다. 평일 07:50에 만들어집니다.</div>`; return; }
+  if (!g?.items?.length) { el.innerHTML = head + `<div class="empty">아직 가이드가 없습니다. 평일 05:30에 만들어집니다.</div>`; return; }
   let sel = store.get("guideSel", "");
   const it = g.items.find((x) => x.code === sel) || g.items[0];
   const L = it.levels;
@@ -691,7 +691,7 @@ const eokStr = (won) => {
 let aptMore = false;
 function aptCard() {
   const a = state.apt;
-  const head = (t) => `<div class="card-head"><h3>아파트 실거래가${t ? ` · ${esc(t)}` : ""}</h3><span class="muted sm">${a?.updatedAt ? `${dayLabel(kstDay(a.updatedAt))} ${timeFmt.format(new Date(a.updatedAt))} 갱신` : "매일 07:10 갱신"}</span></div>`;
+  const head = (t) => `<div class="card-head"><h3>아파트 실거래가${t ? ` · ${esc(t)}` : ""}</h3><span class="muted sm">${a?.updatedAt ? `${dayLabel(kstDay(a.updatedAt))} ${timeFmt.format(new Date(a.updatedAt))} 갱신` : "매일 새벽 갱신"}</span></div>`;
   if (!a?.targets?.length) return head() + `<div class="empty" style="padding:20px 0">공공데이터포털 인증키(APT_API_KEY)를 등록하면 매일 실거래 내역이 표시됩니다.</div>`;
   return a.targets.map((t) => {
     if (!t.found) return head(t.name) + `<div class="empty" style="padding:16px 0">단지를 찾지 못했습니다.${t.hints?.length ? `<br><span class="sm">비슷한 이름: ${t.hints.map(esc).join(", ")}</span>` : ""}</div>`;

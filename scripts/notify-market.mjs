@@ -1,10 +1,11 @@
-// 아침 자산·시장 알림 (평일): 자산 전일 대비 변동, 금일 투자 가이드 요약, 관심 아파트 새로 신고된 실거래를 ntfy 로 보낸다.
+// 아침 자산·시장 알림 (평일, 공휴일 제외): 자산 전일 대비 변동, 금일 투자 가이드 요약, 관심 아파트 새로 신고된 실거래를 ntfy 로 보낸다.
 //
 // 보안: ntfy 기본 서버는 토픽 이름만 알면 누구나 구독할 수 있으므로
 //       총자산·평가금액 같은 절대 금액은 보내지 않고 '변동률과 증감'만 보낸다.
 //
 // 환경 변수: NTFY_TOPIC (필수), SITE_URL, MY_DATA_DIR (비공개 my-data 체크아웃 폴더), FORCE=1 (주말에도 보냄)
 import { readFile } from "node:fs/promises";
+import { isHoliday } from "./daytype.mjs";
 
 const topic = process.env.NTFY_TOPIC;
 if (!topic) { console.log("NTFY_TOPIC 이 설정되지 않아 건너뜁니다."); process.exit(0); }
@@ -14,7 +15,7 @@ const siteUrl = process.env.SITE_URL || "";
 const now = new Date();
 const todayStr = new Intl.DateTimeFormat("sv-SE", { timeZone: "Asia/Seoul" }).format(now);
 const wd = new Intl.DateTimeFormat("en-US", { timeZone: "Asia/Seoul", weekday: "short" }).format(now);
-if (["Sat", "Sun"].includes(wd) && !process.env.FORCE) { console.log("주말이라 자산·시장 알림은 보내지 않습니다."); process.exit(0); }
+if (isHoliday(todayStr) && !process.env.FORCE) { console.log(`휴일(${wd})이라 자산·시장 알림은 보내지 않습니다.`); process.exit(0); }
 
 const readJson = async (p) => { try { return JSON.parse(await readFile(p, "utf8")); } catch { return null; } };
 const pct = (n, d = 1) => `${n > 0 ? "+" : ""}${n.toFixed(d)}%`;
