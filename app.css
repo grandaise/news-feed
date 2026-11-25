@@ -87,6 +87,8 @@ header {
 .views { display: flex; gap: 2px; padding: 3px; border-radius: 980px; background: var(--fill-2); }
 .views button { background: none; padding: 6px 18px; font-size: 14px; font-weight: 500; color: var(--muted); border-radius: 980px; }
 .views button:hover { color: var(--text); background: none; }
+.views .views-link { display: inline-flex; align-items: center; padding: 6px 18px; font-size: 14px; font-weight: 500; color: var(--muted); border-radius: 980px; text-decoration: none; white-space: nowrap; }
+.views .views-link:hover { color: var(--text); }
 .views button.active { background: var(--card); color: var(--text); box-shadow: 0 1px 3px rgba(0, 0, 0, .12); }
 @media (prefers-color-scheme: dark) { .views button.active { background: var(--card-2); } }
 .actions-top { display: flex; align-items: center; justify-content: flex-end; gap: 6px; }
@@ -324,6 +326,7 @@ dialog .field { margin-top: 10px; }
   .top { grid-template-columns: 1fr auto; row-gap: 10px; }
   .views { grid-column: 1 / -1; grid-row: 2; }
   .views button { flex: 1; padding: 7px 0; }
+  .views .views-link { flex: 1; justify-content: center; padding: 7px 0; }
   .updated { display: none; }
   .card { padding: 18px; border-radius: 18px; }
   .card ul.list { margin: 0 -18px -18px; }
@@ -568,6 +571,7 @@ a.tab { text-decoration: none; color: var(--text); border-radius: 980px; display
 @media (max-width: 760px) {
   .views { width: 100%; }
   .views button { flex: 1; padding: 6px 0; min-width: 0; }
+  .views .views-link { flex: 1; justify-content: center; padding: 6px 0; min-width: 0; }
 }
 
 /* ===== 투자 목록 정렬 ===== */

@@ -1,0 +1,684 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#f5f5f7" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
+<meta name="robots" content="noindex">
+<title>업무 WBS</title>
+<meta name="apple-mobile-web-app-title" content="업무 WBS">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+@font-face{font-family:"S-CoreDream-6Bold";src:url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-6Bold.woff") format("woff");font-weight:normal;font-style:normal;font-display:swap}
+/* Layout: same visual system as My Dashboard (Apple system colours, frosted sticky header with centred segmented views,
+   big-number metric tiles, white rounded cards on #f5f5f7). Content: 프로젝트 → 기획·디자인·퍼블·개발 단계 WBS. */
+:root{
+  --bg:#f5f5f7; --card:#ffffff; --card-2:#fbfbfd; --fill:rgba(118,118,128,.12); --fill-2:rgba(118,118,128,.08);
+  --text:#1d1d1f; --muted:#6e6e73; --faint:#86868b; --line:rgba(0,0,0,.08);
+  --accent:#0071e3; --accent-soft:rgba(0,113,227,.1); --on-accent:#ffffff;
+  --danger:#ff3b30; --danger-soft:rgba(255,59,48,.12); --warn:#c77700; --warn-soft:rgba(255,149,0,.14); --ok:#248a3d; --ok-soft:rgba(52,199,89,.14);
+  --st-plan:#ff9500; --st-design:#ffcc00; --st-pub:#34c759; --st-dev:#007aff; --st-etc:#8e8e93;
+  --c-site:#007aff; --c-svc:#5856d6; --c-content:#ff9500; --c-etc:#8e8e93;
+  --shadow:0 1px 2px rgba(0,0,0,.04),0 4px 24px rgba(0,0,0,.04);
+  --radius:20px;
+  --font:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display","Pretendard Variable",Pretendard,"Apple SD Gothic Neo","Noto Sans KR",system-ui,sans-serif;
+  --r:10px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#000000; --card:#1c1c1e; --card-2:#2c2c2e; --fill:rgba(118,118,128,.24); --fill-2:rgba(118,118,128,.16);
+  --text:#f5f5f7; --muted:#a1a1a6; --faint:#8e8e93; --line:rgba(255,255,255,.1);
+  --accent:#2997ff; --accent-soft:rgba(41,151,255,.16); --on-accent:#ffffff;
+  --danger:#ff453a; --danger-soft:rgba(255,69,58,.18); --warn:#ffb340; --warn-soft:rgba(255,159,10,.18); --ok:#30d158; --ok-soft:rgba(48,209,88,.16);
+  --st-plan:#ff9f0a; --st-design:#ffd60a; --st-pub:#30d158; --st-dev:#0a84ff; --st-etc:#98989d;
+  --c-site:#0a84ff; --c-svc:#5e5ce6; --c-content:#ff9f0a; --c-etc:#98989d;
+  --shadow:none; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#000000; --card:#1c1c1e; --card-2:#2c2c2e; --fill:rgba(118,118,128,.24); --fill-2:rgba(118,118,128,.16);
+  --text:#f5f5f7; --muted:#a1a1a6; --faint:#8e8e93; --line:rgba(255,255,255,.1);
+  --accent:#2997ff; --accent-soft:rgba(41,151,255,.16); --on-accent:#ffffff;
+  --danger:#ff453a; --danger-soft:rgba(255,69,58,.18); --warn:#ffb340; --warn-soft:rgba(255,159,10,.18); --ok:#30d158; --ok-soft:rgba(48,209,88,.16);
+  --st-plan:#ff9f0a; --st-design:#ffd60a; --st-pub:#30d158; --st-dev:#0a84ff; --st-etc:#98989d;
+  --c-site:#0a84ff; --c-svc:#5e5ce6; --c-content:#ff9f0a; --c-etc:#98989d;
+  --shadow:none; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font:400 15px/1.47 var(--font);letter-spacing:-0.01em;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+button,input,select,textarea{font:inherit;color:var(--text)}
+a{color:var(--accent);text-decoration:none} a:hover{text-decoration:underline}
+.wrap{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));max-width:1600px;margin:0 auto}
+@media (min-width:900px){.wrap{padding-left:max(32px,env(safe-area-inset-left,0px));padding-right:max(32px,env(safe-area-inset-right,0px))}}
+
+/* controls (pill buttons, soft fills) */
+.btn,.rowbtn,.linkbtn{border:0;background:var(--fill-2);border-radius:980px;padding:7px 14px;cursor:pointer;font-weight:500;white-space:nowrap;transition:background .15s,transform .1s,opacity .15s}
+.btn:hover,.rowbtn:hover{background:var(--fill)} .btn:active,.rowbtn:active{transform:scale(.97)}
+.btn.primary{background:var(--accent);color:var(--on-accent)} .btn.primary:hover{opacity:.88;background:var(--accent)}
+.btn.danger{color:var(--danger)}
+.rowbtn{padding:4px 11px;font-size:12.5px}
+.linkbtn{background:none;color:var(--accent);padding:4px 0;font-size:13.5px}
+.linkbtn:hover{text-decoration:underline}
+select,input,textarea{background:var(--fill-2);border:1px solid transparent;border-radius:10px;padding:8px 11px;min-width:0;transition:border-color .15s,box-shadow .15s,background .15s}
+select{cursor:pointer}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 4px var(--accent-soft);background:var(--card)}
+input[type=checkbox]{accent-color:var(--accent);width:18px;height:18px;margin:0;padding:0}
+:is(.btn,.tab,.rowbtn,.linkbtn,[data-open],[data-proj],.stat):focus-visible{outline:none;box-shadow:0 0 0 4px var(--accent-soft),0 0 0 1px var(--accent)}
+
+/* frosted header */
+header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:color-mix(in srgb,var(--bg) 72%,transparent);-webkit-backdrop-filter:saturate(180%) blur(20px);backdrop-filter:saturate(180%) blur(20px);border-bottom:1px solid var(--line)}
+.top .wrap{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:12px;padding-block:10px}
+.brand{display:flex;align-items:center;gap:10px;margin:0;font-size:19px;font-weight:700;letter-spacing:-0.02em;white-space:nowrap}
+.brand svg{width:30px;height:30px;flex:none;color:var(--accent)}
+.brand span{font-family:"S-CoreDream-6Bold",var(--font);font-weight:normal;letter-spacing:-0.01em;line-height:1}
+.brand a{color:inherit;display:flex}
+.brand small{font-weight:500;color:var(--faint);font-size:12px;letter-spacing:0}
+.tabs{display:flex;gap:2px;padding:3px;border-radius:980px;background:var(--fill-2)}
+.tab{border:0;background:none;padding:6px 18px;font-size:14px;font-weight:500;color:var(--muted);border-radius:980px;cursor:pointer;white-space:nowrap}
+.tab:hover{color:var(--text)}
+.tab[aria-selected="true"]{background:var(--card);color:var(--text);box-shadow:0 1px 3px rgba(0,0,0,.12)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .tab[aria-selected="true"]{background:var(--card-2)}}
+:root[data-theme="dark"] .tab[aria-selected="true"]{background:var(--card-2)}
+.actions-top{display:flex;justify-content:flex-end;gap:6px}
+.actions-top a.btn{color:var(--text);text-decoration:none}
+
+main{padding-block:clamp(16px,2.4vw,28px) 64px}
+.note{padding:14px 18px;border-radius:14px;background:var(--fill-2);color:var(--muted);font-size:13.5px;margin-bottom:16px}
+.note.warn{background:var(--warn-soft);color:var(--text)}
+.empty{padding:56px 16px;text-align:center;color:var(--muted);background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow)}
+.empty h2{font-size:19px;color:var(--text);margin:0 0 6px;letter-spacing:-0.02em}
+
+/* metric tiles */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,160px),1fr));gap:16px;margin-bottom:16px}
+.stat{display:flex;flex-direction:column;align-items:flex-start;gap:4px;text-align:left;border:0;background:var(--card);border-radius:var(--radius);padding:16px 20px 18px;box-shadow:var(--shadow);cursor:pointer;color:var(--muted);font-size:13px;font-weight:500;transition:transform .1s,box-shadow .15s}
+.stat:active{transform:scale(.98)}
+.stat b{font-size:clamp(26px,2.6vw,34px);font-weight:600;letter-spacing:-0.03em;line-height:1.15;color:var(--text);font-variant-numeric:tabular-nums}
+.stat.late b{color:var(--danger)} .stat.soon b{color:var(--warn)}
+.stat.on{box-shadow:0 0 0 2px var(--accent),var(--shadow)}
+
+/* entry + filter card */
+.panel-card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px 22px;margin-bottom:16px;display:flex;flex-direction:column;gap:12px}
+.quick{display:flex;gap:8px}
+.quick input{flex:1;min-width:0;padding:11px 14px}
+.quick-hint{font-size:12px;color:var(--faint);margin-top:-4px}
+.quick-hint code{font-family:inherit;background:var(--fill-2);padding:1px 7px;border-radius:980px;color:var(--muted);font-size:11.5px}
+.row3{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.row3 input[type=search]{width:200px}
+.chk{display:flex;align-items:center;gap:6px;color:var(--muted);font-size:13.5px;margin-left:auto}
+
+.cat{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--muted);white-space:nowrap;font-weight:500}
+.cat::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--cc,var(--c-etc))}
+.stage{display:inline-block;font-size:11.5px;font-weight:600;padding:2px 9px;border-radius:980px;color:var(--text);background:color-mix(in srgb,var(--sc) 18%,transparent);white-space:nowrap}
+.pill{display:inline-block;font-size:11.5px;padding:2px 9px;border-radius:980px;background:var(--fill-2);color:var(--muted);white-space:nowrap;font-weight:600}
+.pill.s-검토대기,.pill.s-검토중{background:var(--accent-soft);color:var(--accent)}
+.pill.s-제작중{background:var(--warn-soft);color:var(--warn)}
+.pill.s-완료{background:var(--ok-soft);color:var(--ok)}
+.dd{font-size:13px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.dd.late{color:var(--danger);font-weight:600} .dd.soon{color:var(--warn);font-weight:600} .dd.done{color:var(--faint)}
+.code{font-size:12px;color:var(--faint);white-space:nowrap;font-variant-numeric:tabular-nums}
+.sub{font-size:12px;color:var(--faint)}
+
+/* WBS table */
+.tbl-wrap{overflow-x:auto;background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow)}
+table{width:100%;border-collapse:collapse;min-width:880px;font-size:14px}
+th,td{text-align:left;padding:10px 12px;border-top:1px solid var(--line);vertical-align:middle}
+thead th{font-size:12px;color:var(--faint);font-weight:500;border-top:0;padding-top:14px}
+tr.proj td{background:var(--card-2);cursor:pointer;padding-top:16px;padding-bottom:12px}
+tr.proj .pname{font-weight:600;font-size:16px;letter-spacing:-0.02em}
+tr.proj .pmeta{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-top:4px}
+.prog{display:inline-flex;align-items:center;gap:8px;font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+.prog i{display:inline-block;width:80px;height:6px;border-radius:980px;background:var(--fill);overflow:hidden;position:relative}
+.prog i b{position:absolute;inset:0 auto 0 0;border-radius:inherit;background:var(--ok)}
+tr.task{cursor:pointer} tr.task:hover td{background:var(--fill-2)}
+tr.task td:first-child{padding-left:24px}
+tr.is-late td:first-child{box-shadow:inset 3px 0 0 var(--danger)}
+tr.is-soon td:first-child{box-shadow:inset 3px 0 0 var(--warn)}
+tr.is-done td{color:var(--faint)} tr.is-done .ttl{text-decoration:line-through}
+.ttl{font-weight:500}
+.addrow td{padding:2px 12px 10px 24px;border-top:0}
+.review-actions{display:flex;gap:6px}
+
+/* gantt */
+.g-tools{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:12px}
+.legend{display:flex;gap:12px;flex-wrap:wrap;font-size:12.5px;color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend span::before{content:"";width:10px;height:10px;border-radius:50%;background:var(--sc)}
+.gantt{overflow-x:auto;background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow)}
+.g-grid{position:relative;width:max-content}
+.g-head,.g-row{display:flex}
+.g-label{position:sticky;left:0;z-index:2;background:var(--card);width:var(--lw);flex:0 0 var(--lw);padding:7px 14px;border-right:1px solid var(--line);overflow:hidden;white-space:nowrap;text-overflow:ellipsis;font-size:13.5px}
+.g-head .g-label{font-size:12px;color:var(--faint);display:flex;align-items:flex-end}
+.g-days{display:flex}
+.g-cell{flex:0 0 var(--dw);text-align:center;font-size:10.5px;color:var(--faint);border-left:1px solid var(--line);padding:6px 0 4px;line-height:1.3;font-variant-numeric:tabular-nums}
+.g-cell.we{background:var(--fill-2)} .g-cell.m1{color:var(--text);font-weight:600} .g-cell.now{color:var(--danger);font-weight:700}
+.g-row{border-top:1px solid var(--line);cursor:pointer}
+.g-row.gp{cursor:default}
+.g-row.gp .g-label{font-weight:600;background:var(--card-2)}
+.g-row.gp .g-track{background:var(--card-2)}
+.g-row:not(.gp):hover .g-label{background:var(--fill-2)}
+.g-track{position:relative;height:32px}
+.g-track .we{position:absolute;top:0;bottom:0;background:var(--fill-2)}
+.bar{position:absolute;top:8px;height:16px;border-radius:980px;background:var(--sc)}
+.bar.done{opacity:.35}
+.bar.late{box-shadow:0 0 0 2px var(--card),0 0 0 4px var(--danger)}
+.bar.span{top:13px;height:6px;background:var(--fill)}
+.ms{position:absolute;top:9px;width:13px;height:13px;transform:rotate(45deg);background:var(--sc);border-radius:3px}
+.today{position:absolute;top:0;bottom:0;width:2px;background:var(--danger);z-index:1;pointer-events:none;border-radius:1px}
+.g-label .stage{margin-right:6px}
+
+/* kanban */
+.board{display:grid;grid-template-columns:repeat(6,minmax(220px,1fr));gap:16px;overflow-x:auto;padding-bottom:6px}
+.col{background:var(--fill-2);border-radius:var(--radius);padding:12px;min-height:200px;display:flex;flex-direction:column;gap:10px}
+.col h4{margin:2px 6px 2px;font-size:13px;color:var(--muted);display:flex;justify-content:space-between;font-weight:600}
+.col h4 span{color:var(--faint);font-variant-numeric:tabular-nums}
+.col.over{box-shadow:inset 0 0 0 2px var(--accent)}
+.card{background:var(--card);border-radius:14px;padding:12px 14px;cursor:grab;display:flex;flex-direction:column;gap:6px;box-shadow:var(--shadow);border:1px solid var(--line)}
+.card .ttl{font-size:14px}
+.card .meta{display:flex;justify-content:space-between;gap:6px;align-items:center}
+
+/* people */
+.ppl table{min-width:780px}
+.ppl td.wk{vertical-align:top;min-width:120px}
+.ppl .chip{display:block;font-size:12px;padding:3px 9px;margin:3px 0;border-radius:980px;background:color-mix(in srgb,var(--sc) 16%,transparent);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:180px;cursor:pointer}
+.ppl .load{font-size:11px;color:var(--faint);font-variant-numeric:tabular-nums}
+.ppl th.now{color:var(--danger)}
+
+/* sheet-style editor */
+.scrim{position:fixed;inset:0;background:rgba(0,0,0,.35);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);z-index:20}
+.panel{position:fixed;top:max(12px,env(safe-area-inset-top,0px));right:max(12px,env(safe-area-inset-right,0px));bottom:max(12px,env(safe-area-inset-bottom,0px));width:min(460px,calc(100% - 24px));background:var(--card);z-index:21;border-radius:var(--radius);box-shadow:0 20px 60px rgba(0,0,0,.25);display:flex;flex-direction:column;overflow:hidden}
+.panel header{display:flex;align-items:center;gap:8px;padding:18px 22px 14px;border-bottom:1px solid var(--line)}
+.panel header h2{font-size:19px;margin:0;flex:1;letter-spacing:-0.02em}
+.panel form{flex:1;overflow:auto;padding:18px 22px;display:grid;grid-template-columns:1fr 1fr;gap:14px;align-content:start}
+.fld{display:flex;flex-direction:column;gap:5px;min-width:0}
+.fld.full{grid-column:1/-1}
+.fld label,.fld .lbl{font-size:12.5px;color:var(--muted);font-weight:500}
+.fld input,.fld select,.fld textarea{width:100%}
+.fld textarea{min-height:72px;resize:vertical}
+.fld .chkrow{display:flex;gap:14px;flex-wrap:wrap}
+.fld .chkrow label{display:flex;gap:6px;align-items:center;color:var(--text);font-weight:400;font-size:14px;white-space:nowrap}
+.fld .chkrow input{width:18px}
+.panel footer{display:flex;gap:8px;padding:14px 22px;border-top:1px solid var(--line)}
+.spacer{flex:1}
+.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:color-mix(in srgb,var(--text) 88%,transparent);color:var(--bg);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);padding:10px 18px;border-radius:980px;font-size:13.5px;font-weight:500;z-index:30;max-width:calc(100% - 32px)}
+@media (max-width:900px){
+  .top .wrap{grid-template-columns:1fr auto;grid-template-areas:"brand actions" "tabs tabs"}
+  .brand{grid-area:brand} .actions-top{grid-area:actions} .top .tabs{grid-area:tabs;justify-self:center;overflow-x:auto;max-width:100%}
+}
+@media (max-width:640px){
+  header.top{position:static}
+  .top .wrap{grid-template-columns:minmax(0,1fr) auto}
+  .brand small{display:none}
+  .actions-top .btn{padding:6px 11px;font-size:13px}
+  .actions-top a.btn{display:none}
+  .row3 select{flex:1 1 30%}
+  .row3 input[type=search]{width:100%;flex:1 1 100%}
+  .chk{margin-left:0}
+  .panel form{grid-template-columns:1fr}
+  .tab{padding:6px 13px}
+  .panel-card{padding:16px}
+}
+@media (prefers-reduced-motion:no-preference){
+  #view{animation:fade .25s ease}
+  .panel{animation:rise .22s cubic-bezier(.2,.8,.2,1)}
+  @keyframes fade{from{opacity:0;transform:translateY(4px)}}
+  @keyframes rise{from{opacity:0;transform:translateY(10px) scale(.99)}}
+}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <h1 class="brand">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="9" fill="currentColor"/><rect x="7" y="8" width="12" height="4" rx="2" fill="#fff"/><rect x="11" y="14" width="13" height="4" rx="2" fill="#fff" fill-opacity=".8"/><rect x="15" y="20" width="10" height="4" rx="2" fill="#fff" fill-opacity=".6"/></svg>
+      <span>업무 WBS</span><small id="sync">불러오는 중</small>
+    </h1>
+    <nav class="tabs" role="tablist" aria-label="보기">
+      <button class="tab" role="tab" data-view="wbs" type="button">WBS 표</button>
+      <button class="tab" role="tab" data-view="gantt" type="button">간트</button>
+      <button class="tab" role="tab" data-view="kanban" type="button">칸반</button>
+      <button class="tab" role="tab" data-view="people" type="button">담당자</button>
+    </nav>
+    <div class="actions-top">
+      <a class="btn" href="../" title="My Dashboard로">대시보드</a>
+      <button class="btn" id="addProjBtn" type="button">+ 프로젝트</button>
+      <button class="btn primary" id="addBtn" type="button">+ 업무</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="stats" id="stats"></div>
+  <section class="panel-card" aria-label="입력과 필터">
+    <form class="quick" id="quickForm" autocomplete="off">
+      <input id="quickInput" type="text" placeholder="빠른 입력: 12/3 메인 배너 시안 #디자인 @고객센터 리뉴얼 +나애리" aria-label="빠른 입력">
+      <button class="btn primary" type="submit">추가</button>
+    </form>
+    <div class="quick-hint">날짜 <code>오늘</code> <code>내일</code> <code>12/3</code> <code>12월 3일</code> · 시간 <code>18시</code> · 단계 <code>#기획</code> <code>#디자인</code> <code>#퍼블</code> <code>#개발</code> · 프로젝트 <code>@이름</code> · 담당 <code>+이름</code></div>
+    <div class="row3">
+      <select id="fCat" aria-label="분류 필터"><option value="">전체 분류</option></select>
+      <select id="fStage" aria-label="단계 필터"><option value="">전체 단계</option></select>
+      <select id="fOwner" aria-label="담당자 필터"><option value="">전체 담당자</option></select>
+      <input id="fQ" type="search" placeholder="검색" aria-label="검색">
+      <label class="chk"><input id="fDone" type="checkbox"> 완료 숨기기</label>
+    </div>
+  </section>
+  <div id="notice"></div>
+  <div id="view"></div>
+</main>
+
+<div id="editorRoot"></div>
+<div id="toastRoot"></div>
+
+<script>
+(function(){
+"use strict";
+const CATS=[{k:"사이트 구축",v:"--c-site"},{k:"서비스 개선",v:"--c-svc"},{k:"콘텐츠 제작",v:"--c-content"},{k:"기타 업무",v:"--c-etc"}];
+const STAGES=[{k:"기획",v:"--st-plan",tag:["기획"]},{k:"디자인",v:"--st-design",tag:["디자인","디자"]},{k:"퍼블",v:"--st-pub",tag:["퍼블","퍼블리싱"]},{k:"개발",v:"--st-dev",tag:["개발","it"]},{k:"기타",v:"--st-etc",tag:["기타"]}];
+const STATUSES=["검토대기","예정","제작중","검토중","완료","보류"];
+const AREAS=["공통","리모델링","리빙","오피스","물류","UIUX"];
+const SOURCES=["수기(회사메일)","수기(기타)","팀 일정표","캘린더","캘린더(Tasks)","캘린더(반복)","Gmail"];
+const $=s=>document.querySelector(s);
+const esc=v=>String(v==null?"":v).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const catVar=k=>"var("+((CATS.find(c=>c.k===k)||CATS[3]).v)+")";
+const stVar=k=>"var("+((STAGES.find(c=>c.k===k)||STAGES[4]).v)+")";
+const normStatus=s=>s==="진행중"?"제작중":(STATUSES.includes(s)?s:"예정");
+
+let db=null, tasks=[], projects=[], loadedT=false, loadedP=false, readOnly=false;
+const state={view:"wbs",cat:"",stage:"",owner:"",q:"",hideDone:false,quick:"",scale:"week"};
+try{const s=JSON.parse(localStorage.getItem("wbs-ui2")||"{}");Object.assign(state,{cat:s.cat||"",stage:s.stage||"",owner:s.owner||"",hideDone:!!s.hideDone,scale:s.scale||"week"})}catch(e){}
+function saveUi(){try{localStorage.setItem("wbs-ui2",JSON.stringify({cat:state.cat,stage:state.stage,owner:state.owner,hideDone:state.hideDone,scale:state.scale}))}catch(e){}}
+const loaded=()=>loadedT&&loadedP;
+
+/* ---------- dates ---------- */
+const pad=n=>String(n).padStart(2,"0");
+function parseD(s){if(!s)return null;const m=String(s).match(/^(\d{4})-(\d{2})-(\d{2})(?:[T ](\d{2}):(\d{2}))?/);if(!m)return null;return new Date(+m[1],+m[2]-1,+m[3],+(m[4]||0),+(m[5]||0))}
+const dayStart=d=>new Date(d.getFullYear(),d.getMonth(),d.getDate());
+const today=()=>dayStart(new Date());
+const dayDiff=(a,b)=>Math.round((dayStart(a)-dayStart(b))/864e5);
+const fmtDay=d=>d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate());
+const WD=["일","월","화","수","목","금","토"];
+function fmtShort(s){const d=parseD(s);if(!d)return "";const t=/T\d/.test(s)&&(d.getHours()||d.getMinutes())?" "+pad(d.getHours())+":"+pad(d.getMinutes()):"";const y=d.getFullYear()!==today().getFullYear()?String(d.getFullYear()).slice(2)+"/":"";return y+(d.getMonth()+1)+"/"+d.getDate()+"("+WD[d.getDay()]+")"+t}
+function weekStart(d){const x=dayStart(d);const wd=(x.getDay()+6)%7;x.setDate(x.getDate()-wd);return x}
+function weekLabel(ws){const th=new Date(ws);th.setDate(th.getDate()+3);return {m:th.getMonth()+1,w:Math.ceil(th.getDate()/7),y:th.getFullYear()}}
+function dday(t){
+  const st=normStatus(t.status);
+  if(st==="완료")return {txt:"완료",cls:"done"};
+  const d=parseD(t.due);if(!d)return {txt:"–",cls:""};
+  const n=dayDiff(d,today());
+  if(st==="보류")return {txt:n<0?"D+"+(-n):n===0?"D-day":"D-"+n,cls:""};
+  return {txt:n<0?"D+"+(-n)+" 지남":n===0?"D-day":"D-"+n,cls:n<0?"late":n<=3?"soon":""};
+}
+
+/* ---------- quick-add ---------- */
+function nextOcc(mo,da){const t=today();let d=new Date(t.getFullYear(),mo-1,da);if(dayDiff(d,t)<-60)d=new Date(t.getFullYear()+1,mo-1,da);return d}
+function parseQuick(text){
+  let s=" "+text.trim()+" ", due=null, time=null, stage="기타", projName="", owners=[];
+  // @project: match the longest existing project name first, else take one word
+  const at=s.indexOf(" @");
+  if(at>=0){
+    const rest=s.slice(at+2);
+    const hit=projects.map(p=>p.name).filter(Boolean).sort((a,b)=>b.length-a.length).find(n=>rest.startsWith(n));
+    if(hit){projName=hit;s=s.slice(0,at)+" "+rest.slice(hit.length)}
+    else{const m=rest.match(/^(\S+)/);if(m){projName=m[1];s=s.slice(0,at)+" "+rest.slice(m[1].length)}}
+  }
+  s=s.replace(/\s#(\S+)/g,(m,tag)=>{const c=STAGES.find(c=>c.tag.some(t=>tag.toLowerCase().startsWith(t)));if(c)stage=c.k;return " "});
+  s=s.replace(/\s\+(\S+)/g,(m,o)=>{owners.push(o);return " "});
+  const now=today(), rel={"오늘":0,"내일":1,"모레":2};
+  s=s.replace(/\s(오늘|내일|모레)(까지)?(?=\s)/,(m,w)=>{const d=new Date(now);d.setDate(d.getDate()+rel[w]);due=d;return " "});
+  if(!due)s=s.replace(/\s(\d{4})-(\d{1,2})-(\d{1,2})(까지)?(?=\s)/,(m,y,mo,da)=>{due=new Date(+y,+mo-1,+da);return " "});
+  if(!due)s=s.replace(/\s(\d{1,2})\s*월\s*(\d{1,2})\s*일?(까지)?(?=\s)/,(m,mo,da)=>{due=nextOcc(+mo,+da);return " "});
+  if(!due)s=s.replace(/\s(\d{1,2})[\/.](\d{1,2})(까지)?(?=\s)/,(m,mo,da)=>{due=nextOcc(+mo,+da);return " "});
+  s=s.replace(/\s(오전|오후)?\s?(\d{1,2})(?::(\d{2})|\s?시(?:\s?(\d{1,2})\s?분)?)(까지)?(?=\s)/,(m,ap,h,mm,mm2)=>{h=+h;if(ap==="오후"&&h<12)h+=12;if(ap==="오전"&&h===12)h=0;time=pad(h)+":"+pad(+(mm||mm2||0));return " "});
+  return {title:s.replace(/\s+/g," ").trim(),due:due?fmtDay(due)+(time?"T"+time:""):"",stage,projName,owner:owners.join(", ")};
+}
+
+/* ---------- data (GitHub: 비공개 my-data/wbs.json, 대시보드와 같은 토큰) ---------- */
+const store={get(k,d=null){try{return localStorage.getItem(k)??d}catch(e){return d}},set(k,v){try{v==null?localStorage.removeItem(k):localStorage.setItem(k,v)}catch(e){}}};
+function defaultRepo(){const h=location.hostname;if(h.endsWith(".github.io")){const o=h.split(".")[0];return o+"/"+(location.pathname.split("/").filter(Boolean)[0]||o+".github.io")}return ""}
+const cfg={get repo(){return store.get("repo")||defaultRepo()},get dataRepo(){return store.get("dataRepo")||(cfg.repo?cfg.repo.split("/")[0]+"/my-data":"")},get token(){return store.get("token")||""}};
+const FILE="wbs.json";
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+function b64encode(str){const by=new TextEncoder().encode(str);let bin="";for(let i=0;i<by.length;i+=0x8000)bin+=String.fromCharCode(...by.subarray(i,i+0x8000));return btoa(bin)}
+const b64decode=x=>new TextDecoder().decode(Uint8Array.from(atob(x.replace(/\n/g,"")),c=>c.charCodeAt(0)));
+async function gh(path,opts={}){
+  if(!cfg.dataRepo||!cfg.token)throw new Error("대시보드 설정에서 이 기기를 먼저 연결하세요.");
+  const res=await fetch("https://api.github.com/repos/"+cfg.dataRepo+path,{...opts,headers:{Authorization:"Bearer "+cfg.token,Accept:"application/vnd.github+json","X-GitHub-Api-Version":"2022-11-28",...(opts.headers||{})}});
+  if(!res.ok){
+    if(res.status===401)throw new Error("토큰이 잘못되었거나 만료되었습니다. 대시보드 설정에서 새 토큰을 연결해 주세요.");
+    if(res.status===404&&!opts.method)throw Object.assign(new Error("없음"),{status:404});
+    if(res.status===403||res.status===404)throw new Error("토큰 권한 부족: my-data의 Contents 권한을 'Read and write'로 바꿔 주세요. ("+res.status+")");
+    if(res.status===409||res.status===422)throw Object.assign(new Error("다른 기기에서 먼저 저장했습니다."),{status:409});
+    throw new Error("GitHub "+res.status);
+  }
+  return res.status===204?null:res.json();
+}
+async function loadFile(){
+  try{const r=await gh("/contents/"+FILE+"?ref=main&t="+Date.now());return {json:JSON.parse(b64decode(r.content)),sha:r.sha}}
+  catch(e){if(e.status===404)return {json:{projects:[],tasks:[]},sha:undefined};throw e}
+}
+function applyData(j){projects=Array.isArray(j.projects)?j.projects:[];tasks=Array.isArray(j.tasks)?j.tasks:[]}
+let saving=Promise.resolve();
+function mutate(message,fn){
+  const run=async(retry)=>{
+    const {json,sha}=await loadFile();
+    const next={projects:[],tasks:[],...json};
+    const out=fn(next);
+    next.updatedAt=new Date().toISOString();
+    try{await gh("/contents/"+FILE,{method:"PUT",body:JSON.stringify({message:"WBS: "+message,content:b64encode(JSON.stringify(next,null,1)+"\n"),sha})})}
+    catch(e){if(e.status===409&&retry)return run(false);throw e}
+    applyData(next);render();return out;
+  };
+  const p=saving.then(()=>{$("#sync").textContent="저장 중";return run(true)}).then(o=>{setSync();return o===undefined?true:o},e=>{setSync();toast(e.message);return false});
+  saving=p.catch(()=>{});return p;
+}
+function setSync(){$("#sync").textContent=projects.length+"개 프로젝트 · "+tasks.length+"건"}
+const codeOf=t=>t.seq?"W-"+String(t.seq).padStart(3,"0"):"";
+const byId=id=>tasks.find(t=>t.id===id);
+const projById=id=>projects.find(p=>p.id===id);
+function projOf(t){return t.projectId?projById(t.projectId):null}
+function taskCat(t){const p=projOf(t);return (p&&p.category)||t.category||"기타 업무"}
+function ownersOf(t){return String(t.owner||"").split(/[,，\/·]/).map(s=>s.trim()).filter(Boolean)}
+const now=()=>new Date().toISOString();
+function newTask(d,data){const seq=d.tasks.reduce((m,t)=>Math.max(m,+t.seq||0),0)+1;const t={id:uid(),seq,createdAt:now(),updatedAt:now(),...data};d.tasks.push(t);return t}
+function newProject(d,data){const p={id:uid(),order:d.projects.reduce((m,x)=>Math.max(m,+x.order||0),0)+1,createdAt:now(),updatedAt:now(),...data};d.projects.push(p);return p}
+async function saveTask(id,data){
+  return mutate(id?"업무 수정: "+(data.title||(byId(id)||{}).title||""):"업무 추가: "+data.title,d=>{
+    if(id){const t=d.tasks.find(x=>x.id===id);if(!t)throw new Error("다른 기기에서 삭제된 업무입니다.");Object.assign(t,data,{updatedAt:now()})}else newTask(d,data);return true});
+}
+async function saveProject(id,data,stageTasks){
+  return mutate(id?"프로젝트 수정: "+data.name:"프로젝트 추가: "+data.name,d=>{
+    if(id){const p=d.projects.find(x=>x.id===id);if(!p)throw new Error("다른 기기에서 삭제된 프로젝트입니다.");Object.assign(p,data,{updatedAt:now()});return id}
+    const p=newProject(d,data);for(const st of stageTasks||[])newTask(d,{...st,projectId:p.id});return p.id});
+}
+async function quickAdd(projName,data){
+  return mutate("업무 추가: "+data.title,d=>{
+    let pid="";if(projName){let p=d.projects.find(x=>x.name===projName);if(!p)p=newProject(d,{name:projName,category:"기타 업무",area:"공통",dept:"",reqNo:"",link:"",note:""});pid=p.id}
+    newTask(d,{...data,projectId:pid});return true});
+}
+async function del(col,id){
+  return mutate(col==="projects"?"프로젝트 삭제":"업무 삭제",d=>{
+    if(col==="projects"){d.projects=d.projects.filter(p=>p.id!==id);d.tasks.forEach(t=>{if(t.projectId===id)t.projectId=""})}
+    else d.tasks=d.tasks.filter(t=>t.id!==id);return true});
+}
+
+/* ---------- filters ---------- */
+function filtered(){
+  const q=state.q.trim().toLowerCase();
+  return tasks.filter(t=>{
+    const p=projOf(t);
+    if(state.cat&&taskCat(t)!==state.cat)return false;
+    if(state.stage&&(t.stage||"기타")!==state.stage)return false;
+    if(state.owner&&!ownersOf(t).includes(state.owner))return false;
+    if(state.hideDone&&normStatus(t.status)==="완료")return false;
+    if(q&&![t.title,t.note,t.owner,codeOf(t),p&&p.name,p&&p.reqNo,p&&p.dept].join(" ").toLowerCase().includes(q))return false;
+    if(state.quick){const d=dday(t);if(state.quick==="late"&&d.cls!=="late")return false;if(state.quick==="soon"&&d.cls!=="soon")return false;if(!["late","soon"].includes(state.quick)&&normStatus(t.status)!==state.quick)return false}
+    return true});
+}
+function sortDue(a,b){const da=parseD(a.due),dbb=parseD(b.due);if(!da&&!dbb)return (a.seq||0)-(b.seq||0);if(!da)return 1;if(!dbb)return -1;return da-dbb}
+const stageIdx=t=>{const i=STAGES.findIndex(s=>s.k===(t.stage||"기타"));return i<0?9:i};
+const sortStage=(a,b)=>stageIdx(a)-stageIdx(b)||sortDue(a,b);
+function groupByProject(list){
+  const map=new Map();
+  for(const t of list){const k=projOf(t)?t.projectId:"_none";if(!map.has(k))map.set(k,[]);map.get(k).push(t)}
+  const keys=[...map.keys()].sort((a,b)=>{if(a==="_none")return 1;if(b==="_none")return -1;return (+projById(a).order||0)-(+projById(b).order||0)});
+  return keys.map(k=>({p:k==="_none"?null:projById(k),items:map.get(k).sort(sortStage)}));
+}
+function progress(pid){const all=tasks.filter(t=>t.projectId===pid);if(!all.length)return 0;return Math.round(all.filter(t=>normStatus(t.status)==="완료").length/all.length*100)}
+
+/* ---------- render ---------- */
+function render(){
+  document.querySelectorAll(".tab").forEach(b=>b.setAttribute("aria-selected",String(b.dataset.view===state.view)));
+  for(const el of ["#addBtn","#addProjBtn","#quickForm",".quick-hint"])$(el).hidden=readOnly;
+  renderStats();renderFilters();
+  const v=$("#view");
+  if(!loaded()){v.innerHTML='<div class="empty"><h2>업무를 불러오는 중입니다</h2>잠시만 기다려 주세요.</div>';return}
+  if(!tasks.length&&!projects.length){v.innerHTML='<div class="empty"><h2>아직 등록된 업무가 없습니다</h2><b>+ 프로젝트</b>로 기획·디자인·퍼블·개발 단계를 한 번에 만들거나, 위 빠른 입력 칸에 한 줄로 적어 보세요.</div>';return}
+  const list=filtered();
+  if(state.view==="people")return renderPeople(v,list);
+  if(!list.length&&state.view!=="wbs"){v.innerHTML='<div class="empty"><h2>조건에 맞는 업무가 없습니다</h2>필터를 바꾸거나 상단 요약 칩을 다시 눌러 해제하세요.</div>';return}
+  if(state.view==="gantt")renderGantt(v,list);else if(state.view==="kanban")renderKanban(v,list);else renderWbs(v,list);
+}
+function renderStats(){
+  const open=tasks.filter(t=>!["완료","보류"].includes(normStatus(t.status)));
+  const late=open.filter(t=>dday(t).cls==="late").length, soon=open.filter(t=>dday(t).cls==="soon").length;
+  const cnt=s=>tasks.filter(t=>normStatus(t.status)===s).length;
+  const items=[["late","마감 지남",late,"late"],["soon","3일 이내",soon,"soon"],["제작중","제작중",cnt("제작중"),""],["검토중","검토중",cnt("검토중"),""],["검토대기","검토대기",cnt("검토대기"),""]];
+  $("#stats").innerHTML=items.map(([k,l,n,c])=>`<button type="button" class="stat ${c} ${state.quick===k?"on":""}" data-q="${esc(k)}">${esc(l)} <b>${n}</b></button>`).join("");
+}
+function fillSelect(sel,opts,cur,allLabel){sel.innerHTML=`<option value="">${esc(allLabel)}</option>`+opts.map(o=>`<option value="${esc(o)}">${esc(o)}</option>`).join("");sel.value=opts.includes(cur)?cur:""}
+function allOwners(){return [...new Set(tasks.flatMap(ownersOf))].sort((a,b)=>a.localeCompare(b,"ko"))}
+function renderFilters(){
+  fillSelect($("#fCat"),CATS.map(c=>c.k),state.cat,"전체 분류");
+  fillSelect($("#fStage"),STAGES.map(c=>c.k),state.stage,"전체 단계");
+  fillSelect($("#fOwner"),allOwners(),state.owner,"전체 담당자");
+  $("#fDone").checked=state.hideDone;
+}
+function taskRow(t){
+  const d=dday(t), st=normStatus(t.status);
+  const cls="task "+(d.cls==="late"?"is-late":d.cls==="soon"?"is-soon":"")+(st==="완료"?" is-done":"");
+  const review=st==="검토대기"&&!readOnly?`<div class="review-actions"><button type="button" class="rowbtn" data-act="confirm" data-id="${esc(t.id)}">확정</button><button type="button" class="rowbtn" data-act="drop" data-id="${esc(t.id)}">업무 아님</button></div>`:"";
+  return `<tr class="${cls}" data-open="${esc(t.id)}" tabindex="0">
+    <td><span class="stage" style="--sc:${stVar(t.stage)}">${esc(t.stage||"기타")}</span></td>
+    <td><div class="ttl">${esc(t.title)}</div>${t.note?`<div class="sub">${esc(t.note.split("\n")[0].slice(0,60))}</div>`:""}</td>
+    <td>${esc(t.owner||"")}</td>
+    <td class="dd">${esc(fmtShort(t.start))}</td>
+    <td class="dd">${esc(fmtShort(t.due))}</td>
+    <td><span class="dd ${d.cls}">${esc(d.txt)}</span></td>
+    <td><span class="pill s-${esc(st)}">${esc(st)}</span></td>
+    <td class="code">${esc(codeOf(t))}</td>
+    <td>${review}</td></tr>`;
+}
+function projRow(p,items){
+  if(!p)return `<tr class="proj"><td colspan="9"><div class="pname">프로젝트 미지정</div><div class="pmeta sub">메일·캘린더에서 들어왔거나 프로젝트 없이 입력한 업무 ${items.length}건</div></td></tr>`;
+  const pr=progress(p.id);
+  const link=p.link&&/^https:\/\//.test(p.link)?`<a href="${esc(p.link)}" target="_blank" rel="noopener" data-stop>링크</a>`:"";
+  return `<tr class="proj" data-proj="${esc(p.id)}" tabindex="0"><td colspan="9">
+    <div class="pname">${esc(p.name)}${p.reqNo?` <span class="code">(${esc(p.reqNo)})</span>`:""}</div>
+    <div class="pmeta"><span class="cat" style="--cc:${catVar(p.category)}">${esc(p.category||"기타 업무")}</span>
+    ${p.dept?`<span class="sub">주관 ${esc(p.dept)}</span>`:""}${p.area?`<span class="sub">구분 ${esc(p.area)}</span>`:""}
+    <span class="prog"><i><b style="width:${pr}%"></b></i>${pr}%</span>${link}${p.note?`<span class="sub">${esc(p.note.split("\n")[0].slice(0,80))}</span>`:""}</div></td></tr>`;
+}
+function renderWbs(v,list){
+  const groups=groupByProject(list);
+  const filtering=state.cat||state.stage||state.owner||state.q||state.quick||state.hideDone;
+  if(!filtering){for(const p of projects)if(!groups.some(g=>g.p&&g.p.id===p.id))groups.push({p,items:[]})}
+  groups.sort((a,b)=>{if(!a.p)return 1;if(!b.p)return -1;return (+a.p.order||0)-(+b.p.order||0)});
+  if(!groups.length){v.innerHTML='<div class="empty"><h2>조건에 맞는 업무가 없습니다</h2>필터를 바꾸거나 상단 요약 칩을 다시 눌러 해제하세요.</div>';return}
+  let rows="";
+  for(const g of groups){
+    rows+=projRow(g.p,g.items)+g.items.map(taskRow).join("");
+    if(g.p&&!readOnly)rows+=`<tr class="addrow"><td colspan="9"><button type="button" class="linkbtn" data-addto="${esc(g.p.id)}">+ 이 프로젝트에 업무 추가</button></td></tr>`;
+  }
+  v.innerHTML=`<div class="tbl-wrap"><table><thead><tr><th>작업 분류</th><th>업무</th><th>담당자</th><th>시작</th><th>완료일</th><th>남은 기간</th><th>상태</th><th>ID</th><th></th></tr></thead><tbody>${rows}</tbody></table></div>`;
+}
+function renderGantt(v,list){
+  const items=list.filter(t=>parseD(t.due));
+  const noDate=list.length-items.length;
+  if(!items.length){v.innerHTML='<div class="empty"><h2>완료일이 있는 업무가 없습니다</h2>간트는 완료일이 있는 업무만 보여줍니다.</div>';return}
+  const week=state.scale==="week", t0=today(), narrow=window.innerWidth<640, lw=narrow?150:260;
+  let min=t0,max=t0;
+  items.forEach(t=>{const s=parseD(t.start)||parseD(t.due),e=parseD(t.due);if(s<min)min=s;if(e>max)max=e});
+  let cols=[], dw, unitDays;
+  if(week){unitDays=7;dw=narrow?40:48;let ws=weekStart(min);ws.setDate(ws.getDate()-7);const end=weekStart(max);end.setDate(end.getDate()+14);
+    while(ws<=end||cols.length<12){cols.push(new Date(ws));ws.setDate(ws.getDate()+7)}}
+  else{unitDays=1;dw=narrow?24:30;let d=dayStart(min);d.setDate(d.getDate()-2);const end=dayStart(max);end.setDate(end.getDate()+5);
+    while(d<=end||cols.length<21){cols.push(new Date(d));d.setDate(d.getDate()+1)}}
+  const origin=cols[0], pxPerDay=dw/unitDays, W=cols.length*dw;
+  const x=d=>dayDiff(d,origin)*pxPerDay;
+  const curW=weekStart(t0).getTime();
+  const head=cols.map((d,i)=>{
+    if(week){const l=weekLabel(d),prev=i?weekLabel(cols[i-1]):null,showM=!prev||prev.m!==l.m;return `<div class="g-cell ${showM?"m1":""} ${d.getTime()===curW?"now":""}">${showM?l.m+"월":"&nbsp;"}<br>${l.w}주</div>`}
+    const we=d.getDay()===0||d.getDay()===6,m1=d.getDate()===1||i===0;return `<div class="g-cell ${we?"we":""} ${m1?"m1":""}">${m1?(d.getMonth()+1)+"월":"&nbsp;"}<br>${d.getDate()}</div>`}).join("");
+  const weBg=week?"":cols.map((d,i)=>(d.getDay()===0||d.getDay()===6)?`<div class="we" style="left:${i*dw}px;width:${dw}px"></div>`:"").join("");
+  const bar=(t)=>{
+    const s=dayStart(parseD(t.start)||parseD(t.due)),e=dayStart(parseD(t.due)),d=dday(t);
+    const left=x(s),w=(dayDiff(e,s)+1)*pxPerDay;
+    if(dayDiff(e,s)===0&&!week)return `<div class="ms" style="left:${left+dw/2-6}px;--sc:${stVar(t.stage)}"></div>`;
+    return `<div class="bar ${normStatus(t.status)==="완료"?"done":""} ${d.cls==="late"?"late":""}" style="left:${left+1}px;width:${Math.max(w-2,week?8:6)}px;--sc:${stVar(t.stage)}"></div>`};
+  let rows="";
+  for(const g of groupByProject(items)){
+    const ss=g.items.map(t=>parseD(t.start)||parseD(t.due)),es=g.items.map(t=>parseD(t.due));
+    const ps=new Date(Math.min(...ss)),pe=new Date(Math.max(...es));
+    rows+=`<div class="g-row gp"><div class="g-label">${esc(g.p?g.p.name:"프로젝트 미지정")}</div><div class="g-track" style="width:${W}px">${weBg}<div class="bar span" style="left:${x(dayStart(ps))}px;width:${Math.max((dayDiff(pe,ps)+1)*pxPerDay,4)}px"></div></div></div>`;
+    rows+=g.items.map(t=>`<div class="g-row" data-open="${esc(t.id)}" tabindex="0"><div class="g-label"><span class="stage" style="--sc:${stVar(t.stage)}">${esc(t.stage||"기타")}</span>${esc(t.title)}${t.owner?` <span class="sub">${esc(t.owner)}</span>`:""}</div><div class="g-track" style="width:${W}px">${weBg}${bar(t)}</div></div>`).join("");
+  }
+  const todayX=x(t0)+(week?pxPerDay/2:dw/2);
+  v.innerHTML=`<div class="g-tools"><div class="tabs"><button type="button" class="tab" data-scale="week" aria-selected="${week}">주 단위</button><button type="button" class="tab" data-scale="day" aria-selected="${!week}">일 단위</button></div>
+    <div class="legend">${STAGES.slice(0,4).map(s=>`<span style="--sc:var(${s.v})">${s.k}</span>`).join("")}<span style="--sc:var(--late)">오늘</span></div></div>
+    ${noDate?`<div class="note">완료일이 없는 업무 ${noDate}건은 간트에서 빠졌습니다.</div>`:""}
+    <div class="gantt"><div class="g-grid" style="--dw:${dw}px;--lw:${lw}px"><div class="g-head"><div class="g-label">프로젝트 · 작업</div><div class="g-days">${head}</div></div>${rows}
+    <div class="today" style="left:${lw+todayX}px"></div></div></div>`;
+}
+function renderKanban(v,list){
+  v.innerHTML=`<div class="board">${STATUSES.map(s=>{
+    const items=list.filter(t=>normStatus(t.status)===s).sort(sortDue);
+    return `<div class="col" data-col="${esc(s)}"><h4>${esc(s)}<span>${items.length}</span></h4>${items.map(t=>{const d=dday(t),p=projOf(t);
+      return `<div class="card" draggable="${!readOnly}" data-open="${esc(t.id)}" data-drag="${esc(t.id)}" tabindex="0" style="--sc:${stVar(t.stage)}">
+        ${p?`<div class="sub">${esc(p.name)}</div>`:""}<div class="ttl">${esc(t.title)}</div>
+        <div class="meta"><span class="stage" style="--sc:${stVar(t.stage)}">${esc(t.stage||"기타")}</span><span class="dd ${d.cls}">${esc(d.txt)}</span></div>
+        <div class="sub">${esc([t.owner,t.due?"완료 "+fmtShort(t.due):""].filter(Boolean).join(" · "))}</div></div>`}).join("")}</div>`}).join("")}</div>`;
+}
+function renderPeople(v,list){
+  const open=list.filter(t=>!["완료","보류"].includes(normStatus(t.status)));
+  const people=[...new Set(open.flatMap(ownersOf))].sort((a,b)=>a.localeCompare(b,"ko"));
+  const noOwner=open.filter(t=>!ownersOf(t).length);
+  if(!people.length&&!noOwner.length){v.innerHTML='<div class="empty"><h2>진행할 업무가 없습니다</h2>담당자가 지정된 미완료 업무가 여기에 주별로 모입니다.</div>';return}
+  const w0=weekStart(today());const weeks=[];for(let i=-1;i<7;i++){const d=new Date(w0);d.setDate(d.getDate()+i*7);weeks.push(d)}
+  const inWeek=(t,ws)=>{const s=dayStart(parseD(t.start)||parseD(t.due)||today()),e=dayStart(parseD(t.due)||s);const we=new Date(ws);we.setDate(we.getDate()+6);return s<=we&&e>=ws};
+  const cell=(ts,ws,i)=>{const hit=ts.filter(t=>i===0?(parseD(t.due)&&dayStart(parseD(t.due))<ws):false).concat(ts.filter(t=>parseD(t.due)&&inWeek(t,ws)));
+    return `<td class="wk">${hit.length?`<span class="load">${hit.length}건</span>`:""}${hit.map(t=>`<span class="chip" data-open="${esc(t.id)}" tabindex="0" style="--sc:${stVar(t.stage)}" title="${esc((projOf(t)?projOf(t).name+" · ":"")+t.title)}">${esc(t.title)}</span>`).join("")}</td>`};
+  const rows=people.map(name=>{const ts=open.filter(t=>ownersOf(t).includes(name));return `<tr><td><b>${esc(name)}</b><div class="sub">${ts.length}건 진행</div></td>${weeks.map((ws,i)=>cell(ts,ws,i)).join("")}</tr>`}).join("")
+    +(noOwner.length?`<tr><td><b>담당 미지정</b><div class="sub">${noOwner.length}건</div></td>${weeks.map((ws,i)=>cell(noOwner,ws,i)).join("")}</tr>`:"");
+  const cw=weekStart(today()).getTime();
+  v.innerHTML=`<div class="note">미완료 업무를 담당자별·주별로 모았습니다. 첫 칸에는 지난주와 그 이전에 마감이 지난 업무도 함께 보입니다.</div>
+    <div class="tbl-wrap ppl"><table><thead><tr><th>담당자</th>${weeks.map((ws,i)=>{const l=weekLabel(ws);return `<th class="${ws.getTime()===cw?"now":""}">${i===0?"지난주 이전":l.m+"월 "+l.w+"주"}${ws.getTime()===cw?" · 이번 주":""}</th>`}).join("")}</tr></thead><tbody>${rows}</tbody></table></div>`;
+}
+
+/* ---------- editors ---------- */
+const toInput=s=>s?String(s).slice(0,16):"";
+const opt=(arr,cur)=>arr.map(a=>`<option ${a===cur?"selected":""}>${esc(a)}</option>`).join("");
+function panel(title,formHtml,footerHtml){
+  $("#editorRoot").innerHTML=`<div class="scrim" data-close></div><aside class="panel" role="dialog" aria-modal="true" aria-labelledby="edTitle">
+    <header><h2 id="edTitle">${title}</h2><button class="btn" type="button" data-close>닫기</button></header>
+    <form id="edForm">${formHtml}</form><footer>${footerHtml}</footer></aside>`;
+}
+function armDelete(btn,fn){btn.addEventListener("click",async()=>{if(btn.dataset.armed){await fn()}else{btn.dataset.armed="1";btn.textContent="한 번 더 누르면 삭제";setTimeout(()=>{if(btn.isConnected){delete btn.dataset.armed;btn.textContent="삭제"}},3000)}})}
+function openTask(id,preset){
+  const t=id?byId(id):Object.assign({title:"",stage:"기획",status:"예정",source:"수기(회사메일)",projectId:"",start:"",due:"",note:"",owner:"",link:""},preset||{});
+  if(!t)return;
+  const ro=readOnly?"disabled":"";
+  const owners=allOwners();
+  panel(id?esc(codeOf(t))+" 업무":"업무 추가",`
+    <div class="fld full"><label for="e_proj">프로젝트</label><select id="e_proj" ${ro}><option value="">프로젝트 미지정</option>${projects.slice().sort((a,b)=>(+a.order||0)-(+b.order||0)).map(p=>`<option value="${esc(p.id)}" ${p.id===t.projectId?"selected":""}>${esc(p.name)}</option>`).join("")}</select></div>
+    <div class="fld"><label for="e_stage">작업 분류</label><select id="e_stage" ${ro}>${opt(STAGES.map(s=>s.k),t.stage||"기타")}</select></div>
+    <div class="fld"><label for="e_status">상태</label><select id="e_status" ${ro}>${opt(STATUSES,normStatus(t.status))}</select></div>
+    <div class="fld full"><label for="e_title">업무</label><input id="e_title" required value="${esc(t.title)}" placeholder="예: UI 디자인, 퍼블리싱, 개발(어드민)" ${ro}></div>
+    <div class="fld full"><label for="e_owner">담당자</label><input id="e_owner" list="ownerList" value="${esc(t.owner||"")}" placeholder="여러 명이면 쉼표로: 김지현, 이재림" ${ro}><datalist id="ownerList">${owners.map(o=>`<option value="${esc(o)}">`).join("")}</datalist></div>
+    <div class="fld"><label for="e_start">시작</label><input id="e_start" type="datetime-local" value="${esc(toInput(t.start))}" ${ro}></div>
+    <div class="fld"><label for="e_due">완료일</label><input id="e_due" type="datetime-local" value="${esc(toInput(t.due))}" ${ro}></div>
+    <div class="fld"><label for="e_src">출처</label><select id="e_src" ${ro}>${opt(SOURCES.includes(t.source)?SOURCES:SOURCES.concat(t.source?[t.source]:[]),t.source)}</select></div>
+    <div class="fld"><label for="e_link">링크</label><input id="e_link" value="${esc(t.link||"")}" placeholder="https://" ${ro}></div>
+    <div class="fld full"><label for="e_note">메모</label><textarea id="e_note" placeholder="진행 상황, 요청자, 참고 사항" ${ro}>${esc(t.note||"")}</textarea></div>
+    ${t.link&&/^https:\/\//.test(t.link)?`<div class="fld full"><a href="${esc(t.link)}" target="_blank" rel="noopener">링크 열기</a></div>`:""}`,
+    `${id&&!readOnly?`<button class="btn danger" type="button" id="edDel">삭제</button>`:""}<div class="spacer"></div><button class="btn" type="button" data-close>취소</button>${readOnly?"":`<button class="btn primary" type="submit" form="edForm">${id?"저장":"추가"}</button>`}`);
+  if(!id)setTimeout(()=>{const el=$("#e_title");el&&el.focus()},30);
+  $("#edForm").addEventListener("submit",async ev=>{ev.preventDefault();
+    const data={projectId:$("#e_proj").value,stage:$("#e_stage").value,status:$("#e_status").value,title:$("#e_title").value.trim(),owner:$("#e_owner").value.trim(),
+      start:$("#e_start").value,due:$("#e_due").value,source:$("#e_src").value,link:$("#e_link").value.trim(),note:$("#e_note").value.trim()};
+    if(!data.title){$("#e_title").focus();return}
+    if(data.link&&!/^https:\/\//.test(data.link)){toast("링크는 https://로 시작해야 합니다.");return}
+    if(data.start&&data.due&&parseD(data.start)>parseD(data.due)){toast("시작이 완료일보다 늦습니다.");return}
+    if(await saveTask(id,data)){closeEditor();toast(id?"저장했습니다.":"추가했습니다.")}});
+  const d=$("#edDel");if(d)armDelete(d,async()=>{if(await del("tasks",id)){closeEditor();toast("삭제했습니다.")}});
+}
+function openProject(id){
+  const p=id?projById(id):{name:"",reqNo:"",dept:"",area:"공통",category:"사이트 구축",link:"",note:""};
+  if(!p)return;
+  const ro=readOnly?"disabled":"";
+  panel(id?"프로젝트 정보":"프로젝트 추가",`
+    <div class="fld full"><label for="p_name">프로젝트</label><input id="p_name" required value="${esc(p.name)}" placeholder="예: 고객센터 리뉴얼" ${ro}></div>
+    <div class="fld"><label for="p_req">요청번호</label><input id="p_req" value="${esc(p.reqNo||"")}" placeholder="예: 1680" ${ro}></div>
+    <div class="fld"><label for="p_dept">주관부서</label><input id="p_dept" value="${esc(p.dept||"")}" placeholder="예: U커머스" ${ro}></div>
+    <div class="fld"><label for="p_area">구분(주사용부서)</label><select id="p_area" ${ro}>${opt(AREAS.includes(p.area)?AREAS:AREAS.concat(p.area?[p.area]:[]),p.area)}</select></div>
+    <div class="fld"><label for="p_cat">분류</label><select id="p_cat" ${ro}>${opt(CATS.map(c=>c.k),p.category)}</select></div>
+    <div class="fld full"><label for="p_link">피그마·참고 링크</label><input id="p_link" value="${esc(p.link||"")}" placeholder="https://www.figma.com/..." ${ro}></div>
+    <div class="fld full"><label for="p_note">메모</label><textarea id="p_note" placeholder="요청자, 목표 일정, 협의 사항" ${ro}>${esc(p.note||"")}</textarea></div>
+    ${id?"":`<div class="fld full"><span class="lbl">단계 업무 함께 만들기</span><div class="chkrow">${STAGES.slice(0,4).map(s=>`<label><input type="checkbox" class="p_st" value="${s.k}" checked> ${s.k}</label>`).join("")}</div></div>
+    <div class="fld full"><label for="p_due">최종 완료 목표일 (선택)</label><input id="p_due" type="date"></div>`}`,
+    `${id&&!readOnly?`<button class="btn danger" type="button" id="edDel">삭제</button>`:""}<div class="spacer"></div><button class="btn" type="button" data-close>취소</button>${readOnly?"":`<button class="btn primary" type="submit" form="edForm">${id?"저장":"추가"}</button>`}`);
+  if(!id)setTimeout(()=>{const el=$("#p_name");el&&el.focus()},30);
+  $("#edForm").addEventListener("submit",async ev=>{ev.preventDefault();
+    const data={name:$("#p_name").value.trim(),reqNo:$("#p_req").value.trim(),dept:$("#p_dept").value.trim(),area:$("#p_area").value,category:$("#p_cat").value,link:$("#p_link").value.trim(),note:$("#p_note").value.trim()};
+    if(!data.name){$("#p_name").focus();return}
+    if(data.link&&!/^https:\/\//.test(data.link)){toast("링크는 https://로 시작해야 합니다.");return}
+    if(!id&&projects.some(x=>x.name===data.name)){toast("같은 이름의 프로젝트가 이미 있습니다.");return}
+    const stages=id?[]:[...document.querySelectorAll(".p_st:checked")].map(c=>c.value);
+    const due=id?"":$("#p_due").value;
+    const stageTasks=stages.map(st=>({stage:st,title:st==="디자인"?"UI 디자인":st==="퍼블"?"퍼블리싱":st,status:"예정",owner:"",start:"",due:st==="개발"?due:"",source:"수기(회사메일)",link:"",note:""}));
+    const pid=await saveProject(id,data,stageTasks);if(!pid)return;
+    closeEditor();toast(id?"저장했습니다.":stages.length?`프로젝트와 단계 업무 ${stages.length}건을 만들었습니다.`:"프로젝트를 만들었습니다.")});
+  const d=$("#edDel");if(d)armDelete(d,async()=>{const n=tasks.filter(t=>t.projectId===id);
+    if(await del("projects",id)){closeEditor();toast(n.length?`삭제했습니다. 업무 ${n.length}건은 프로젝트 미지정으로 옮겼습니다.`:"삭제했습니다.")}});
+}
+function closeEditor(){$("#editorRoot").innerHTML=""}
+let toastTimer;
+function toast(msg){const r=$("#toastRoot");r.innerHTML=`<div class="toast" role="status">${esc(msg)}</div>`;clearTimeout(toastTimer);toastTimer=setTimeout(()=>r.innerHTML="",2800)}
+
+/* ---------- events ---------- */
+document.addEventListener("click",async ev=>{
+  if(ev.target.closest("[data-stop]"))return;
+  if(ev.target.closest("[data-close]")){closeEditor();return}
+  const act=ev.target.closest("[data-act]");
+  if(act){const id=act.dataset.id;
+    if(act.dataset.act==="confirm"){if(await saveTask(id,{status:"예정"}))toast("예정으로 확정했습니다.")}
+    else if(await del("tasks",id))toast("목록에서 뺐습니다.");
+    return}
+  const st=ev.target.closest(".stat");if(st){state.quick=state.quick===st.dataset.q?"":st.dataset.q;render();return}
+  const sc=ev.target.closest("[data-scale]");if(sc){state.scale=sc.dataset.scale;saveUi();render();return}
+  const tab=ev.target.closest(".tab[data-view]");if(tab){state.view=tab.dataset.view;try{history.replaceState(null,"","#"+state.view)}catch(e){}render();return}
+  if($("#editorRoot").firstChild)return;
+  const add=ev.target.closest("[data-addto]");if(add){openTask(null,{projectId:add.dataset.addto});return}
+  const pr=ev.target.closest("[data-proj]");if(pr){openProject(pr.dataset.proj);return}
+  const op=ev.target.closest("[data-open]");if(op)openTask(op.dataset.open);
+});
+document.addEventListener("keydown",ev=>{
+  if(ev.key==="Escape"&&$("#editorRoot").firstChild){closeEditor();return}
+  if(ev.key==="Enter"&&!ev.target.closest(".panel")){if(ev.target.matches("[data-proj]"))openProject(ev.target.dataset.proj);else if(ev.target.matches("[data-open]"))openTask(ev.target.dataset.open)}
+});
+$("#addBtn").addEventListener("click",()=>openTask(null));
+$("#addProjBtn").addEventListener("click",()=>openProject(null));
+$("#quickForm").addEventListener("submit",async ev=>{
+  ev.preventDefault();const inp=$("#quickInput");const raw=inp.value.trim();if(!raw)return;
+  const p=parseQuick(raw);if(!p.title){toast("업무 내용을 적어 주세요.");return}
+  const data={title:p.title,due:p.due,start:"",stage:p.stage,owner:p.owner,status:"예정",source:"수기(회사메일)",link:"",note:""};
+  if(await quickAdd(p.projName,data)){inp.value="";toast("추가했습니다"+(p.due?" · 완료 "+fmtShort(p.due):" · 완료일 없음")+(p.projName?" · "+p.projName:""))}
+});
+for(const [id,key] of [["#fCat","cat"],["#fStage","stage"],["#fOwner","owner"]])$(id).addEventListener("change",e=>{state[key]=e.target.value;saveUi();render()});
+$("#fQ").addEventListener("input",e=>{state.q=e.target.value;render()});
+$("#fDone").addEventListener("change",e=>{state.hideDone=e.target.checked;saveUi();render()});
+document.addEventListener("dragstart",e=>{const c=e.target.closest&&e.target.closest("[data-drag]");if(c){e.dataTransfer.setData("text/plain",c.dataset.drag);e.dataTransfer.effectAllowed="move"}});
+document.addEventListener("dragover",e=>{const col=e.target.closest&&e.target.closest("[data-col]");if(col){e.preventDefault();document.querySelectorAll(".col.over").forEach(x=>x!==col&&x.classList.remove("over"));col.classList.add("over")}});
+document.addEventListener("dragleave",e=>{const col=e.target.closest&&e.target.closest("[data-col]");if(col&&!col.contains(e.relatedTarget))col.classList.remove("over")});
+document.addEventListener("drop",async e=>{const col=e.target.closest&&e.target.closest("[data-col]");if(!col)return;e.preventDefault();col.classList.remove("over");
+  const id=e.dataTransfer.getData("text/plain"),t=byId(id);if(t&&normStatus(t.status)!==col.dataset.col){if(await saveTask(id,{status:col.dataset.col}))toast(col.dataset.col+"(으)로 옮겼습니다.")}});
+function fromHash(){const h=(location.hash||"").slice(1);if(["wbs","gantt","kanban","people"].includes(h))state.view=h;else if(h==="list")state.view="wbs"}
+window.addEventListener("hashchange",()=>{fromHash();render()});
+let rT;window.addEventListener("resize",()=>{clearTimeout(rT);rT=setTimeout(()=>{if(state.view==="gantt")render()},200)});
+fromHash();
+
+/* ---------- boot ---------- */
+render();
+async function load(){
+  if(!cfg.token){loadedT=loadedP=true;readOnly=true;$("#sync").textContent="연결 안 됨";
+    $("#notice").innerHTML='<div class="note warn">이 기기가 아직 연결되지 않았습니다. <a href="../#settings">My Dashboard</a>의 설정에서 GitHub 토큰을 연결하면 같은 키로 여기서도 업무를 보고 저장할 수 있습니다.</div>';render();return}
+  try{const {json}=await loadFile();applyData(json);loadedT=loadedP=true;readOnly=false;$("#notice").innerHTML="";setSync();render()}
+  catch(e){loadedT=loadedP=true;$("#sync").textContent="오류";$("#notice").innerHTML='<div class="note warn">'+esc(e.message)+'</div>';render()}
+}
+load();
+let lastLoad=Date.now();
+document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible"&&Date.now()-lastLoad>60000&&!$("#editorRoot").firstChild){lastLoad=Date.now();saving.then(load)}});
+})();
+</script>
+</body>
+</html>
