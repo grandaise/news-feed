@@ -306,9 +306,9 @@ const stVar=k=>"var("+((STAGES.find(c=>c.k===k)||STAGES[4]).v)+")";
 const normStatus=s=>s==="진행중"?"제작중":(STATUSES.includes(s)?s:"예정");
 
 let db=null, tasks=[], projects=[], loadedT=false, loadedP=false, readOnly=false;
-const state={view:"wbs",year:String(new Date().getFullYear()),cat:"",stage:"",owner:"",q:"",hideDone:false,quick:"",scale:"week"};
-try{const s=JSON.parse(localStorage.getItem("wbs-ui2")||"{}");Object.assign(state,{year:s.year===undefined?null:s.year,cat:s.cat||"",stage:s.stage||"",status:s.status||"",role:s.role||"",owner:s.role&&s.owner||"",hideDone:!!s.hideDone,scale:s.scale||"week"})}catch(e){}
-function saveUi(){try{localStorage.setItem("wbs-ui2",JSON.stringify({year:state.year,cat:state.cat,stage:state.stage,status:state.status,role:state.role,owner:state.owner,hideDone:state.hideDone,scale:state.scale}))}catch(e){}}
+const state={view:"wbs",psort:"",year:String(new Date().getFullYear()),cat:"",stage:"",owner:"",q:"",hideDone:false,quick:"",scale:"week"};
+try{const s=JSON.parse(localStorage.getItem("wbs-ui2")||"{}");Object.assign(state,{psort:s.psort||"",year:s.year===undefined?null:s.year,cat:s.cat||"",stage:s.stage||"",status:s.status||"",role:s.role||"",owner:s.role&&s.owner||"",hideDone:!!s.hideDone,scale:s.scale||"week"})}catch(e){}
+function saveUi(){try{localStorage.setItem("wbs-ui2",JSON.stringify({psort:state.psort,year:state.year,cat:state.cat,stage:state.stage,status:state.status,role:state.role,owner:state.owner,hideDone:state.hideDone,scale:state.scale}))}catch(e){}}
 const loaded=()=>loadedT&&loadedP;
 
 /* ---------- dates ---------- */
@@ -546,18 +546,35 @@ function projRow(p,items){
     ${p.dept?`<span class="sub">주관 ${esc(p.dept)}</span>`:""}${p.area?`<span class="sub">구분 ${esc(p.area)}</span>`:""}
     <span class="prog"><i><b style="width:${pr}%"></b></i>${pr}%</span>${link}${p.note?`<span class="sub">${esc(p.note.split("\n")[0].slice(0,80))}</span>`:""}</div></td></tr>`;
 }
+/* 프로젝트 정렬: 프로젝트의 모든 단계 업무 기준 */
+const PSORTS=[["","등록순","팀 일정표 순서"],["start","시작일","가장 먼저 시작한 프로젝트부터"],["due","최종 완료일","최종 완료일이 빠른 프로젝트부터"],["left","남은 기간","남은 기간이 짧은 프로젝트부터 · 마감 지난 프로젝트가 맨 위, 모두 완료된 프로젝트는 맨 아래"]];
+function projSortKey(k){
+  if(!k)return null;
+  return p=>{const ts=tasks.filter(t=>t.projectId===p.id);
+    if(k==="start"){const v=ts.map(t=>parseD(t.start)||parseD(t.due)).filter(Boolean);return v.length?Math.min(...v):null}
+    if(k==="due"){const v=ts.map(t=>parseD(t.due)).filter(Boolean);return v.length?Math.max(...v):null}
+    const open=ts.filter(t=>!["완료","보류"].includes(normStatus(t.status)));
+    const v=open.map(t=>parseD(t.due)).filter(Boolean);
+    if(v.length)return Math.min(...v);
+    return open.length?8e15:9e15; /* 날짜 없는 미완료, 그다음 모두 완료 */
+  };
+}
 function renderWbs(v,list){
   const groups=groupByProject(list);
   const filtering=state.cat||state.stage||state.status||state.role||state.owner||state.q||state.quick||state.hideDone;
   if(!filtering){for(const p of projects)if(projInYear(p)&&!groups.some(g=>g.p&&g.p.id===p.id))groups.push({p,items:[]})}
-  groups.sort((a,b)=>{if(!a.p)return 1;if(!b.p)return -1;return (+a.p.order||0)-(+b.p.order||0)});
-  if(!groups.length){v.innerHTML='<div class="empty"><h2>조건에 맞는 업무가 없습니다</h2>위의 <b>전체</b>를 누르면 모든 업무가 다시 보입니다.</div>';return}
+  const key=projSortKey(state.psort);
+  groups.sort((a,b)=>{if(!a.p)return 1;if(!b.p)return -1;
+    if(key){const ka=key(a.p),kb=key(b.p);if(ka!==kb){if(ka==null)return 1;if(kb==null)return -1;return ka-kb}}
+    return (+a.p.order||0)-(+b.p.order||0)});
+  const sortBar=`<div class="g-tools"><div class="tabs" role="group" aria-label="프로젝트 정렬">${PSORTS.map(([k,l])=>`<button type="button" class="tab" data-psort="${k}" aria-selected="${state.psort===k}">${l}</button>`).join("")}</div><span class="sub">${esc((PSORTS.find(x=>x[0]===state.psort)||PSORTS[0])[2])}</span></div>`;
+  if(!groups.length){v.innerHTML=sortBar+'<div class="empty"><h2>조건에 맞는 업무가 없습니다</h2>위의 <b>전체</b>를 누르면 모든 업무가 다시 보입니다.</div>';return}
   let rows="";
   for(const g of groups){
     rows+=projRow(g.p,g.items)+g.items.map(taskRow).join("");
     if(g.p&&!readOnly)rows+=`<tr class="addrow"><td colspan="8"><button type="button" class="linkbtn" data-addto="${esc(g.p.id)}">+ 이 프로젝트에 업무 추가</button></td></tr>`;
   }
-  v.innerHTML=`<div class="tbl-wrap"><table><thead><tr><th>작업 분류</th><th>업무</th><th>담당자</th><th>시작</th><th>완료일</th><th>남은 기간</th><th>상태</th><th></th></tr></thead><tbody>${rows}</tbody></table></div>`;
+  v.innerHTML=sortBar+`<div class="tbl-wrap"><table><thead><tr><th>작업 분류</th><th>업무</th><th>담당자</th><th>시작</th><th>완료일</th><th>남은 기간</th><th>상태</th><th></th></tr></thead><tbody>${rows}</tbody></table></div>`;
 }
 function renderGantt(v,list){
   const items=list.filter(t=>parseD(t.due));
@@ -750,6 +767,7 @@ document.addEventListener("click",async ev=>{
     return}
   const st=ev.target.closest(".stat");if(st){state.quick=st.dataset.q;render();return}
   const ys=ev.target.closest("[data-year-step]");if(ys){const l=allYears(),i=l.indexOf(state.year)+(+ys.dataset.yearStep);if(l[i])setYear(l[i]);return}
+  const ps=ev.target.closest("[data-psort]");if(ps){state.psort=ps.dataset.psort;saveUi();render();return}
   const sc=ev.target.closest("[data-scale]");if(sc){state.scale=sc.dataset.scale;saveUi();render();return}
   const tab=ev.target.closest(".tab[data-view]");if(tab){state.view=tab.dataset.view;try{history.replaceState(null,"","#"+state.view)}catch(e){}render();return}
   if($("#editorRoot").firstChild)return;
