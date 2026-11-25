@@ -130,7 +130,12 @@ table{width:100%;border-collapse:collapse;min-width:880px;font-size:14px}
 th,td{text-align:left;padding:10px 12px;border-top:1px solid var(--line);vertical-align:middle}
 thead th{font-size:12px;color:var(--faint);font-weight:500;border-top:0;padding-top:14px}
 tr.proj td{background:var(--card-2);cursor:pointer;padding-top:16px;padding-bottom:12px}
-tr.proj .pname{font-weight:600;font-size:16px;letter-spacing:-0.02em}
+tr.proj .pname{font-weight:600;font-size:16px;letter-spacing:-0.02em;display:flex;align-items:center;gap:6px}
+tr.proj .fold{border:0;background:var(--fill-2);color:var(--muted);width:26px;height:26px;border-radius:50%;font-size:17px;line-height:1;cursor:pointer;flex:0 0 26px;transform:rotate(90deg);transition:transform .15s}
+tr.proj.folded .fold{transform:rotate(0deg)}
+tr.proj.folded td{padding-bottom:14px}
+tr.proj .pmeta{padding-left:32px}
+.foldall{margin-left:auto}
 tr.proj .pmeta{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-top:4px}
 .prog{display:inline-flex;align-items:center;gap:8px;font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
 .prog i{display:inline-block;width:80px;height:6px;border-radius:980px;background:var(--fill);overflow:hidden;position:relative}
@@ -306,9 +311,9 @@ const stVar=k=>"var("+((STAGES.find(c=>c.k===k)||STAGES[4]).v)+")";
 const normStatus=s=>s==="진행중"?"제작중":(STATUSES.includes(s)?s:"예정");
 
 let db=null, tasks=[], projects=[], loadedT=false, loadedP=false, readOnly=false;
-const state={view:"wbs",psort:"",year:String(new Date().getFullYear()),cat:"",stage:"",owner:"",q:"",hideDone:false,quick:"",scale:"week"};
-try{const s=JSON.parse(localStorage.getItem("wbs-ui2")||"{}");Object.assign(state,{psort:s.psort||"",year:s.year===undefined?null:s.year,cat:s.cat||"",stage:s.stage||"",status:s.status||"",role:s.role||"",owner:s.role&&s.owner||"",hideDone:!!s.hideDone,scale:s.scale||"week"})}catch(e){}
-function saveUi(){try{localStorage.setItem("wbs-ui2",JSON.stringify({psort:state.psort,year:state.year,cat:state.cat,stage:state.stage,status:state.status,role:state.role,owner:state.owner,hideDone:state.hideDone,scale:state.scale}))}catch(e){}}
+const state={view:"wbs",fold:false,psort:"",year:String(new Date().getFullYear()),cat:"",stage:"",owner:"",q:"",hideDone:false,quick:"",scale:"week"};
+try{const s=JSON.parse(localStorage.getItem("wbs-ui2")||"{}");Object.assign(state,{fold:!!s.fold,psort:s.psort||"",year:s.year===undefined?null:s.year,cat:s.cat||"",stage:s.stage||"",status:s.status||"",role:s.role||"",owner:s.role&&s.owner||"",hideDone:!!s.hideDone,scale:s.scale||"week"})}catch(e){}
+function saveUi(){try{localStorage.setItem("wbs-ui2",JSON.stringify({fold:state.fold,psort:state.psort,year:state.year,cat:state.cat,stage:state.stage,status:state.status,role:state.role,owner:state.owner,hideDone:state.hideDone,scale:state.scale}))}catch(e){}}
 const loaded=()=>loadedT&&loadedP;
 
 /* ---------- dates ---------- */
@@ -540,11 +545,25 @@ function projRow(p,items){
   if(!p)return `<tr class="proj"><td colspan="8"><div class="pname">프로젝트 미지정</div><div class="pmeta sub">메일·캘린더에서 들어왔거나 프로젝트 없이 입력한 업무 ${items.length}건</div></td></tr>`;
   const pr=progress(p.id);
   const link=p.link&&/^https:\/\//.test(p.link)?`<a href="${esc(p.link)}" target="_blank" rel="noopener" data-stop>링크</a>`:"";
-  return `<tr class="proj" data-proj="${esc(p.id)}" tabindex="0"><td colspan="8">
-    <div class="pname">${esc(p.name)}${p.reqNo?` <span class="code">(${esc(p.reqNo)})</span>`:""}</div>
+  const fo=isFolded(p.id),sm=fo?projSummary(p.id):"";
+  return `<tr class="proj ${fo?"folded":""}" data-proj="${esc(p.id)}" tabindex="0"><td colspan="8">
+    <div class="pname"><button type="button" class="fold" data-fold="${esc(p.id)}" aria-expanded="${!fo}" aria-label="${fo?"세부 업무 펼치기":"세부 업무 접기"}">›</button>${esc(p.name)}${p.reqNo?` <span class="code">(${esc(p.reqNo)})</span>`:""}</div>
     <div class="pmeta"><span class="cat" style="--cc:${catVar(p.category)}">${esc(p.category||"기타 업무")}</span>
     ${p.dept?`<span class="sub">주관 ${esc(p.dept)}</span>`:""}${p.area?`<span class="sub">구분 ${esc(p.area)}</span>`:""}
-    <span class="prog"><i><b style="width:${pr}%"></b></i>${pr}%</span>${link}${p.note?`<span class="sub">${esc(p.note.split("\n")[0].slice(0,80))}</span>`:""}</div></td></tr>`;
+    <span class="prog"><i><b style="width:${pr}%"></b></i>${pr}%</span>${link}${sm}${p.note&&!fo?`<span class="sub">${esc(p.note.split("\n")[0].slice(0,80))}</span>`:""}</div></td></tr>`;
+}
+/* 접기: 전체 접기 상태(state.fold)에 프로젝트별 예외(foldEx)를 뒤집어 적용 */
+const foldEx=new Set();
+const isFolded=id=>state.fold!==foldEx.has(id);
+const ymdOf=ms=>{const d=new Date(ms);return d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate())};
+function projSummary(id){
+  const ts=tasks.filter(t=>t.projectId===id);if(!ts.length)return `<span class="sub">단계 업무 없음</span>`;
+  const st=ts.map(t=>parseD(t.start)||parseD(t.due)).filter(Boolean),en=ts.map(t=>parseD(t.due)).filter(Boolean);
+  const range=st.length&&en.length?`<span class="sub">${fmtShort(ymdOf(Math.min(...st)))} ~ ${fmtShort(ymdOf(Math.max(...en)))}</span>`:"";
+  const open=ts.filter(t=>!["완료","보류"].includes(normStatus(t.status))&&parseD(t.due)).sort(sortDue);
+  const d=open.length?dday(open[0]):null;
+  const left=d?`<span class="dd ${d.cls}">${esc(open[0].stage||"")} ${esc(d.txt)}</span>`:ts.every(t=>normStatus(t.status)==="완료")?`<span class="sub">모두 완료</span>`:"";
+  return range+left+`<span class="sub">단계 ${ts.length}개</span>`;
 }
 /* 프로젝트 정렬: 프로젝트의 모든 단계 업무 기준 */
 const PSORTS=[["","등록순","팀 일정표 순서"],["start","시작일","가장 먼저 시작한 프로젝트부터"],["due","최종 완료일","최종 완료일이 빠른 프로젝트부터"],["left","남은 기간","남은 기간이 짧은 프로젝트부터 · 마감 지난 프로젝트가 맨 위, 모두 완료된 프로젝트는 맨 아래"]];
@@ -567,11 +586,13 @@ function renderWbs(v,list){
   groups.sort((a,b)=>{if(!a.p)return 1;if(!b.p)return -1;
     if(key){const ka=key(a.p),kb=key(b.p);if(ka!==kb){if(ka==null)return 1;if(kb==null)return -1;return ka-kb}}
     return (+a.p.order||0)-(+b.p.order||0)});
-  const sortBar=`<div class="g-tools"><div class="tabs" role="group" aria-label="프로젝트 정렬">${PSORTS.map(([k,l])=>`<button type="button" class="tab" data-psort="${k}" aria-selected="${state.psort===k}">${l}</button>`).join("")}</div><span class="sub">${esc((PSORTS.find(x=>x[0]===state.psort)||PSORTS[0])[2])}</span></div>`;
+  const sortBar=`<div class="g-tools"><div class="tabs" role="group" aria-label="프로젝트 정렬">${PSORTS.map(([k,l])=>`<button type="button" class="tab" data-psort="${k}" aria-selected="${state.psort===k}">${l}</button>`).join("")}</div><span class="sub">${esc((PSORTS.find(x=>x[0]===state.psort)||PSORTS[0])[2])}</span><button type="button" class="btn foldall" data-foldall>${state.fold?"세부 업무 모두 펼치기":"세부 업무 모두 접기"}</button></div>`;
   if(!groups.length){v.innerHTML=sortBar+'<div class="empty"><h2>조건에 맞는 업무가 없습니다</h2>위의 <b>전체</b>를 누르면 모든 업무가 다시 보입니다.</div>';return}
   let rows="";
   for(const g of groups){
-    rows+=projRow(g.p,g.items)+g.items.map(taskRow).join("");
+    rows+=projRow(g.p,g.items);
+    if(g.p&&isFolded(g.p.id))continue;
+    rows+=g.items.map(taskRow).join("");
     if(g.p&&!readOnly)rows+=`<tr class="addrow"><td colspan="8"><button type="button" class="linkbtn" data-addto="${esc(g.p.id)}">+ 이 프로젝트에 업무 추가</button></td></tr>`;
   }
   v.innerHTML=sortBar+`<div class="tbl-wrap"><table><thead><tr><th>작업 분류</th><th>업무</th><th>담당자</th><th>시작</th><th>완료일</th><th>남은 기간</th><th>상태</th><th></th></tr></thead><tbody>${rows}</tbody></table></div>`;
@@ -772,6 +793,8 @@ document.addEventListener("click",async ev=>{
   const tab=ev.target.closest(".tab[data-view]");if(tab){state.view=tab.dataset.view;try{history.replaceState(null,"","#"+state.view)}catch(e){}render();return}
   if($("#editorRoot").firstChild)return;
   const add=ev.target.closest("[data-addto]");if(add){openTask(null,{projectId:add.dataset.addto});return}
+  const fb=ev.target.closest("[data-fold]");if(fb){const id=fb.dataset.fold;foldEx.has(id)?foldEx.delete(id):foldEx.add(id);render();return}
+  if(ev.target.closest("[data-foldall]")){state.fold=!state.fold;foldEx.clear();saveUi();render();return}
   const pr=ev.target.closest("[data-proj]");if(pr){openProject(pr.dataset.proj);return}
   const op=ev.target.closest("[data-open]");if(op&&!(gDragged&&op.closest(".gantt")))openTask(op.dataset.open);
 });
