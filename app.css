@@ -585,7 +585,8 @@ a.tab { text-decoration: none; color: var(--text); border-radius: 980px; display
 .hist-y span { background: color-mix(in srgb, var(--card) 80%, transparent); padding: 0 2px; border-radius: 4px; }
 
 /* ===== 구글 캘린더 지금 동기화 버튼 ===== */
-.gcal-sync { display: inline-grid; place-items: center; width: 22px; height: 22px; margin-left: 6px; padding: 0; border: 0; border-radius: 50%; background: var(--fill-2); color: var(--text-2, inherit); font-size: 13px; line-height: 1; vertical-align: -5px; cursor: pointer; }
+.gcal-sync { display: inline-flex; align-items: center; justify-content: center; width: 18px; height: 18px; margin-left: 6px; padding: 0; border: 0; border-radius: 50%; background: var(--fill); color: var(--muted); vertical-align: top; cursor: pointer; }
+.gcal-sync svg { display: block; }
 .gcal-sync:hover { color: var(--accent); }
 .gcal-sync.spin { animation: gspin 1s linear infinite; color: var(--accent); }
 @keyframes gspin { to { transform: rotate(360deg); } }

@@ -598,7 +598,7 @@ function renderPlan() {
   $("#cal").innerHTML = html;
   const g = state.gcal;
   $("#gcalStatus").innerHTML = g?.updatedAt
-    ? `<span class="sw" style="background:var(--cat-google)"></span>구글 캘린더 ${dayLabel(kstDay(g.updatedAt))} ${timeFmt.format(new Date(g.updatedAt))} 동기화 · ${g.events.length}건${g.errors ? ` · <span class="up">${esc(g.errors.join(", "))}</span>` : ""}<button type="button" class="gcal-sync${gcalSyncing && Date.now() - gcalSyncing < 300000 ? " spin" : ""}" id="gcalSync" title="지금 동기화" aria-label="구글 캘린더 지금 동기화">↻</button>`
+    ? `<span class="sw" style="background:var(--cat-google)"></span>구글 캘린더 ${dayLabel(kstDay(g.updatedAt))} ${timeFmt.format(new Date(g.updatedAt))} 동기화 · ${g.events.length}건${g.errors ? ` · <span class="up">${esc(g.errors.join(", "))}</span>` : ""}<button type="button" class="gcal-sync${gcalSyncing && Date.now() - gcalSyncing < 300000 ? " spin" : ""}" id="gcalSync" title="지금 동기화" aria-label="구글 캘린더 지금 동기화"><svg viewBox="0 0 24 24" width="12" height="12" aria-hidden="true"><path d="M20 12a8 8 0 1 1-2.34-5.66M20 4v5h-5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>`
     : `구글 캘린더 미연동 · <a href="https://github.com/${esc(cfg.repo)}#구글-캘린더-연동" target="_blank" rel="noopener">연동 방법</a>`;
 
   $("#dayTitle").textContent = `${dayLabel(state.selDay) === "오늘" ? "오늘 · " : ""}${+state.selDay.slice(5, 7)}월 ${+state.selDay.slice(8)}일 (${weekday(state.selDay)})`;
