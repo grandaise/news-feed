@@ -598,7 +598,7 @@ function renderPlan() {
   $("#cal").innerHTML = html;
   const g = state.gcal;
   $("#gcalStatus").innerHTML = g?.updatedAt
-    ? `<span class="sw" style="background:var(--cat-google)"></span>구글 캘린더 ${dayLabel(kstDay(g.updatedAt))} ${timeFmt.format(new Date(g.updatedAt))} 동기화 · ${g.events.length}건${g.errors ? ` · <span class="up">${esc(g.errors.join(", "))}</span>` : ""}`
+    ? `<span class="sw" style="background:var(--cat-google)"></span>구글 캘린더 ${dayLabel(kstDay(g.updatedAt))} ${timeFmt.format(new Date(g.updatedAt))} 동기화 · ${g.events.length}건${g.errors ? ` · <span class="up">${esc(g.errors.join(", "))}</span>` : ""}<button type="button" class="gcal-sync${gcalSyncing && Date.now() - gcalSyncing < 300000 ? " spin" : ""}" id="gcalSync" title="지금 동기화" aria-label="구글 캘린더 지금 동기화">↻</button>`
     : `구글 캘린더 미연동 · <a href="https://github.com/${esc(cfg.repo)}#구글-캘린더-연동" target="_blank" rel="noopener">연동 방법</a>`;
 
   $("#dayTitle").textContent = `${dayLabel(state.selDay) === "오늘" ? "오늘 · " : ""}${+state.selDay.slice(5, 7)}월 ${+state.selDay.slice(8)}일 (${weekday(state.selDay)})`;
@@ -1211,6 +1211,23 @@ $("#holdingForm").addEventListener("submit", (e) => {
     watchPrices();
   });
 });
+// 구글 캘린더 지금 동기화: my-data 의 gcal.yml 을 실행하고 새 gcal.json 이 올라오면 다시 그림
+let gcalSyncing = 0;
+$("#gcalStatus").addEventListener("click", async (e) => {
+  if (!e.target.closest("#gcalSync")) return;
+  if (!cfg.token) return openSettings({ needConnect: true });
+  if (gcalSyncing && Date.now() - gcalSyncing < 300000) return toast("동기화 중입니다. 잠시만 기다려 주세요.");
+  try {
+    await gh(cfg.dataRepo, "/actions/workflows/gcal.yml/dispatches", { method: "POST", body: JSON.stringify({ ref: "main" }) });
+    gcalSyncing = Date.now();
+    e.target.classList.add("spin");
+    toast("구글 캘린더 동기화를 시작했습니다. 1분쯤 뒤 자동으로 갱신됩니다.");
+    const before = state.gcal?.updatedAt;
+    pollFor(async () => (await ghFile(cfg.dataRepo, "gcal.json")).json, (d) => d.updatedAt !== before, (d) => { state.gcal = d; gcalSyncing = 0; }, "gcal");
+    setTimeout(() => { if (gcalSyncing) { gcalSyncing = 0; $("#gcalSync")?.classList.remove("spin"); } }, 300000);
+  } catch (err) { toast(err.message, 6000); }
+});
+
 function watchPrices() {
   const before = state.prices.updatedAt;
   pollFor(async () => (await ghFile(cfg.dataRepo, "prices.json")).json, (d) => d.updatedAt !== before, (d) => { state.prices = d; }, "prices");
