@@ -89,6 +89,11 @@ main{padding-block:clamp(16px,2.4vw,28px) 64px}
 .empty h2{font-size:19px;color:var(--text);margin:0 0 6px;letter-spacing:-0.02em}
 
 /* metric tiles */
+.yearbar{display:flex;align-items:center;gap:6px;margin:0 0 14px}
+.yearbar h2{margin:0 6px;font-size:clamp(24px,2.4vw,30px);font-weight:700;letter-spacing:-0.02em;font-variant-numeric:tabular-nums;min-width:4.2em;text-align:center}
+.yearbar .ybtn{border:0;background:var(--card);box-shadow:var(--shadow);width:36px;height:36px;border-radius:50%;font-size:20px;line-height:1;color:var(--text);cursor:pointer}
+.yearbar .ybtn:disabled{opacity:.35;cursor:default}
+.yearbar select{margin-left:auto;width:auto}
 .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,160px),1fr));gap:16px;margin-bottom:16px}
 .stat{display:flex;flex-direction:column;align-items:flex-start;gap:4px;text-align:left;border:0;background:var(--card);border-radius:var(--radius);padding:16px 20px 18px;box-shadow:var(--shadow);cursor:pointer;color:var(--muted);font-size:13px;font-weight:500;transition:transform .1s,box-shadow .15s}
 .stat:active{transform:scale(.98)}
@@ -261,6 +266,7 @@ tr.is-done td{color:var(--faint)} tr.is-done .ttl{text-decoration:line-through}
 </header>
 
 <main class="wrap">
+  <div class="yearbar" id="yearbar"></div>
   <div class="stats" id="stats"></div>
   <section class="panel-card" aria-label="입력과 필터">
     <form class="quick" id="quickForm" autocomplete="off">
@@ -300,9 +306,9 @@ const stVar=k=>"var("+((STAGES.find(c=>c.k===k)||STAGES[4]).v)+")";
 const normStatus=s=>s==="진행중"?"제작중":(STATUSES.includes(s)?s:"예정");
 
 let db=null, tasks=[], projects=[], loadedT=false, loadedP=false, readOnly=false;
-const state={view:"wbs",cat:"",stage:"",owner:"",q:"",hideDone:false,quick:"",scale:"week"};
-try{const s=JSON.parse(localStorage.getItem("wbs-ui2")||"{}");Object.assign(state,{cat:s.cat||"",stage:s.stage||"",status:s.status||"",role:s.role||"",owner:s.role&&s.owner||"",hideDone:!!s.hideDone,scale:s.scale||"week"})}catch(e){}
-function saveUi(){try{localStorage.setItem("wbs-ui2",JSON.stringify({cat:state.cat,stage:state.stage,status:state.status,role:state.role,owner:state.owner,hideDone:state.hideDone,scale:state.scale}))}catch(e){}}
+const state={view:"wbs",year:String(new Date().getFullYear()),cat:"",stage:"",owner:"",q:"",hideDone:false,quick:"",scale:"week"};
+try{const s=JSON.parse(localStorage.getItem("wbs-ui2")||"{}");Object.assign(state,{year:s.year===undefined?null:s.year,cat:s.cat||"",stage:s.stage||"",status:s.status||"",role:s.role||"",owner:s.role&&s.owner||"",hideDone:!!s.hideDone,scale:s.scale||"week"})}catch(e){}
+function saveUi(){try{localStorage.setItem("wbs-ui2",JSON.stringify({year:state.year,cat:state.cat,stage:state.stage,status:state.status,role:state.role,owner:state.owner,hideDone:state.hideDone,scale:state.scale}))}catch(e){}}
 const loaded=()=>loadedT&&loadedP;
 
 /* ---------- dates ---------- */
@@ -372,7 +378,9 @@ async function loadFile(){
   try{const r=await gh("/contents/"+FILE+"?ref=main&t="+Date.now());return {json:JSON.parse(b64decode(r.content)),sha:r.sha}}
   catch(e){if(e.status===404)return {json:{projects:[],tasks:[]},sha:undefined};throw e}
 }
-function applyData(j){projects=Array.isArray(j.projects)?j.projects:[];tasks=Array.isArray(j.tasks)?j.tasks:[]}
+function applyData(j){projects=Array.isArray(j.projects)?j.projects:[];tasks=Array.isArray(j.tasks)?j.tasks:[];
+  if(state.year===null){const ys=allYears();state.year=ys[ys.length-1]}}
+const curYear=()=>state.year||String(new Date().getFullYear());
 let saving=Promise.resolve();
 function mutate(message,fn){
   const run=async(retry)=>{
@@ -397,8 +405,8 @@ const ROLES=["기획","디자인","퍼블","개발"];
 function roleOwners(role){const set=new Set();tasks.forEach(t=>{if((t.stage||"기타")===role)ownersOf(t).forEach(o=>set.add(o))});return [...set].sort((a,b)=>a.localeCompare(b,"ko"))}
 function ownersOf(t){return String(t.owner||"").split(/[,，\/·]/).map(s=>s.trim()).filter(Boolean)}
 const now=()=>new Date().toISOString();
-function newTask(d,data){const seq=d.tasks.reduce((m,t)=>Math.max(m,+t.seq||0),0)+1;const t={id:uid(),seq,createdAt:now(),updatedAt:now(),...data};d.tasks.push(t);return t}
-function newProject(d,data){const p={id:uid(),order:d.projects.reduce((m,x)=>Math.max(m,+x.order||0),0)+1,createdAt:now(),updatedAt:now(),...data};d.projects.push(p);return p}
+function newTask(d,data){const seq=d.tasks.reduce((m,t)=>Math.max(m,+t.seq||0),0)+1;const t={id:uid(),seq,createdAt:now(),updatedAt:now(),...data};if(!t.projectId&&!t.year)t.year=curYear();d.tasks.push(t);return t}
+function newProject(d,data){const p={id:uid(),order:d.projects.reduce((m,x)=>Math.max(m,+x.order||0),0)+1,createdAt:now(),updatedAt:now(),...data};if(!p.year)p.year=curYear();d.projects.push(p);return p}
 async function saveTask(id,data){
   return mutate(id?"업무 수정: "+(data.title||(byId(id)||{}).title||""):"업무 추가: "+data.title,d=>{
     if(id){const t=d.tasks.find(x=>x.id===id);if(!t)throw new Error("다른 기기에서 삭제된 업무입니다.");Object.assign(t,data,{updatedAt:now()})}else newTask(d,data);return true});
@@ -422,8 +430,9 @@ async function del(col,id){
 /* ---------- filters ---------- */
 function filtered(){
   const q=state.q.trim().toLowerCase();
-  const qk=state.quick?quickUnits(state.quick):null;
+  const qk=state.quick?quickUnits(state.quick):null, yu=yearUnits();
   return tasks.filter(t=>{
+    if(yu&&!yu.has(unitKey(t)))return false;
     const p=projOf(t);
     if(state.cat&&taskCat(t)!==state.cat)return false;
     if(state.stage&&(t.stage||"기타")!==state.stage)return false;
@@ -442,12 +451,27 @@ function matchQuick(t,k){
   if(k==="late"||k==="soon")return st!=="보류"&&dday(t).cls===k;
   return st===k;
 }
+/* 연도: 프로젝트(또는 프로젝트 없는 업무)에 적힌 year를 따름. year가 없으면 단계 업무의 시작·완료일 연도로 판단하고, 날짜도 없으면 모든 연도에 보임 */
+function taskYears(t){return [t.start,t.due].map(v=>{const d=parseD(v);return d?String(d.getFullYear()):""}).filter(Boolean)}
+function unitYearOf(t){const p=projOf(t);return String((p?p.year:t.year)||"")}
+function allYears(){const set=new Set([String(new Date().getFullYear())]);projects.forEach(p=>p.year&&set.add(String(p.year)));tasks.forEach(t=>{const y=unitYearOf(t);if(y)set.add(y);else taskYears(t).forEach(x=>set.add(x))});return [...set].sort()}
+function projInYear(p){if(!state.year)return true;if(p.year)return String(p.year)===state.year;const ts=tasks.filter(t=>t.projectId===p.id);const ys=ts.flatMap(taskYears);return !ys.length||ys.includes(state.year)}
+function yearUnits(){
+  if(!state.year)return null;
+  const out=new Set(),loose=new Map();
+  tasks.forEach(t=>{const u=unitKey(t),y=unitYearOf(t);
+    if(y){if(y===state.year)out.add(u);return}
+    if(!loose.has(u))loose.set(u,{any:false,hit:false});const o=loose.get(u),ys=taskYears(t);if(ys.length)o.any=true;if(ys.includes(state.year))o.hit=true});
+  loose.forEach((o,u)=>{if(o.hit||!o.any)out.add(u)});
+  return out;
+}
 function quickUnits(k){
   if(k==="완료"){ /* 완료는 프로젝트의 모든 단계가 완료일 때만 */
     const all=new Map();tasks.forEach(t=>{const u=unitKey(t);all.set(u,(all.get(u)??true)&&normStatus(t.status)==="완료")});
-    return new Set([...all].filter(([,v])=>v).map(([u])=>u));
+    return inYear(new Set([...all].filter(([,v])=>v).map(([u])=>u)));
   }
-  return new Set(tasks.filter(t=>matchQuick(t,k)).map(unitKey))}
+  return inYear(new Set(tasks.filter(t=>matchQuick(t,k)).map(unitKey)))}
+function inYear(units){const yu=yearUnits();return yu?new Set([...units].filter(u=>yu.has(u))):units}
 function sortDue(a,b){const da=parseD(a.due),dbb=parseD(b.due);if(!da&&!dbb)return (a.seq||0)-(b.seq||0);if(!da)return 1;if(!dbb)return -1;return da-dbb}
 const stageIdx=t=>{const i=STAGES.findIndex(s=>s.k===(t.stage||"기타"));return i<0?9:i};
 const sortStage=(a,b)=>stageIdx(a)-stageIdx(b)||sortDue(a,b);
@@ -472,8 +496,16 @@ function render(){
   if(!list.length&&state.view!=="wbs"){v.innerHTML='<div class="empty"><h2>조건에 맞는 업무가 없습니다</h2>위의 <b>전체</b>를 누르면 모든 업무가 다시 보입니다.</div>';return}
   if(state.view==="gantt")renderGantt(v,list);else if(state.view==="kanban")renderKanban(v,list);else renderWbs(v,list);
 }
+function renderYear(){
+  const ys=allYears(),i=ys.indexOf(state.year);
+  $("#yearbar").innerHTML=`<button type="button" class="ybtn" data-year-step="-1" aria-label="이전 연도" ${state.year&&i>0?"":"disabled"}>‹</button><h2>${state.year?esc(state.year)+"년":"전체 연도"}</h2><button type="button" class="ybtn" data-year-step="1" aria-label="다음 연도" ${state.year&&i>=0&&i<ys.length-1?"":"disabled"}>›</button>
+    <select id="fYear" aria-label="연도 선택"><option value="">전체 연도</option>${ys.slice().reverse().map(y=>`<option value="${y}" ${y===state.year?"selected":""}>${y}년</option>`).join("")}</select>`;
+}
+function setYear(y){state.year=y;saveUi();render()}
 function renderStats(){
-  const all=projects.length+tasks.filter(t=>!projOf(t)).length;
+  const yu=yearUnits();
+  const all=yu?projects.filter(projInYear).length+tasks.filter(t=>!projOf(t)&&yu.has(unitKey(t))).length:projects.length+tasks.filter(t=>!projOf(t)).length;
+  renderYear();
   const cnt=k=>quickUnits(k).size;
   const items=[["","전체",all,"all"],["완료","완료",cnt("완료"),"done"],["soon","3일 내 마감예정",cnt("soon"),"soon"],["late","마감 지남",cnt("late"),"late"]];
   $("#stats").innerHTML=items.map(([k,l,n,c])=>`<button type="button" class="stat ${c} ${state.quick===k?"on":""}" data-q="${esc(k)}" aria-pressed="${state.quick===k}">${esc(l)} <b>${n}</b></button>`).join("");
@@ -517,7 +549,7 @@ function projRow(p,items){
 function renderWbs(v,list){
   const groups=groupByProject(list);
   const filtering=state.cat||state.stage||state.status||state.role||state.owner||state.q||state.quick||state.hideDone;
-  if(!filtering){for(const p of projects)if(!groups.some(g=>g.p&&g.p.id===p.id))groups.push({p,items:[]})}
+  if(!filtering){for(const p of projects)if(projInYear(p)&&!groups.some(g=>g.p&&g.p.id===p.id))groups.push({p,items:[]})}
   groups.sort((a,b)=>{if(!a.p)return 1;if(!b.p)return -1;return (+a.p.order||0)-(+b.p.order||0)});
   if(!groups.length){v.innerHTML='<div class="empty"><h2>조건에 맞는 업무가 없습니다</h2>위의 <b>전체</b>를 누르면 모든 업무가 다시 보입니다.</div>';return}
   let rows="";
@@ -680,7 +712,8 @@ function openProject(id){
   const ro=readOnly?"disabled":"";
   panel(id?"프로젝트 정보":"프로젝트 추가",`
     <div class="fld full"><label for="p_name">프로젝트</label><input id="p_name" required value="${esc(p.name)}" placeholder="예: 고객센터 리뉴얼" ${ro}></div>
-    <div class="fld full"><label for="p_dept">주관부서</label><input id="p_dept" value="${esc(p.dept||"")}" placeholder="예: U커머스" ${ro}></div>
+    <div class="fld"><label for="p_year">연도</label><select id="p_year" ${ro}>${(()=>{const ys=allYears(),c=String(p.year||curYear()),n=String(+ys[ys.length-1]+1);return opt([...new Set([...ys,n,c])].sort().reverse(),c)})()}</select></div>
+    <div class="fld"><label for="p_dept">주관부서</label><input id="p_dept" value="${esc(p.dept||"")}" placeholder="예: U커머스" ${ro}></div>
     <div class="fld"><label for="p_area">구분(주사용부서)</label><select id="p_area" ${ro}>${opt(AREAS.includes(p.area)?AREAS:AREAS.concat(p.area?[p.area]:[]),p.area)}</select></div>
     <div class="fld"><label for="p_cat">분류</label><select id="p_cat" ${ro}>${opt(CATS.map(c=>c.k),p.category)}</select></div>
     <div class="fld full"><label for="p_link">피그마·참고 링크</label><input id="p_link" value="${esc(p.link||"")}" placeholder="https://www.figma.com/..." ${ro}></div>
@@ -690,7 +723,7 @@ function openProject(id){
     `${id&&!readOnly?`<button class="btn danger" type="button" id="edDel">삭제</button>`:""}<div class="spacer"></div><button class="btn" type="button" data-close>취소</button>${readOnly?"":`<button class="btn primary" type="submit" form="edForm">${id?"저장":"추가"}</button>`}`);
   if(!id)setTimeout(()=>{const el=$("#p_name");el&&el.focus()},30);
   $("#edForm").addEventListener("submit",async ev=>{ev.preventDefault();
-    const data={name:$("#p_name").value.trim(),dept:$("#p_dept").value.trim(),area:$("#p_area").value,category:$("#p_cat").value,link:$("#p_link").value.trim(),note:$("#p_note").value.trim()};
+    const data={name:$("#p_name").value.trim(),year:$("#p_year").value,dept:$("#p_dept").value.trim(),area:$("#p_area").value,category:$("#p_cat").value,link:$("#p_link").value.trim(),note:$("#p_note").value.trim()};
     if(!data.name){$("#p_name").focus();return}
     if(data.link&&!/^https:\/\//.test(data.link)){toast("링크는 https://로 시작해야 합니다.");return}
     if(!id&&projects.some(x=>x.name===data.name)){toast("같은 이름의 프로젝트가 이미 있습니다.");return}
@@ -716,6 +749,7 @@ document.addEventListener("click",async ev=>{
     else if(await del("tasks",id))toast("목록에서 뺐습니다.");
     return}
   const st=ev.target.closest(".stat");if(st){state.quick=st.dataset.q;render();return}
+  const ys=ev.target.closest("[data-year-step]");if(ys){const l=allYears(),i=l.indexOf(state.year)+(+ys.dataset.yearStep);if(l[i])setYear(l[i]);return}
   const sc=ev.target.closest("[data-scale]");if(sc){state.scale=sc.dataset.scale;saveUi();render();return}
   const tab=ev.target.closest(".tab[data-view]");if(tab){state.view=tab.dataset.view;try{history.replaceState(null,"","#"+state.view)}catch(e){}render();return}
   if($("#editorRoot").firstChild)return;
@@ -737,6 +771,7 @@ $("#quickForm").addEventListener("submit",async ev=>{
 });
 for(const [id,key] of [["#fCat","cat"],["#fStage","stage"],["#fStatus","status"],["#fRole","role"],["#fOwner","owner"]])$(id).addEventListener("change",e=>{state[key]=e.target.value;saveUi();render()});
 $("#fQ").addEventListener("input",e=>{state.q=e.target.value;render()});
+document.addEventListener("change",e=>{if(e.target.id==="fYear")setYear(e.target.value)});
 $("#fDone").addEventListener("change",e=>{state.hideDone=e.target.checked;saveUi();render()});
 document.addEventListener("dragstart",e=>{const c=e.target.closest&&e.target.closest("[data-drag]");if(c){e.dataTransfer.setData("text/plain",c.dataset.drag);e.dataTransfer.effectAllowed="move"}});
 document.addEventListener("dragover",e=>{const col=e.target.closest&&e.target.closest("[data-col]");if(col){e.preventDefault();document.querySelectorAll(".col.over").forEach(x=>x!==col&&x.classList.remove("over"));col.classList.add("over")}});
