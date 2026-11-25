@@ -203,6 +203,11 @@ tr.is-done td{color:var(--faint)} tr.is-done .ttl{text-decoration:line-through}
 .fld input,.fld select,.fld textarea{width:100%}
 .fld textarea{min-height:72px;resize:vertical}
 .fld .chkrow{display:flex;gap:14px;flex-wrap:wrap}
+.ownpick{display:flex;flex-direction:column;gap:6px;margin-top:8px}
+.ownpick .og{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.ownpick .ol{font-size:12px;color:var(--faint);width:44px;flex:0 0 44px}
+.ownpick .opick{border:0;background:var(--fill-2);color:var(--text);border-radius:980px;padding:5px 12px;font:inherit;font-size:13px;cursor:pointer}
+.ownpick .opick[aria-pressed="true"]{background:var(--accent);color:#fff}
 .fld .chkrow label{display:flex;gap:6px;align-items:center;color:var(--text);font-weight:400;font-size:14px;white-space:nowrap}
 .fld .chkrow input{width:18px}
 .panel footer{display:flex;gap:8px;padding:14px 22px;border-top:1px solid var(--line)}
@@ -631,13 +636,12 @@ function openTask(id,preset){
   const t=id?byId(id):Object.assign({title:"",stage:"기획",status:"예정",source:"수기(회사메일)",projectId:"",start:"",due:"",note:"",owner:"",link:""},preset||{});
   if(!t)return;
   const ro=readOnly?"disabled":"";
-  const owners=allOwners();
   panel(id?esc(codeOf(t))+" 업무":"업무 추가",`
     <div class="fld full"><label for="e_proj">프로젝트</label><select id="e_proj" ${ro}><option value="">프로젝트 미지정</option>${projects.slice().sort((a,b)=>(+a.order||0)-(+b.order||0)).map(p=>`<option value="${esc(p.id)}" ${p.id===t.projectId?"selected":""}>${esc(p.name)}</option>`).join("")}</select></div>
     <div class="fld"><label for="e_stage">작업 분류</label><select id="e_stage" ${ro}>${opt(STAGES.map(s=>s.k),t.stage||"기타")}</select></div>
     <div class="fld"><label for="e_status">상태</label><select id="e_status" ${ro}>${opt(STATUSES,normStatus(t.status))}</select></div>
     <div class="fld full"><label for="e_title">업무</label><input id="e_title" required value="${esc(t.title)}" placeholder="예: UI 디자인, 퍼블리싱, 개발(어드민)" ${ro}></div>
-    <div class="fld full"><label for="e_owner">담당자</label><input id="e_owner" list="ownerList" value="${esc(t.owner||"")}" placeholder="여러 명이면 쉼표로: 김지현, 이재림" ${ro}><datalist id="ownerList">${owners.map(o=>`<option value="${esc(o)}">`).join("")}</datalist></div>
+    <div class="fld full"><label for="e_owner">담당자</label><input id="e_owner" value="${esc(t.owner||"")}" placeholder="아래에서 고르거나 직접 입력 (여러 명이면 쉼표)" autocomplete="off" ${ro}><div class="ownpick" id="ownPick"></div></div>
     <div class="fld"><label for="e_start">시작</label><input id="e_start" type="datetime-local" value="${esc(toInput(t.start))}" ${ro}></div>
     <div class="fld"><label for="e_due">완료일</label><input id="e_due" type="datetime-local" value="${esc(toInput(t.due))}" ${ro}></div>
     <div class="fld"><label for="e_src">출처</label><select id="e_src" ${ro}>${opt(SOURCES.includes(t.source)?SOURCES:SOURCES.concat(t.source?[t.source]:[]),t.source)}</select></div>
@@ -646,6 +650,7 @@ function openTask(id,preset){
     ${t.link&&/^https:\/\//.test(t.link)?`<div class="fld full"><a href="${esc(t.link)}" target="_blank" rel="noopener">링크 열기</a></div>`:""}`,
     `${id&&!readOnly?`<button class="btn danger" type="button" id="edDel">삭제</button>`:""}<div class="spacer"></div><button class="btn" type="button" data-close>취소</button>${readOnly?"":`<button class="btn primary" type="submit" form="edForm">${id?"저장":"추가"}</button>`}`);
   if(!id)setTimeout(()=>{const el=$("#e_title");el&&el.focus()},30);
+  if(!readOnly)wireOwnerPick();
   $("#edForm").addEventListener("submit",async ev=>{ev.preventDefault();
     const data={projectId:$("#e_proj").value,stage:$("#e_stage").value,status:$("#e_status").value,title:$("#e_title").value.trim(),owner:$("#e_owner").value.trim(),
       start:$("#e_start").value,due:$("#e_due").value,source:$("#e_src").value,link:$("#e_link").value.trim(),note:$("#e_note").value.trim()};
@@ -654,6 +659,20 @@ function openTask(id,preset){
     if(data.start&&data.due&&parseD(data.start)>parseD(data.due)){toast("시작이 완료일보다 늦습니다.");return}
     if(await saveTask(id,data)){closeEditor();toast(id?"저장했습니다.":"추가했습니다.")}});
   const d=$("#edDel");if(d)armDelete(d,async()=>{if(await del("tasks",id)){closeEditor();toast("삭제했습니다.")}});
+}
+/* 담당자 고르기: 작업 분류(기획·디자인·퍼블·개발)별로 그 분류를 맡았던 사람을 보여 줌 */
+function wireOwnerPick(){
+  const inp=$("#e_owner"),stSel=$("#e_stage"),box=$("#ownPick");
+  const cur=()=>inp.value.split(/[,，\/·]/).map(x=>x.trim()).filter(Boolean);
+  const draw=()=>{
+    const st=stSel.value,sel=cur();
+    const groups=ROLES.includes(st)?[[st,roleOwners(st)]]:ROLES.map(r=>[r,roleOwners(r)]);
+    box.innerHTML=groups.filter(([,ps])=>ps.length).map(([r,ps])=>`<div class="og"><span class="ol">${esc(r)}</span>${ps.map(n=>`<button type="button" class="opick" data-name="${esc(n)}" aria-pressed="${sel.includes(n)}">${esc(n)}</button>`).join("")}</div>`).join("")||`<div class="sub">${esc(st)} 담당자로 등록된 사람이 아직 없습니다. 위 칸에 직접 입력하세요.</div>`;
+  };
+  box.addEventListener("click",e=>{const b=e.target.closest(".opick");if(!b)return;
+    const n=b.dataset.name,list=cur(),i=list.indexOf(n);if(i<0)list.push(n);else list.splice(i,1);
+    inp.value=list.join(", ");draw()});
+  stSel.addEventListener("change",draw);inp.addEventListener("input",draw);draw();
 }
 function openProject(id){
   const p=id?projById(id):{name:"",reqNo:"",dept:"",area:"공통",category:"사이트 구축",link:"",note:""};
