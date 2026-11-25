@@ -480,10 +480,17 @@ function inYear(units){const yu=yearUnits();return yu?new Set([...units].filter(
 function sortDue(a,b){const da=parseD(a.due),dbb=parseD(b.due);if(!da&&!dbb)return (a.seq||0)-(b.seq||0);if(!da)return 1;if(!dbb)return -1;return da-dbb}
 const stageIdx=t=>{const i=STAGES.findIndex(s=>s.k===(t.stage||"기타"));return i<0?9:i};
 const sortStage=(a,b)=>stageIdx(a)-stageIdx(b)||sortDue(a,b);
+/* WBS 표에서 고른 정렬을 모든 화면에 같이 적용 */
+function projCmp(a,b){
+  const key=projSortKey(state.psort);
+  if(key){const ka=key(a),kb=key(b);if(ka!==kb){if(ka==null)return 1;if(kb==null)return -1;return ka-kb}}
+  return (+a.order||0)-(+b.order||0);
+}
+function projRank(){const m=new Map();projects.slice().sort(projCmp).forEach((p,i)=>m.set(p.id,i));return t=>{const p=projOf(t);return p?m.get(p.id):1e9}}
 function groupByProject(list){
   const map=new Map();
   for(const t of list){const k=projOf(t)?t.projectId:"_none";if(!map.has(k))map.set(k,[]);map.get(k).push(t)}
-  const keys=[...map.keys()].sort((a,b)=>{if(a==="_none")return 1;if(b==="_none")return -1;return (+projById(a).order||0)-(+projById(b).order||0)});
+  const keys=[...map.keys()].sort((a,b)=>{if(a==="_none")return 1;if(b==="_none")return -1;return projCmp(projById(a),projById(b))});
   return keys.map(k=>({p:k==="_none"?null:projById(k),items:map.get(k).sort(sortStage)}));
 }
 function progress(pid){const all=tasks.filter(t=>t.projectId===pid);if(!all.length)return 0;return Math.round(all.filter(t=>normStatus(t.status)==="완료").length/all.length*100)}
@@ -582,11 +589,8 @@ function renderWbs(v,list){
   const groups=groupByProject(list);
   const filtering=state.cat||state.stage||state.status||state.role||state.owner||state.q||state.quick||state.hideDone;
   if(!filtering){for(const p of projects)if(projInYear(p)&&!groups.some(g=>g.p&&g.p.id===p.id))groups.push({p,items:[]})}
-  const key=projSortKey(state.psort);
-  groups.sort((a,b)=>{if(!a.p)return 1;if(!b.p)return -1;
-    if(key){const ka=key(a.p),kb=key(b.p);if(ka!==kb){if(ka==null)return 1;if(kb==null)return -1;return ka-kb}}
-    return (+a.p.order||0)-(+b.p.order||0)});
-  const sortBar=`<div class="g-tools"><div class="tabs" role="group" aria-label="프로젝트 정렬">${PSORTS.map(([k,l])=>`<button type="button" class="tab" data-psort="${k}" aria-selected="${state.psort===k}">${l}</button>`).join("")}</div><span class="sub">${esc((PSORTS.find(x=>x[0]===state.psort)||PSORTS[0])[2])}</span><button type="button" class="btn foldall" data-foldall>${state.fold?"세부 업무 모두 펼치기":"세부 업무 모두 접기"}</button></div>`;
+  groups.sort((a,b)=>{if(!a.p)return 1;if(!b.p)return -1;return projCmp(a.p,b.p)});
+  const sortBar=sortTabs(true);
   if(!groups.length){v.innerHTML=sortBar+'<div class="empty"><h2>조건에 맞는 업무가 없습니다</h2>위의 <b>전체</b>를 누르면 모든 업무가 다시 보입니다.</div>';return}
   let rows="";
   for(const g of groups){
@@ -597,6 +601,7 @@ function renderWbs(v,list){
   }
   v.innerHTML=sortBar+`<div class="tbl-wrap"><table><thead><tr><th>작업 분류</th><th>업무</th><th>담당자</th><th>시작</th><th>완료일</th><th>남은 기간</th><th>상태</th><th></th></tr></thead><tbody>${rows}</tbody></table></div>`;
 }
+function sortTabs(withFold){return `<div class="g-tools"><div class="tabs" role="group" aria-label="프로젝트 정렬">${PSORTS.map(([k,l])=>`<button type="button" class="tab" data-psort="${k}" aria-selected="${state.psort===k}">${l}</button>`).join("")}</div><span class="sub">${esc((PSORTS.find(x=>x[0]===state.psort)||PSORTS[0])[2])}</span>${withFold?`<button type="button" class="btn foldall" data-foldall>${state.fold?"세부 업무 모두 펼치기":"세부 업무 모두 접기"}</button>`:""}</div>`;}
 function renderGantt(v,list){
   const items=list.filter(t=>parseD(t.due));
   const noDate=list.length-items.length;
@@ -626,10 +631,11 @@ function renderGantt(v,list){
     const ss=g.items.map(t=>parseD(t.start)||parseD(t.due)),es=g.items.map(t=>parseD(t.due));
     const ps=new Date(Math.min(...ss)),pe=new Date(Math.max(...es));
     rows+=`<div class="g-row gp"><div class="g-label">${esc(g.p?g.p.name:"프로젝트 미지정")}</div><div class="g-track" style="width:${W}px">${weBg}<div class="bar span" style="left:${x(dayStart(ps))}px;width:${Math.max((dayDiff(pe,ps)+1)*pxPerDay,4)}px"></div></div></div>`;
+    if(g.p&&isFolded(g.p.id))continue;
     rows+=g.items.map(t=>`<div class="g-row" data-open="${esc(t.id)}" tabindex="0"><div class="g-label"><span class="stage" style="--sc:${stVar(t.stage)}">${esc(t.stage||"기타")}</span>${esc(t.title)}${t.owner?` <span class="sub">${esc(t.owner)}</span>`:""}</div><div class="g-track" style="width:${W}px">${weBg}${bar(t)}</div></div>`).join("");
   }
   const todayX=x(t0)+(week?pxPerDay/2:dw/2);
-  v.innerHTML=`<div class="g-tools"><div class="tabs"><button type="button" class="tab" data-scale="week" aria-selected="${week}">주 단위</button><button type="button" class="tab" data-scale="day" aria-selected="${!week}">일 단위</button></div>
+  v.innerHTML=sortTabs(true)+`<div class="g-tools"><div class="tabs"><button type="button" class="tab" data-scale="week" aria-selected="${week}">주 단위</button><button type="button" class="tab" data-scale="day" aria-selected="${!week}">일 단위</button></div>
     <div class="legend">${STAGES.slice(0,4).map(s=>`<span style="--sc:var(${s.v})">${s.k}</span>`).join("")}<span style="--sc:var(--danger)">오늘</span></div>
     <div class="g-nav"><button type="button" class="btn" data-gnav="-1" aria-label="이전">‹</button><button type="button" class="btn" data-gnav="0">오늘</button><button type="button" class="btn" data-gnav="1" aria-label="다음">›</button></div></div>
     ${noDate?`<div class="note">완료일이 없는 업무 ${noDate}건은 간트에서 빠졌습니다.</div>`:""}
@@ -669,8 +675,9 @@ window.addEventListener("pointermove",e=>{
 function gUp(){if(!gDrag)return;gDrag.g.classList.remove("drag");gDrag=null;if(gDragged)setTimeout(()=>{gDragged=false},0)}
 window.addEventListener("pointerup",gUp);window.addEventListener("pointercancel",gUp);
 function renderKanban(v,list){
-  v.innerHTML=`<div class="board">${STATUSES.map(s=>{
-    const items=list.filter(t=>normStatus(t.status)===s).sort(sortDue);
+  const rk=projRank();
+  v.innerHTML=sortTabs(false)+`<div class="board">${STATUSES.map(s=>{
+    const items=list.filter(t=>normStatus(t.status)===s).sort((a,b)=>state.psort?(rk(a)-rk(b)||sortStage(a,b)):sortDue(a,b));
     return `<div class="col" data-col="${esc(s)}"><h4>${esc(s)}<span>${items.length}</span></h4>${items.map(t=>{const d=dday(t),p=projOf(t);
       return `<div class="card" draggable="${!readOnly}" data-open="${esc(t.id)}" data-drag="${esc(t.id)}" tabindex="0" style="--sc:${stVar(t.stage)}">
         ${p?`<div class="sub">${esc(p.name)}</div>`:""}<div class="ttl">${esc(t.title)}</div>
@@ -678,7 +685,8 @@ function renderKanban(v,list){
         <div class="sub">${esc([t.owner,t.due?"완료 "+fmtShort(t.due):""].filter(Boolean).join(" · "))}</div></div>`}).join("")}</div>`}).join("")}</div>`;
 }
 function renderPeople(v,list){
-  const open=list.filter(t=>!["완료","보류"].includes(normStatus(t.status)));
+  const rk=projRank();
+  const open=list.filter(t=>!["완료","보류"].includes(normStatus(t.status))).sort((a,b)=>rk(a)-rk(b)||sortStage(a,b));
   const people=[...new Set(open.flatMap(ownersOf))].sort((a,b)=>a.localeCompare(b,"ko"));
   const noOwner=open.filter(t=>!ownersOf(t).length);
   if(!people.length&&!noOwner.length){v.innerHTML='<div class="empty"><h2>진행할 업무가 없습니다</h2>담당자가 지정된 미완료 업무가 여기에 주별로 모입니다.</div>';return}
@@ -689,7 +697,7 @@ function renderPeople(v,list){
   const rows=people.map(name=>{const ts=open.filter(t=>ownersOf(t).includes(name));return `<tr><td><b>${esc(name)}</b><div class="sub">${ts.length}건 진행</div></td>${weeks.map((ws,i)=>cell(ts,ws,i)).join("")}</tr>`}).join("")
     +(noOwner.length?`<tr><td><b>담당 미지정</b><div class="sub">${noOwner.length}건</div></td>${weeks.map((ws,i)=>cell(noOwner,ws,i)).join("")}</tr>`:"");
   const cw=weekStart(today()).getTime();
-  v.innerHTML=`<div class="note">미완료 업무를 담당자별·주별로 모았습니다. 첫 칸에는 지난주와 그 이전에 마감이 지난 업무도 함께 보입니다.</div>
+  v.innerHTML=sortTabs(false)+`<div class="note">미완료 업무를 담당자별·주별로 모았습니다. 첫 칸에는 지난주와 그 이전에 마감이 지난 업무도 함께 보입니다.</div>
     <div class="tbl-wrap ppl"><table><thead><tr><th>담당자</th>${weeks.map((ws,i)=>{const l=weekLabel(ws);return `<th class="${ws.getTime()===cw?"now":""}">${i===0?"지난주 이전":l.m+"월 "+l.w+"주"}${ws.getTime()===cw?" · 이번 주":""}</th>`}).join("")}</tr></thead><tbody>${rows}</tbody></table></div>`;
 }
 
