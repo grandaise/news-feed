@@ -631,9 +631,14 @@ function historyChart() {
     return head + `<div class="empty" style="padding:28px 0">${last ? `오늘부터 기록을 시작했습니다 (${won(last.value)}원).<br>매일 한 점씩 쌓여 내일부터 그래프가 그려집니다.` : "아직 기록이 없습니다. 시세가 수집되면 매일 기록됩니다."}</div>`;
   }
   const W = 640, H = 200, P = { l: 8, r: 8, t: 14, b: 22 };
-  const vals = pts.flatMap((x) => [x.value, x.cost || x.value]);
+  // 세로축은 평가금액만으로 잡는다 (매입금액까지 넣으면 차이가 커서 평가금액 변동이 평평하게 보임)
+  // 너무 작은 흔들림이 과장되지 않도록 최소 범위는 평가금액의 1%
+  const vals = pts.map((x) => x.value);
   let lo = Math.min(...vals), hi = Math.max(...vals);
-  const padv = (hi - lo) * 0.12 || hi * 0.02 || 1; lo -= padv; hi += padv;
+  const minSpan = hi * 0.01;
+  if (hi - lo < minSpan) { const mid = (hi + lo) / 2; lo = mid - minSpan / 2; hi = mid + minSpan / 2; }
+  const padv = (hi - lo) * 0.12; lo -= padv; hi += padv;
+  const costIn = pts.some((x) => x.cost && x.cost >= lo && x.cost <= hi);
   const X = (i) => P.l + (i / (pts.length - 1)) * (W - P.l - P.r);
   const Y = (v) => P.t + (1 - (v - lo) / (hi - lo)) * (H - P.t - P.b);
   const line = (k) => pts.map((x, i) => `${i ? "L" : "M"}${X(i).toFixed(1)},${Y(x[k] || x.value).toFixed(1)}`).join("");
@@ -646,14 +651,16 @@ function historyChart() {
     <div class="hist-wrap" data-hist='${esc(JSON.stringify(pts.map((x) => [x.d, x.value, x.cost])))}'>
       <svg viewBox="0 0 ${W} ${H}" class="hist" preserveAspectRatio="none" role="img" aria-label="자산 추이 그래프">
         <path d="${line("value")}L${X(pts.length - 1)},${H - P.b}L${X(0)},${H - P.b}Z" class="hist-area"/>
-        <path d="${line("cost")}" class="hist-cost"/>
+        ${[0.25, 0.5, 0.75].map((f) => `<line class="hist-grid" x1="${P.l}" x2="${W - P.r}" y1="${(P.t + f * (H - P.t - P.b)).toFixed(1)}" y2="${(P.t + f * (H - P.t - P.b)).toFixed(1)}"/>`).join("")}
+        ${costIn ? `<clipPath id="histClip"><rect x="0" y="${P.t}" width="${W}" height="${H - P.t - P.b}"/></clipPath><path d="${line("cost")}" class="hist-cost" clip-path="url(#histClip)"/>` : ""}
         <path d="${line("value")}" class="hist-line"/>
         <line class="hist-cursor" x1="0" x2="0" y1="${P.t}" y2="${H - P.b}" style="display:none"/>
       </svg>
+      <div class="hist-y"><span>${manwon(hi - padv)}</span><span>${manwon(lo + padv)}</span></div>
       <div class="hist-axis"><span>${lbl(first.d)}</span><span>${lbl(last.d)}</span></div>
       <div class="hist-tip" hidden></div>
     </div>
-    <div class="hist-legend"><span><i class="lg-v"></i>평가금액</span><span><i class="lg-c"></i>매입금액</span></div>`;
+    <div class="hist-legend"><span><i class="lg-v"></i>평가금액</span>${costIn ? `<span><i class="lg-c"></i>매입금액</span>` : last.cost ? `<span class="muted">매입금액 ${manwon(last.cost)}원 (그래프 범위 밖)</span>` : ""}</div>`;
 }
 document.addEventListener("click", (e) => {
   const b = e.target.closest("[data-hist-range]");

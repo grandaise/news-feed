@@ -576,3 +576,6 @@ a.tab { text-decoration: none; color: var(--text); border-radius: 980px; display
 .tbl th.sortable { cursor: pointer; user-select: none; white-space: nowrap; }
 .tbl th.sortable:hover { color: var(--text); }
 .tbl th.sortable.on { color: var(--accent); }
+.hist-grid { stroke: var(--line); stroke-width: 1; vector-effect: non-scaling-stroke; }
+.hist-y { position: absolute; right: 0; top: 8px; height: 170px; display: flex; flex-direction: column; justify-content: space-between; font-size: 11px; color: var(--faint); pointer-events: none; text-align: right; font-variant-numeric: tabular-nums; }
+.hist-y span { background: color-mix(in srgb, var(--card) 80%, transparent); padding: 0 2px; border-radius: 4px; }
