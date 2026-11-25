@@ -481,14 +481,13 @@ function taskRow(t){
     <td class="dd">${esc(fmtShort(t.due))}</td>
     <td><span class="dd ${d.cls}">${esc(d.txt)}</span></td>
     <td><span class="pill s-${esc(st)}">${esc(st)}</span></td>
-    <td class="code">${esc(codeOf(t))}</td>
     <td>${review}</td></tr>`;
 }
 function projRow(p,items){
-  if(!p)return `<tr class="proj"><td colspan="9"><div class="pname">프로젝트 미지정</div><div class="pmeta sub">메일·캘린더에서 들어왔거나 프로젝트 없이 입력한 업무 ${items.length}건</div></td></tr>`;
+  if(!p)return `<tr class="proj"><td colspan="8"><div class="pname">프로젝트 미지정</div><div class="pmeta sub">메일·캘린더에서 들어왔거나 프로젝트 없이 입력한 업무 ${items.length}건</div></td></tr>`;
   const pr=progress(p.id);
   const link=p.link&&/^https:\/\//.test(p.link)?`<a href="${esc(p.link)}" target="_blank" rel="noopener" data-stop>링크</a>`:"";
-  return `<tr class="proj" data-proj="${esc(p.id)}" tabindex="0"><td colspan="9">
+  return `<tr class="proj" data-proj="${esc(p.id)}" tabindex="0"><td colspan="8">
     <div class="pname">${esc(p.name)}${p.reqNo?` <span class="code">(${esc(p.reqNo)})</span>`:""}</div>
     <div class="pmeta"><span class="cat" style="--cc:${catVar(p.category)}">${esc(p.category||"기타 업무")}</span>
     ${p.dept?`<span class="sub">주관 ${esc(p.dept)}</span>`:""}${p.area?`<span class="sub">구분 ${esc(p.area)}</span>`:""}
@@ -503,9 +502,9 @@ function renderWbs(v,list){
   let rows="";
   for(const g of groups){
     rows+=projRow(g.p,g.items)+g.items.map(taskRow).join("");
-    if(g.p&&!readOnly)rows+=`<tr class="addrow"><td colspan="9"><button type="button" class="linkbtn" data-addto="${esc(g.p.id)}">+ 이 프로젝트에 업무 추가</button></td></tr>`;
+    if(g.p&&!readOnly)rows+=`<tr class="addrow"><td colspan="8"><button type="button" class="linkbtn" data-addto="${esc(g.p.id)}">+ 이 프로젝트에 업무 추가</button></td></tr>`;
   }
-  v.innerHTML=`<div class="tbl-wrap"><table><thead><tr><th>작업 분류</th><th>업무</th><th>담당자</th><th>시작</th><th>완료일</th><th>남은 기간</th><th>상태</th><th>ID</th><th></th></tr></thead><tbody>${rows}</tbody></table></div>`;
+  v.innerHTML=`<div class="tbl-wrap"><table><thead><tr><th>작업 분류</th><th>업무</th><th>담당자</th><th>시작</th><th>완료일</th><th>남은 기간</th><th>상태</th><th></th></tr></thead><tbody>${rows}</tbody></table></div>`;
 }
 function renderGantt(v,list){
   const items=list.filter(t=>parseD(t.due));
