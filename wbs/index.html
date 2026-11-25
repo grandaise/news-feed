@@ -412,6 +412,7 @@ async function del(col,id){
 /* ---------- filters ---------- */
 function filtered(){
   const q=state.q.trim().toLowerCase();
+  const qk=state.quick?quickUnits(state.quick):null;
   return tasks.filter(t=>{
     const p=projOf(t);
     if(state.cat&&taskCat(t)!==state.cat)return false;
@@ -419,9 +420,17 @@ function filtered(){
     if(state.owner&&!ownersOf(t).includes(state.owner))return false;
     if(state.hideDone&&normStatus(t.status)==="완료")return false;
     if(q&&![t.title,t.note,t.owner,codeOf(t),p&&p.name,p&&p.reqNo,p&&p.dept].join(" ").toLowerCase().includes(q))return false;
-    if(state.quick){const d=dday(t);if(state.quick==="late"&&d.cls!=="late")return false;if(state.quick==="soon"&&d.cls!=="soon")return false;if(!["late","soon"].includes(state.quick)&&normStatus(t.status)!==state.quick)return false}
+    if(qk&&!qk.has(unitKey(t)))return false;
     return true});
 }
+/* 요약 버튼은 프로젝트 단위: 단계 업무 중 하나라도 조건에 맞으면 그 프로젝트 전체가 해당. 프로젝트가 없는 업무는 1건씩 */
+const unitKey=t=>projOf(t)?"p:"+t.projectId:"t:"+t.id;
+function matchQuick(t,k){
+  const st=normStatus(t.status);
+  if(k==="late"||k==="soon")return st!=="보류"&&dday(t).cls===k;
+  return st===k;
+}
+function quickUnits(k){return new Set(tasks.filter(t=>matchQuick(t,k)).map(unitKey))}
 function sortDue(a,b){const da=parseD(a.due),dbb=parseD(b.due);if(!da&&!dbb)return (a.seq||0)-(b.seq||0);if(!da)return 1;if(!dbb)return -1;return da-dbb}
 const stageIdx=t=>{const i=STAGES.findIndex(s=>s.k===(t.stage||"기타"));return i<0?9:i};
 const sortStage=(a,b)=>stageIdx(a)-stageIdx(b)||sortDue(a,b);
@@ -447,10 +456,9 @@ function render(){
   if(state.view==="gantt")renderGantt(v,list);else if(state.view==="kanban")renderKanban(v,list);else renderWbs(v,list);
 }
 function renderStats(){
-  const open=tasks.filter(t=>!["완료","보류"].includes(normStatus(t.status)));
-  const late=open.filter(t=>dday(t).cls==="late").length, soon=open.filter(t=>dday(t).cls==="soon").length;
-  const cnt=s=>tasks.filter(t=>normStatus(t.status)===s).length;
-  const items=[["","전체",tasks.length,"all"],["late","마감 지남",late,"late"],["soon","3일 이내",soon,"soon"],["제작중","제작중",cnt("제작중"),""],["검토중","검토중",cnt("검토중"),""],["검토대기","검토대기",cnt("검토대기"),""]];
+  const all=projects.length+tasks.filter(t=>!projOf(t)).length;
+  const cnt=k=>quickUnits(k).size;
+  const items=[["","전체",all,"all"],["late","마감 지남",cnt("late"),"late"],["soon","3일 이내",cnt("soon"),"soon"],["제작중","제작중",cnt("제작중"),""],["검토중","검토중",cnt("검토중"),""],["검토대기","검토대기",cnt("검토대기"),""]];
   $("#stats").innerHTML=items.map(([k,l,n,c])=>`<button type="button" class="stat ${c} ${state.quick===k?"on":""}" data-q="${esc(k)}" aria-pressed="${state.quick===k}">${esc(l)} <b>${n}</b></button>`).join("");
 }
 function fillSelect(sel,opts,cur,allLabel){sel.innerHTML=`<option value="">${esc(allLabel)}</option>`+opts.map(o=>`<option value="${esc(o)}">${esc(o)}</option>`).join("");sel.value=opts.includes(cur)?cur:""}
