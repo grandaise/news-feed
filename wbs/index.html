@@ -661,8 +661,7 @@ function openProject(id){
   const ro=readOnly?"disabled":"";
   panel(id?"프로젝트 정보":"프로젝트 추가",`
     <div class="fld full"><label for="p_name">프로젝트</label><input id="p_name" required value="${esc(p.name)}" placeholder="예: 고객센터 리뉴얼" ${ro}></div>
-    <div class="fld"><label for="p_req">요청번호</label><input id="p_req" value="${esc(p.reqNo||"")}" placeholder="예: 1680" ${ro}></div>
-    <div class="fld"><label for="p_dept">주관부서</label><input id="p_dept" value="${esc(p.dept||"")}" placeholder="예: U커머스" ${ro}></div>
+    <div class="fld full"><label for="p_dept">주관부서</label><input id="p_dept" value="${esc(p.dept||"")}" placeholder="예: U커머스" ${ro}></div>
     <div class="fld"><label for="p_area">구분(주사용부서)</label><select id="p_area" ${ro}>${opt(AREAS.includes(p.area)?AREAS:AREAS.concat(p.area?[p.area]:[]),p.area)}</select></div>
     <div class="fld"><label for="p_cat">분류</label><select id="p_cat" ${ro}>${opt(CATS.map(c=>c.k),p.category)}</select></div>
     <div class="fld full"><label for="p_link">피그마·참고 링크</label><input id="p_link" value="${esc(p.link||"")}" placeholder="https://www.figma.com/..." ${ro}></div>
@@ -672,7 +671,7 @@ function openProject(id){
     `${id&&!readOnly?`<button class="btn danger" type="button" id="edDel">삭제</button>`:""}<div class="spacer"></div><button class="btn" type="button" data-close>취소</button>${readOnly?"":`<button class="btn primary" type="submit" form="edForm">${id?"저장":"추가"}</button>`}`);
   if(!id)setTimeout(()=>{const el=$("#p_name");el&&el.focus()},30);
   $("#edForm").addEventListener("submit",async ev=>{ev.preventDefault();
-    const data={name:$("#p_name").value.trim(),reqNo:$("#p_req").value.trim(),dept:$("#p_dept").value.trim(),area:$("#p_area").value,category:$("#p_cat").value,link:$("#p_link").value.trim(),note:$("#p_note").value.trim()};
+    const data={name:$("#p_name").value.trim(),dept:$("#p_dept").value.trim(),area:$("#p_area").value,category:$("#p_cat").value,link:$("#p_link").value.trim(),note:$("#p_note").value.trim()};
     if(!data.name){$("#p_name").focus();return}
     if(data.link&&!/^https:\/\//.test(data.link)){toast("링크는 https://로 시작해야 합니다.");return}
     if(!id&&projects.some(x=>x.name===data.name)){toast("같은 이름의 프로젝트가 이미 있습니다.");return}
