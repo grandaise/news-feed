@@ -143,7 +143,14 @@ tr.is-done td{color:var(--faint)} tr.is-done .ttl{text-decoration:line-through}
 .legend{display:flex;gap:12px;flex-wrap:wrap;font-size:12.5px;color:var(--muted)}
 .legend span{display:inline-flex;align-items:center;gap:6px}
 .legend span::before{content:"";width:10px;height:10px;border-radius:50%;background:var(--sc)}
-.gantt{overflow-x:auto;background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow)}
+.gantt{overflow:auto;max-height:calc(100vh - 150px);max-height:calc(100dvh - 150px);background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);overscroll-behavior-x:contain}
+.gantt.drag{cursor:grabbing;user-select:none}
+.gantt.drag .g-row{cursor:grabbing}
+.g-head{position:sticky;top:0;z-index:3;background:var(--card);border-bottom:1px solid var(--line)}
+.g-head .g-label{z-index:4}
+.g-days{cursor:ew-resize}
+.g-nav{display:inline-flex;gap:6px;margin-left:auto}
+.g-nav .btn{padding:6px 12px;font-size:13px}
 .g-grid{position:relative;width:max-content}
 .g-head,.g-row{display:flex}
 .g-label{position:sticky;left:0;z-index:2;background:var(--card);width:var(--lw);flex:0 0 var(--lw);padding:7px 14px;border-right:1px solid var(--line);overflow:hidden;white-space:nowrap;text-overflow:ellipsis;font-size:13.5px}
@@ -525,11 +532,44 @@ function renderGantt(v,list){
   }
   const todayX=x(t0)+(week?pxPerDay/2:dw/2);
   v.innerHTML=`<div class="g-tools"><div class="tabs"><button type="button" class="tab" data-scale="week" aria-selected="${week}">주 단위</button><button type="button" class="tab" data-scale="day" aria-selected="${!week}">일 단위</button></div>
-    <div class="legend">${STAGES.slice(0,4).map(s=>`<span style="--sc:var(${s.v})">${s.k}</span>`).join("")}<span style="--sc:var(--late)">오늘</span></div></div>
+    <div class="legend">${STAGES.slice(0,4).map(s=>`<span style="--sc:var(${s.v})">${s.k}</span>`).join("")}<span style="--sc:var(--danger)">오늘</span></div>
+    <div class="g-nav"><button type="button" class="btn" data-gnav="-1" aria-label="이전">‹</button><button type="button" class="btn" data-gnav="0">오늘</button><button type="button" class="btn" data-gnav="1" aria-label="다음">›</button></div></div>
     ${noDate?`<div class="note">완료일이 없는 업무 ${noDate}건은 간트에서 빠졌습니다.</div>`:""}
     <div class="gantt"><div class="g-grid" style="--dw:${dw}px;--lw:${lw}px"><div class="g-head"><div class="g-label">프로젝트 · 작업</div><div class="g-days">${head}</div></div>${rows}
     <div class="today" style="left:${lw+todayX}px"></div></div></div>`;
+  wireGantt(v.querySelector(".gantt"),lw,todayX,week);
 }
+/* 간트 좌우 이동: 가로 휠·트랙패드, Shift+휠, 날짜 머리줄 위 휠, 마우스 끌기, ‹ 오늘 › 버튼 */
+let gDragged=false;
+function wireGantt(g,lw,todayX,week){
+  if(!g)return;
+  const key=week?"w":"d";
+  const goToday=smooth=>g.scrollTo({left:Math.max(0,todayX-(g.clientWidth-lw)*0.3),behavior:smooth?"smooth":"auto"});
+  if(state.gScroll&&state.gScroll.k===key)g.scrollLeft=state.gScroll.x;else goToday(false);
+  g.addEventListener("scroll",()=>{state.gScroll={k:key,x:g.scrollLeft}},{passive:true});
+  g.parentElement.querySelectorAll("[data-gnav]").forEach(b=>b.addEventListener("click",()=>{
+    const n=+b.dataset.gnav;if(!n)goToday(true);else g.scrollBy({left:n*(g.clientWidth-lw)*0.8,behavior:"smooth"})}));
+  g.addEventListener("wheel",e=>{
+    if(e.ctrlKey)return;
+    const dx=Math.abs(e.deltaX),dy=Math.abs(e.deltaY);
+    let h=0;
+    if(dx>dy)h=e.deltaX; /* 가로 휠·트랙패드 좌우: 브라우저 기본 동작이 막히는 경우까지 직접 처리 */
+    else if(e.shiftKey||e.target.closest(".g-days"))h=e.deltaY; /* Shift+휠, 날짜 머리줄 위 휠 */
+    if(!h)return;
+    if(e.deltaMode===1)h*=32;else if(e.deltaMode===2)h*=g.clientWidth;
+    e.preventDefault();g.scrollLeft+=h;
+  },{passive:false});
+  g.addEventListener("pointerdown",e=>{
+    if(e.pointerType!=="mouse"||e.button!==0||e.target.closest(".g-label"))return;
+    gDrag={g,sx:e.clientX,sl:g.scrollLeft};gDragged=false});
+}
+let gDrag=null;
+window.addEventListener("pointermove",e=>{
+  if(!gDrag)return;const d=e.clientX-gDrag.sx;
+  if(!gDragged&&Math.abs(d)>5){gDragged=true;gDrag.g.classList.add("drag")}
+  if(gDragged){gDrag.g.scrollLeft=gDrag.sl-d;e.preventDefault()}});
+function gUp(){if(!gDrag)return;gDrag.g.classList.remove("drag");gDrag=null;if(gDragged)setTimeout(()=>{gDragged=false},0)}
+window.addEventListener("pointerup",gUp);window.addEventListener("pointercancel",gUp);
 function renderKanban(v,list){
   v.innerHTML=`<div class="board">${STATUSES.map(s=>{
     const items=list.filter(t=>normStatus(t.status)===s).sort(sortDue);
@@ -640,7 +680,7 @@ document.addEventListener("click",async ev=>{
   if($("#editorRoot").firstChild)return;
   const add=ev.target.closest("[data-addto]");if(add){openTask(null,{projectId:add.dataset.addto});return}
   const pr=ev.target.closest("[data-proj]");if(pr){openProject(pr.dataset.proj);return}
-  const op=ev.target.closest("[data-open]");if(op)openTask(op.dataset.open);
+  const op=ev.target.closest("[data-open]");if(op&&!(gDragged&&op.closest(".gantt")))openTask(op.dataset.open);
 });
 document.addEventListener("keydown",ev=>{
   if(ev.key==="Escape"&&$("#editorRoot").firstChild){closeEditor();return}
