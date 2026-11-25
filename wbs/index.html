@@ -93,9 +93,9 @@ main{padding-block:clamp(16px,2.4vw,28px) 64px}
 .stat{display:flex;flex-direction:column;align-items:flex-start;gap:4px;text-align:left;border:0;background:var(--card);border-radius:var(--radius);padding:16px 20px 18px;box-shadow:var(--shadow);cursor:pointer;color:var(--muted);font-size:13px;font-weight:500;transition:transform .1s,box-shadow .15s}
 .stat:active{transform:scale(.98)}
 .stat b{font-size:clamp(26px,2.6vw,34px);font-weight:600;letter-spacing:-0.03em;line-height:1.15;color:var(--text);font-variant-numeric:tabular-nums}
-.stat.late b{color:var(--danger)} .stat.soon b{color:var(--warn)}
+.stat.done b{color:var(--ok,#34c759)} .stat.late b{color:var(--danger)} .stat.soon b{color:var(--warn)}
 .stat.on{box-shadow:0 0 0 2px var(--accent),var(--shadow)}
-@media (max-width:640px){.stats{grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.stat{padding:12px 14px 14px}}
+@media (max-width:640px){.stats{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.stat{padding:12px 14px 14px}}
 
 /* entry + filter card */
 .panel-card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px 22px;margin-bottom:16px;display:flex;flex-direction:column;gap:12px}
@@ -437,7 +437,12 @@ function matchQuick(t,k){
   if(k==="late"||k==="soon")return st!=="보류"&&dday(t).cls===k;
   return st===k;
 }
-function quickUnits(k){return new Set(tasks.filter(t=>matchQuick(t,k)).map(unitKey))}
+function quickUnits(k){
+  if(k==="완료"){ /* 완료는 프로젝트의 모든 단계가 완료일 때만 */
+    const all=new Map();tasks.forEach(t=>{const u=unitKey(t);all.set(u,(all.get(u)??true)&&normStatus(t.status)==="완료")});
+    return new Set([...all].filter(([,v])=>v).map(([u])=>u));
+  }
+  return new Set(tasks.filter(t=>matchQuick(t,k)).map(unitKey))}
 function sortDue(a,b){const da=parseD(a.due),dbb=parseD(b.due);if(!da&&!dbb)return (a.seq||0)-(b.seq||0);if(!da)return 1;if(!dbb)return -1;return da-dbb}
 const stageIdx=t=>{const i=STAGES.findIndex(s=>s.k===(t.stage||"기타"));return i<0?9:i};
 const sortStage=(a,b)=>stageIdx(a)-stageIdx(b)||sortDue(a,b);
@@ -465,7 +470,7 @@ function render(){
 function renderStats(){
   const all=projects.length+tasks.filter(t=>!projOf(t)).length;
   const cnt=k=>quickUnits(k).size;
-  const items=[["","전체",all,"all"],["late","마감 지남",cnt("late"),"late"],["soon","3일 이내",cnt("soon"),"soon"]];
+  const items=[["","전체",all,"all"],["완료","완료",cnt("완료"),"done"],["soon","3일 내 마감예정",cnt("soon"),"soon"],["late","마감 지남",cnt("late"),"late"]];
   $("#stats").innerHTML=items.map(([k,l,n,c])=>`<button type="button" class="stat ${c} ${state.quick===k?"on":""}" data-q="${esc(k)}" aria-pressed="${state.quick===k}">${esc(l)} <b>${n}</b></button>`).join("");
 }
 function fillSelect(sel,opts,cur,allLabel){sel.innerHTML=`<option value="">${esc(allLabel)}</option>`+opts.map(o=>`<option value="${esc(o)}">${esc(o)}</option>`).join("");sel.value=opts.includes(cur)?cur:""}
