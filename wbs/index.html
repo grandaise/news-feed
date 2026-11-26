@@ -431,7 +431,7 @@ async function quickAdd(projName,data){
 }
 async function del(col,id){
   return mutate(col==="projects"?"프로젝트 삭제":"업무 삭제",d=>{
-    if(col==="projects"){d.projects=d.projects.filter(p=>p.id!==id);d.tasks.forEach(t=>{if(t.projectId===id)t.projectId=""})}
+    if(col==="projects"){d.projects=d.projects.filter(p=>p.id!==id);d.tasks=d.tasks.filter(t=>t.projectId!==id)}
     else d.tasks=d.tasks.filter(t=>t.id!==id);return true});
 }
 
@@ -713,7 +713,7 @@ function panel(title,formHtml,footerHtml){
     <header><h2 id="edTitle">${title}</h2><button class="btn" type="button" data-close>닫기</button></header>
     <form id="edForm">${formHtml}</form><footer>${footerHtml}</footer></aside>`;
 }
-function armDelete(btn,fn){btn.addEventListener("click",async()=>{if(btn.dataset.armed){await fn()}else{btn.dataset.armed="1";btn.textContent="한 번 더 누르면 삭제";setTimeout(()=>{if(btn.isConnected){delete btn.dataset.armed;btn.textContent="삭제"}},3000)}})}
+function armDelete(btn,fn,armText){btn.addEventListener("click",async()=>{if(btn.dataset.armed){await fn()}else{btn.dataset.armed="1";btn.textContent=armText||"한 번 더 누르면 삭제";setTimeout(()=>{if(btn.isConnected){delete btn.dataset.armed;btn.textContent="삭제"}},3000)}})}
 function openTask(id,preset){
   const t=id?byId(id):Object.assign({title:"",stage:"기획",status:"예정",source:"수기(회사메일)",projectId:"",start:"",due:"",note:"",owner:"",link:""},preset||{});
   if(!t)return;
@@ -783,7 +783,8 @@ function openProject(id){
     const pid=await saveProject(id,data,stageTasks);if(!pid)return;
     closeEditor();toast(id?"저장했습니다.":stages.length?`프로젝트와 단계 업무 ${stages.length}건을 만들었습니다.`:"프로젝트를 만들었습니다.")});
   const d=$("#edDel");if(d)armDelete(d,async()=>{const n=tasks.filter(t=>t.projectId===id);
-    if(await del("projects",id)){closeEditor();toast(n.length?`삭제했습니다. 업무 ${n.length}건은 프로젝트 미지정으로 옮겼습니다.`:"삭제했습니다.")}});
+    if(await del("projects",id)){closeEditor();toast(n.length?`프로젝트와 단계 업무 ${n.length}건을 삭제했습니다.`:"삭제했습니다.")}},
+    (()=>{const c=tasks.filter(t=>t.projectId===id).length;return c?`한 번 더 누르면 단계 업무 ${c}건까지 삭제`:""})());
 }
 function closeEditor(){$("#editorRoot").innerHTML=""}
 let toastTimer;
