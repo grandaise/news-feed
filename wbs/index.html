@@ -196,7 +196,7 @@ tr.is-done td{color:var(--faint)} tr.is-done .ttl{text-decoration:line-through}
 .g-row.gp .g-label{font-weight:600;background:var(--card-2)}
 .g-row.gp .g-track{background:var(--card-2)}
 .g-row:not(.gp):hover .g-label{background:var(--fill-2)}
-.g-track{position:relative;height:32px}
+.g-track{position:relative;height:32px;z-index:0;isolation:isolate} /* 막대는 각 줄 안에서만 겹치고, 고정된 제목 칸(z-index 2) 위로 올라오지 않음 */
 .g-track .we{position:absolute;top:0;bottom:0;background:var(--fill-2)}
 .bar{position:absolute;top:8px;height:16px;border-radius:980px;background:var(--sc)}
 .bar.done{opacity:.35}
