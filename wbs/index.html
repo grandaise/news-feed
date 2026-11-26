@@ -131,6 +131,9 @@ th,td{text-align:left;padding:10px 12px;border-top:1px solid var(--line);vertica
 thead th{font-size:12px;color:var(--faint);font-weight:500;border-top:0;padding-top:14px}
 tr.proj td{background:var(--card-2);cursor:pointer;padding-top:16px;padding-bottom:12px}
 tr.proj .pname{font-weight:600;font-size:16px;letter-spacing:-0.02em;display:flex;align-items:center;gap:6px}
+.g-row.gp .g-label{display:flex;align-items:center;gap:6px}
+.g-row.gp .fold{border:0;background:var(--fill-2);color:var(--muted);width:22px;height:22px;border-radius:50%;font-size:15px;line-height:1;cursor:pointer;flex:0 0 22px;transform:rotate(90deg);transition:transform .15s}
+.g-row.gp.folded .fold{transform:rotate(0deg)}
 tr.proj .fold{border:0;background:var(--fill-2);color:var(--muted);width:26px;height:26px;border-radius:50%;font-size:17px;line-height:1;cursor:pointer;flex:0 0 26px;transform:rotate(90deg);transition:transform .15s}
 tr.proj.folded .fold{transform:rotate(0deg)}
 tr.proj.folded td{padding-bottom:14px}
@@ -630,7 +633,8 @@ function renderGantt(v,list){
   for(const g of groupByProject(items)){
     const ss=g.items.map(t=>parseD(t.start)||parseD(t.due)),es=g.items.map(t=>parseD(t.due));
     const ps=new Date(Math.min(...ss)),pe=new Date(Math.max(...es));
-    rows+=`<div class="g-row gp"><div class="g-label">${esc(g.p?g.p.name:"프로젝트 미지정")}</div><div class="g-track" style="width:${W}px">${weBg}<div class="bar span" style="left:${x(dayStart(ps))}px;width:${Math.max((dayDiff(pe,ps)+1)*pxPerDay,4)}px"></div></div></div>`;
+    const gf=g.p&&isFolded(g.p.id);
+    rows+=`<div class="g-row gp ${gf?"folded":""}"><div class="g-label">${g.p?`<button type="button" class="fold" data-fold="${esc(g.p.id)}" aria-expanded="${!gf}" aria-label="${gf?"세부 업무 펼치기":"세부 업무 접기"}">›</button>`:""}${esc(g.p?g.p.name:"프로젝트 미지정")}</div><div class="g-track" style="width:${W}px">${weBg}<div class="bar span" style="left:${x(dayStart(ps))}px;width:${Math.max((dayDiff(pe,ps)+1)*pxPerDay,4)}px"></div></div></div>`;
     if(g.p&&isFolded(g.p.id))continue;
     rows+=g.items.map(t=>`<div class="g-row" data-open="${esc(t.id)}" tabindex="0"><div class="g-label"><span class="stage" style="--sc:${stVar(t.stage)}">${esc(t.stage||"기타")}</span>${esc(t.title)}${t.owner?` <span class="sub">${esc(t.owner)}</span>`:""}</div><div class="g-track" style="width:${W}px">${weBg}${bar(t)}</div></div>`).join("");
   }
