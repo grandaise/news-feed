@@ -117,6 +117,7 @@ main{padding-block:clamp(16px,2.4vw,28px) 64px}
 .stage{display:inline-block;font-size:11.5px;font-weight:600;padding:2px 9px;border-radius:980px;color:var(--text);background:color-mix(in srgb,var(--sc) 18%,transparent);white-space:nowrap}
 .pill{display:inline-block;font-size:11.5px;padding:2px 9px;border-radius:980px;background:var(--fill-2);color:var(--muted);white-space:nowrap;font-weight:600}
 .pill.s-검토대기,.pill.s-검토중{background:var(--accent-soft);color:var(--accent)}
+.pill.s-수정중{background:color-mix(in srgb,#af52de 15%,transparent);color:#a347d1}
 .pill.s-제작중{background:var(--warn-soft);color:var(--warn)}
 .pill.s-완료{background:var(--ok-soft);color:var(--ok)}
 .dd{font-size:13px;font-variant-numeric:tabular-nums;white-space:nowrap}
@@ -333,14 +334,15 @@ tr.is-done td{color:var(--faint)} tr.is-done .ttl{text-decoration:line-through}
 "use strict";
 const CATS=[{k:"사이트 구축",v:"--c-site"},{k:"서비스 개선",v:"--c-svc"},{k:"콘텐츠 제작",v:"--c-content"},{k:"기타 업무",v:"--c-etc"}];
 const STAGES=[{k:"기획",v:"--st-plan",tag:["기획"]},{k:"디자인",v:"--st-design",tag:["디자인","디자"]},{k:"퍼블",v:"--st-pub",tag:["퍼블","퍼블리싱"]},{k:"개발",v:"--st-dev",tag:["개발","it"]},{k:"기타",v:"--st-etc",tag:["기타"]}];
-const STATUSES=["검토대기","예정","제작중","검토중","완료","보류"];
+const STATUSES=["예정","제작중","검토중","수정중","완료"]; /* 고를 수 있는 진행상태 */
+const OLD_STATUSES=["검토대기","보류"]; /* 예전 상태: 기존 업무에 남아 있으면 그대로 보여 줌 */
 const AREAS=["공통","리모델링","리빙","오피스","물류","UIUX"];
 const SOURCES=["수기(회사메일)","수기(기타)","팀 일정표","캘린더","캘린더(Tasks)","캘린더(반복)","Gmail"];
 const $=s=>document.querySelector(s);
 const esc=v=>String(v==null?"":v).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const catVar=k=>"var("+((CATS.find(c=>c.k===k)||CATS[3]).v)+")";
 const stVar=k=>"var("+((STAGES.find(c=>c.k===k)||STAGES[4]).v)+")";
-const normStatus=s=>s==="진행중"?"제작중":(STATUSES.includes(s)?s:"예정");
+const normStatus=s=>s==="진행중"?"제작중":(STATUSES.includes(s)||OLD_STATUSES.includes(s)?s:"예정");
 
 let db=null, tasks=[], projects=[], loadedT=false, loadedP=false, readOnly=false;
 const state={view:"wbs",fold:false,psort:"",year:String(new Date().getFullYear()),cat:"",stage:"",owner:"",q:"",hideDone:false,quick:"",scale:"week"};
@@ -559,7 +561,7 @@ function allOwners(){return [...new Set(tasks.flatMap(ownersOf))].sort((a,b)=>a.
 function renderFilters(){
   fillSelect($("#fCat"),CATS.map(c=>c.k),state.cat,"전체 분류");
   fillSelect($("#fStage"),STAGES.map(c=>c.k),state.stage,"전체 단계");
-  fillSelect($("#fStatus"),STATUSES,state.status,"전체 진행상태");
+  fillSelect($("#fStatus"),STATUSES.concat(OLD_STATUSES.filter(o=>tasks.some(t=>normStatus(t.status)===o))),state.status,"전체 진행상태");
   fillSelect($("#fRole"),ROLES,state.role,"담당 직군");
   const fo=$("#fOwner"),people=state.role?roleOwners(state.role):[];
   if(state.owner&&!people.includes(state.owner))state.owner="";
@@ -730,7 +732,7 @@ window.addEventListener("pointermove",e=>{
 function gUp(){if(!gDrag)return;gDrag.g.classList.remove("drag");gDrag=null;if(gDragged)setTimeout(()=>{gDragged=false},0)}
 window.addEventListener("pointerup",gUp);window.addEventListener("pointercancel",gUp);
 /* 칸반 열: 보류는 빼고 이 순서로. 모바일은 열을 세로로 쌓고 0건 열은 숨김, 완료는 처음에 접어 둠 */
-const KANBAN=["예정","제작중","검토대기","검토중","완료"];
+const KANBAN=STATUSES;
 const kanOpen=new Map();
 const kanFold=s=>kanOpen.has(s)?!kanOpen.get(s):s==="완료";
 function renderKanban(v,list){
@@ -779,7 +781,7 @@ function openTask(id,preset){
   panel(id?esc(codeOf(t))+" 업무":"업무 추가",`
     <div class="fld full"><label for="e_proj">프로젝트</label><select id="e_proj" ${ro}><option value="">프로젝트 미지정</option>${projects.slice().sort((a,b)=>(+a.order||0)-(+b.order||0)).map(p=>`<option value="${esc(p.id)}" ${p.id===t.projectId?"selected":""}>${esc(p.name)}</option>`).join("")}</select></div>
     <div class="fld"><label for="e_stage">작업 분류</label><select id="e_stage" ${ro}>${opt(STAGES.map(s=>s.k),t.stage||"기타")}</select></div>
-    <div class="fld"><label for="e_status">상태</label><select id="e_status" ${ro}>${opt(STATUSES,normStatus(t.status))}</select></div>
+    <div class="fld"><label for="e_status">상태</label><select id="e_status" ${ro}>${opt(STATUSES.includes(normStatus(t.status))?STATUSES:STATUSES.concat([normStatus(t.status)]),normStatus(t.status))}</select></div>
     <div class="fld full"><label for="e_title">업무</label><input id="e_title" required value="${esc(t.title)}" placeholder="예: UI 디자인, 퍼블리싱, 개발(어드민)" ${ro}></div>
     <div class="fld full"><label for="e_owner">담당자</label><input id="e_owner" value="${esc(t.owner||"")}" placeholder="아래에서 고르거나 직접 입력 (여러 명이면 쉼표)" autocomplete="off" ${ro}><div class="ownpick" id="ownPick"></div></div>
     <div class="fld"><label for="e_start">시작</label><input id="e_start" type="datetime-local" value="${esc(toInput(t.start))}" ${ro}></div>
