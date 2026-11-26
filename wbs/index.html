@@ -237,6 +237,8 @@ tr.is-done td{color:var(--faint)} tr.is-done .ttl{text-decoration:line-through}
 /* people */
 .ppl table{min-width:780px}
 .ppl td.wk{vertical-align:top;min-width:120px}
+.ppl td.who,.ppl th:first-child{white-space:nowrap;min-width:92px;width:92px;vertical-align:top}
+.ppl td.who b{white-space:nowrap}
 .ppl .chip{display:block;font-size:12px;padding:3px 9px;margin:3px 0;border-radius:980px;background:color-mix(in srgb,var(--sc) 16%,transparent);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:180px;cursor:pointer}
 .ppl .load{font-size:11px;color:var(--faint);font-variant-numeric:tabular-nums}
 .ppl th.now{color:var(--danger)}
@@ -767,11 +769,14 @@ function renderPeople(v,list){
   const w0=weekStart(today());const weeks=[];for(let i=-1;i<7;i++){const d=new Date(w0);d.setDate(d.getDate()+i*7);weeks.push(d)}
   const inWeek=(t,ws)=>{const s=dayStart(parseD(t.start)||parseD(t.due)||today()),e=dayStart(parseD(t.due)||s);const we=new Date(ws);we.setDate(we.getDate()+6);return s<=we&&e>=ws};
   const cell=(ts,ws,i)=>{const hit=ts.filter(t=>i===0?(parseD(t.due)&&dayStart(parseD(t.due))<ws):false).concat(ts.filter(t=>parseD(t.due)&&inWeek(t,ws)));
-    return `<td class="wk">${hit.length?`<span class="load">${hit.length}건</span>`:""}${hit.map(t=>`<span class="chip" data-open="${esc(t.id)}" tabindex="0" style="--sc:${stVar(t.stage)}" title="${esc((projOf(t)?projOf(t).name+" · ":"")+t.title)}">${esc(t.title)}</span>`).join("")}</td>`};
-  const rows=people.map(name=>{const ts=open.filter(t=>ownersOf(t).includes(name));return `<tr><td><b>${esc(name)}</b><div class="sub">${ts.length}건 진행</div></td>${weeks.map((ws,i)=>cell(ts,ws,i)).join("")}</tr>`}).join("")
-    +(noOwner.length?`<tr><td><b>담당 미지정</b><div class="sub">${noOwner.length}건</div></td>${weeks.map((ws,i)=>cell(noOwner,ws,i)).join("")}</tr>`:"");
+    const byP=new Map();hit.forEach(t=>{const k=projOf(t)?t.projectId:"_"+t.id;if(!byP.has(k))byP.set(k,[]);byP.get(k).push(t)});
+    return `<td class="wk">${byP.size?`<span class="load">${byP.size}개</span>`:""}${[...byP].map(([k,ts])=>{const p=projOf(ts[0]);
+      return `<span class="chip" ${p?`data-proj="${esc(p.id)}"`:`data-open="${esc(ts[0].id)}"`} tabindex="0" style="--sc:${stVar(ts[0].stage)}" title="${esc(ts.map(t=>(t.stage||"기타")+" "+t.title).join(", "))}">${esc(p?p.name:ts[0].title)}</span>`}).join("")}</td>`};
+  const projCount=ts=>new Set(ts.map(t=>projOf(t)?t.projectId:"_"+t.id)).size;
+  const rows=people.map(name=>{const ts=open.filter(t=>ownersOf(t).includes(name));return `<tr><td class="who"><b>${esc(name)}</b><div class="sub">프로젝트 ${projCount(ts)}개</div></td>${weeks.map((ws,i)=>cell(ts,ws,i)).join("")}</tr>`}).join("")
+    +(noOwner.length?`<tr><td class="who"><b>담당 미지정</b><div class="sub">프로젝트 ${projCount(noOwner)}개</div></td>${weeks.map((ws,i)=>cell(noOwner,ws,i)).join("")}</tr>`:"");
   const cw=weekStart(today()).getTime();
-  v.innerHTML=sortTabs(false)+`<div class="note">미완료 업무를 담당자별·주별로 모았습니다. 첫 칸에는 지난주와 그 이전에 마감이 지난 업무도 함께 보입니다.</div>
+  v.innerHTML=sortTabs(false)+`<div class="note">담당자별로 주마다 참여 중인 프로젝트를 모았습니다(미완료 업무 기준). 첫 칸에는 마감이 지난 업무의 프로젝트도 함께 보입니다. 프로젝트를 누르면 정보 창이 열려요.</div>
     <div class="tbl-wrap ppl"><table><thead><tr><th>담당자</th>${weeks.map((ws,i)=>{const l=weekLabel(ws);return `<th class="${ws.getTime()===cw?"now":""}">${i===0?"지난주 이전":l.m+"월 "+l.w+"주"}${ws.getTime()===cw?" · 이번 주":""}</th>`}).join("")}</tr></thead><tbody>${rows}</tbody></table></div>`;
 }
 
