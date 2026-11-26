@@ -207,7 +207,17 @@ tr.is-done td{color:var(--faint)} tr.is-done .ttl{text-decoration:line-through}
 .g-label .stage{margin-right:6px}
 
 /* kanban */
-.board{display:grid;grid-template-columns:repeat(6,minmax(220px,1fr));gap:16px;overflow-x:auto;padding-bottom:6px}
+.board{display:grid;grid-template-columns:repeat(5,minmax(200px,1fr));gap:16px;overflow-x:auto;padding-bottom:6px}
+@media (max-width:760px){
+  .board{grid-template-columns:minmax(0,1fr);overflow:visible;gap:12px}
+  .col{min-height:0}
+  .col.shut{padding-block:10px}
+  .colbtn{border:0;background:none;font:inherit;color:inherit;padding:0;display:inline-flex;align-items:center;gap:6px;cursor:pointer}
+  .colbtn .chev{display:inline-block;transform:rotate(90deg);transition:transform .15s;font-size:15px}
+  .col.shut .colbtn .chev{transform:rotate(0)}
+  .col h4{font-size:14px}
+  .card{cursor:pointer}
+}
 .col{background:var(--fill-2);border-radius:var(--radius);padding:12px;min-height:200px;display:flex;flex-direction:column;gap:10px}
 .col h4{margin:2px 6px 2px;font-size:13px;color:var(--muted);display:flex;justify-content:space-between;font-weight:600}
 .col h4 span{color:var(--faint);font-variant-numeric:tabular-nums}
@@ -719,11 +729,18 @@ window.addEventListener("pointermove",e=>{
   if(gDragged){gDrag.g.scrollLeft=gDrag.sl-d;e.preventDefault()}});
 function gUp(){if(!gDrag)return;gDrag.g.classList.remove("drag");gDrag=null;if(gDragged)setTimeout(()=>{gDragged=false},0)}
 window.addEventListener("pointerup",gUp);window.addEventListener("pointercancel",gUp);
+/* 칸반 열: 보류는 빼고 이 순서로. 모바일은 열을 세로로 쌓고 0건 열은 숨김, 완료는 처음에 접어 둠 */
+const KANBAN=["예정","제작중","검토대기","검토중","완료"];
+const kanOpen=new Map();
+const kanFold=s=>kanOpen.has(s)?!kanOpen.get(s):s==="완료";
 function renderKanban(v,list){
   const rk=projRank();
-  v.innerHTML=sortTabs(false)+`<div class="board">${STATUSES.map(s=>{
-    const items=list.filter(t=>normStatus(t.status)===s).sort((a,b)=>state.psort?(rk(a)-rk(b)||sortStage(a,b)):sortDue(a,b));
-    return `<div class="col" data-col="${esc(s)}"><h4>${esc(s)}<span>${items.length}</span></h4>${items.map(t=>{const d=dday(t),p=projOf(t);
+  const mob=isMobile();
+  const cols=KANBAN.map(s=>[s,list.filter(t=>normStatus(t.status)===s).sort((a,b)=>state.psort?(rk(a)-rk(b)||sortStage(a,b)):sortDue(a,b))]).filter(([,items])=>!mob||items.length);
+  if(!cols.length){v.innerHTML=sortTabs(false)+'<div class="empty"><h2>조건에 맞는 업무가 없습니다</h2>위의 <b>전체</b>를 누르면 모든 업무가 다시 보입니다.</div>';return}
+  v.innerHTML=sortTabs(false)+`<div class="board">${cols.map(([s,items])=>{
+    const shut=mob&&kanFold(s);
+    return `<div class="col ${shut?"shut":""}" data-col="${esc(s)}"><h4>${mob?`<button type="button" class="colbtn" data-kfold="${esc(s)}" aria-expanded="${!shut}"><span class="chev">›</span>${esc(s)}</button>`:esc(s)}<span>${items.length}</span></h4>${shut?"":items.map(t=>{const d=dday(t),p=projOf(t);
       return `<div class="card" draggable="${!readOnly}" data-open="${esc(t.id)}" data-drag="${esc(t.id)}" tabindex="0" style="--sc:${stVar(t.stage)}">
         ${p?`<div class="sub">${esc(p.name)}</div>`:""}<div class="ttl">${esc(t.title)}</div>
         <div class="meta"><span class="stage" style="--sc:${stVar(t.stage)}">${esc(t.stage||"기타")}</span><span class="dd ${d.cls}">${esc(d.txt)}</span></div>
@@ -842,6 +859,7 @@ document.addEventListener("click",async ev=>{
     return}
   const st=ev.target.closest(".stat");if(st){state.quick=st.dataset.q;render();return}
   const ys=ev.target.closest("[data-year-step]");if(ys){const l=allYears(),i=l.indexOf(state.year)+(+ys.dataset.yearStep);if(l[i])setYear(l[i]);return}
+  const kf=ev.target.closest("[data-kfold]");if(kf){const s=kf.dataset.kfold;kanOpen.set(s,kanFold(s));render();return}
   const ps=ev.target.closest("[data-psort]");if(ps){state.psort=ps.dataset.psort;saveUi();render();return}
   const sc=ev.target.closest("[data-scale]");if(sc){state.scale=sc.dataset.scale;saveUi();render();return}
   const tab=ev.target.closest(".tab[data-view]");if(tab){state.view=tab.dataset.view;try{history.replaceState(null,"","#"+state.view)}catch(e){}render();return}
@@ -876,7 +894,7 @@ document.addEventListener("drop",async e=>{const col=e.target.closest&&e.target.
 function fromHash(){const h=(location.hash||"").slice(1);if(["wbs","gantt","kanban","people"].includes(h))state.view=h;else if(h==="list")state.view="wbs"}
 window.addEventListener("hashchange",()=>{fromHash();render()});
 let lastMobile=isMobile();
-let rT;window.addEventListener("resize",()=>{clearTimeout(rT);rT=setTimeout(()=>{if(state.view==="gantt")render();else if(state.view==="wbs"){const m=isMobile();if(m!==lastMobile){lastMobile=m;render()}}},200)});
+let rT;window.addEventListener("resize",()=>{clearTimeout(rT);rT=setTimeout(()=>{if(state.view==="gantt")render();else if(state.view==="wbs"||state.view==="kanban"){const m=isMobile();if(m!==lastMobile){lastMobile=m;render()}}},200)});
 fromHash();
 
 /* ---------- boot ---------- */
