@@ -211,8 +211,15 @@ tr.is-done td{color:var(--faint)} tr.is-done .ttl{text-decoration:line-through}
 .board{display:grid;grid-template-columns:repeat(5,minmax(200px,1fr));gap:16px;overflow-x:auto;padding-bottom:6px}
 @media (max-width:760px){
   .board{grid-template-columns:minmax(0,1fr);overflow:visible;gap:12px}
-  .col{min-height:0}
-  .col.shut{padding-block:10px}
+  .board .col{min-height:0}
+  .board .col.shut{padding-block:10px;gap:6px}
+  .klines{display:flex;flex-direction:column;background:var(--card);border-radius:12px;overflow:hidden}
+  .kline{display:flex;align-items:center;gap:8px;padding:9px 12px;font-size:13px;cursor:pointer;min-width:0}
+  .kline+.kline{border-top:1px solid var(--line)}
+  .kline .kp{flex:0 1 38%;min-width:0;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .kline .kt{flex:1 1 auto;min-width:0;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .kline .kd{flex:0 0 auto;font-size:12.5px;color:var(--faint)}
+  .kline .kd.late{color:var(--danger)} .kline .kd.soon{color:var(--warn)}
   .colbtn{border:0;background:none;font:inherit;color:inherit;padding:0;display:inline-flex;align-items:center;gap:6px;cursor:pointer}
   .colbtn .chev{display:inline-block;transform:rotate(90deg);transition:transform .15s;font-size:15px}
   .col.shut .colbtn .chev{transform:rotate(0)}
@@ -735,6 +742,9 @@ window.addEventListener("pointerup",gUp);window.addEventListener("pointercancel"
 const KANBAN=STATUSES;
 const kanOpen=new Map();
 const kanFold=s=>kanOpen.has(s)?!kanOpen.get(s):s==="완료";
+/* 모바일에서 접은 열: 업무마다 한 줄(프로젝트명 · 업무명 · 날짜), 넘치면 말줄임 */
+function kLine(t){const p=projOf(t),d=dday(t);
+  return `<div class="kline" data-open="${esc(t.id)}" tabindex="0"><span class="kp">${esc(p?p.name:"프로젝트 미지정")}</span><span class="kt">${esc(t.title)}</span><span class="kd dd ${d.cls==="late"||d.cls==="soon"?d.cls:""}">${esc(fmtShort(t.due)||"–")}</span></div>`}
 function renderKanban(v,list){
   const rk=projRank();
   const mob=isMobile();
@@ -742,7 +752,7 @@ function renderKanban(v,list){
   if(!cols.length){v.innerHTML=sortTabs(false)+'<div class="empty"><h2>조건에 맞는 업무가 없습니다</h2>위의 <b>전체</b>를 누르면 모든 업무가 다시 보입니다.</div>';return}
   v.innerHTML=sortTabs(false)+`<div class="board">${cols.map(([s,items])=>{
     const shut=mob&&kanFold(s);
-    return `<div class="col ${shut?"shut":""}" data-col="${esc(s)}"><h4>${mob?`<button type="button" class="colbtn" data-kfold="${esc(s)}" aria-expanded="${!shut}"><span class="chev">›</span>${esc(s)}</button>`:esc(s)}<span>${items.length}</span></h4>${shut?"":items.map(t=>{const d=dday(t),p=projOf(t);
+    return `<div class="col ${shut?"shut":""}" data-col="${esc(s)}"><h4>${mob?`<button type="button" class="colbtn" data-kfold="${esc(s)}" aria-expanded="${!shut}"><span class="chev">›</span>${esc(s)}</button>`:esc(s)}<span>${items.length}</span></h4>${shut?`<div class="klines">${items.map(kLine).join("")}</div>`:items.map(t=>{const d=dday(t),p=projOf(t);
       return `<div class="card" draggable="${!readOnly}" data-open="${esc(t.id)}" data-drag="${esc(t.id)}" tabindex="0" style="--sc:${stVar(t.stage)}">
         ${p?`<div class="sub">${esc(p.name)}</div>`:""}<div class="ttl">${esc(t.title)}</div>
         <div class="meta"><span class="stage" style="--sc:${stVar(t.stage)}">${esc(t.stage||"기타")}</span><span class="dd ${d.cls}">${esc(d.txt)}</span></div>
