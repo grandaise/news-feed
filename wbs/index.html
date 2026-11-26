@@ -134,6 +134,25 @@ tr.proj .pname{font-weight:600;font-size:16px;letter-spacing:-0.02em;display:fle
 .g-row.gp .g-label{display:flex;align-items:center;gap:6px}
 .g-row.gp .fold{border:0;background:var(--fill-2);color:var(--muted);width:22px;height:22px;border-radius:50%;font-size:15px;line-height:1;cursor:pointer;flex:0 0 22px;transform:rotate(90deg);transition:transform .15s}
 .g-row.gp.folded .fold{transform:rotate(0deg)}
+.mlist{display:flex;flex-direction:column;gap:12px}
+.mcard{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
+.mhead{display:flex;gap:10px;align-items:flex-start;padding:14px 16px 12px;background:var(--card-2);cursor:pointer}
+.mhead .fold{border:0;background:var(--fill-2);color:var(--muted);width:26px;height:26px;border-radius:50%;font-size:17px;line-height:1;cursor:pointer;flex:0 0 26px;transform:rotate(90deg);transition:transform .15s;margin-top:1px}
+.mcard.folded .mhead .fold{transform:rotate(0deg)}
+.mtitle{min-width:0;flex:1}
+.mtitle .pname{font-weight:600;font-size:16px;letter-spacing:-0.02em;overflow-wrap:anywhere}
+.mtitle .pmeta{display:flex;flex-wrap:wrap;gap:4px 10px;align-items:center;margin-top:4px;font-size:12.5px}
+.mtitle .prog i{width:54px}
+.mrow{display:flex;flex-direction:column;gap:3px;padding:11px 16px 11px 18px;border-top:1px solid var(--line);position:relative;cursor:pointer}
+.mrow.is-late::before,.mrow.is-soon::before{content:"";position:absolute;left:0;top:8px;bottom:8px;width:3px;border-radius:0 3px 3px 0;background:var(--danger)}
+.mrow.is-soon::before{background:var(--warn)}
+.mrow .r1{display:flex;align-items:center;gap:8px}
+.mrow .r1 .t{flex:1;min-width:0;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mrow.is-done .r1 .t{color:var(--faint);text-decoration:line-through}
+.mrow .r2{display:flex;flex-wrap:wrap;gap:2px 8px;font-size:12.5px;color:var(--muted);padding-left:2px}
+.mrow .r2>span+span::before{content:"·";margin-right:8px;color:var(--faint)}
+.mrow .review-actions{margin-top:4px}
+.maddrow{padding:10px 16px 12px;border-top:1px solid var(--line)}
 tr.proj .fold{border:0;background:var(--fill-2);color:var(--muted);width:26px;height:26px;border-radius:50%;font-size:17px;line-height:1;cursor:pointer;flex:0 0 26px;transform:rotate(90deg);transition:transform .15s}
 tr.proj.folded .fold{transform:rotate(0deg)}
 tr.proj.folded td{padding-bottom:14px}
@@ -562,6 +581,27 @@ function projRow(p,items){
     ${p.dept?`<span class="sub">주관 ${esc(p.dept)}</span>`:""}${p.area?`<span class="sub">구분 ${esc(p.area)}</span>`:""}
     <span class="prog"><i><b style="width:${pr}%"></b></i>${pr}%</span>${link}${sm}${p.note&&!fo?`<span class="sub">${esc(p.note.split("\n")[0].slice(0,80))}</span>`:""}</div></td></tr>`;
 }
+/* 모바일(760px 이하) WBS: 표 대신 프로젝트 카드 + 단계 두 줄 목록 (좌우 스크롤 없음) */
+const isMobile=()=>window.matchMedia("(max-width:760px)").matches;
+function mTask(t){
+  const d=dday(t),st=normStatus(t.status);
+  const cls=(d.cls==="late"?"is-late":d.cls==="soon"?"is-soon":"")+(st==="완료"?" is-done":"");
+  const when=[t.start?fmtShort(t.start)+" ~":"",fmtShort(t.due)].filter(Boolean).join(" ");
+  const review=st==="검토대기"&&!readOnly?`<div class="review-actions"><button type="button" class="rowbtn" data-act="confirm" data-id="${esc(t.id)}">확정</button><button type="button" class="rowbtn" data-act="drop" data-id="${esc(t.id)}">업무 아님</button></div>`:"";
+  return `<div class="mrow ${cls}" data-open="${esc(t.id)}" tabindex="0">
+    <div class="r1"><span class="stage" style="--sc:${stVar(t.stage)}">${esc(t.stage||"기타")}</span><span class="t">${esc(t.title)}</span><span class="pill s-${esc(st)}">${esc(st)}</span></div>
+    <div class="r2">${[t.owner?esc(t.owner):"담당 미정",when?esc(when):"",d.txt&&d.txt!=="–"&&st!=="완료"?`<span class="dd ${d.cls}">${esc(d.txt)}</span>`:""].filter(Boolean).map(x=>`<span>${x}</span>`).join("")}</div>${review}</div>`;
+}
+function mCard(p,items){
+  if(!p)return `<article class="mcard"><div class="mhead"><div class="mtitle"><div class="pname">프로젝트 미지정</div><div class="pmeta sub">프로젝트 없이 입력한 업무 ${items.length}건</div></div></div>${items.map(mTask).join("")}</article>`;
+  const pr=progress(p.id),fo=isFolded(p.id);
+  const link=p.link&&/^https:\/\//.test(p.link)?`<a href="${esc(p.link)}" target="_blank" rel="noopener" data-stop>링크</a>`:"";
+  return `<article class="mcard ${fo?"folded":""}"><div class="mhead" data-proj="${esc(p.id)}" tabindex="0">
+    <button type="button" class="fold" data-fold="${esc(p.id)}" aria-expanded="${!fo}" aria-label="${fo?"세부 업무 펼치기":"세부 업무 접기"}">›</button>
+    <div class="mtitle"><div class="pname">${esc(p.name)}${p.reqNo?` <span class="code">(${esc(p.reqNo)})</span>`:""}</div>
+    <div class="pmeta"><span class="cat" style="--cc:${catVar(p.category)}">${esc(p.category||"기타 업무")}</span>${p.dept?`<span class="sub">주관 ${esc(p.dept)}</span>`:""}<span class="prog"><i><b style="width:${pr}%"></b></i>${pr}%</span>${projSummary(p.id)}${link}</div></div></div>
+    ${fo?"":items.map(mTask).join("")+(readOnly?"":`<div class="maddrow"><button type="button" class="linkbtn" data-addto="${esc(p.id)}">+ 이 프로젝트에 업무 추가</button></div>`)}</article>`;
+}
 /* 접기: 전체 접기 상태(state.fold)에 프로젝트별 예외(foldEx)를 뒤집어 적용 */
 const foldEx=new Set();
 const isFolded=id=>state.fold!==foldEx.has(id);
@@ -595,6 +635,7 @@ function renderWbs(v,list){
   groups.sort((a,b)=>{if(!a.p)return 1;if(!b.p)return -1;return projCmp(a.p,b.p)});
   const sortBar=sortTabs(true);
   if(!groups.length){v.innerHTML=sortBar+'<div class="empty"><h2>조건에 맞는 업무가 없습니다</h2>위의 <b>전체</b>를 누르면 모든 업무가 다시 보입니다.</div>';return}
+  if(isMobile()){v.innerHTML=sortBar+`<div class="mlist">${groups.map(g=>mCard(g.p,g.items)).join("")}</div>`;return}
   let rows="";
   for(const g of groups){
     rows+=projRow(g.p,g.items);
@@ -834,7 +875,8 @@ document.addEventListener("drop",async e=>{const col=e.target.closest&&e.target.
   const id=e.dataTransfer.getData("text/plain"),t=byId(id);if(t&&normStatus(t.status)!==col.dataset.col){if(await saveTask(id,{status:col.dataset.col}))toast(col.dataset.col+"(으)로 옮겼습니다.")}});
 function fromHash(){const h=(location.hash||"").slice(1);if(["wbs","gantt","kanban","people"].includes(h))state.view=h;else if(h==="list")state.view="wbs"}
 window.addEventListener("hashchange",()=>{fromHash();render()});
-let rT;window.addEventListener("resize",()=>{clearTimeout(rT);rT=setTimeout(()=>{if(state.view==="gantt")render()},200)});
+let lastMobile=isMobile();
+let rT;window.addEventListener("resize",()=>{clearTimeout(rT);rT=setTimeout(()=>{if(state.view==="gantt")render();else if(state.view==="wbs"){const m=isMobile();if(m!==lastMobile){lastMobile=m;render()}}},200)});
 fromHash();
 
 /* ---------- boot ---------- */
