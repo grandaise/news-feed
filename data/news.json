@@ -1,5 +1,5 @@
 {
- "updatedAt": "2026-11-27T11:51:34.809Z",
+ "updatedAt": "2026-11-27T14:17:23.258Z",
  "keywords": {
   "현대리바트": [
    {
@@ -211,18 +211,6 @@
     "link": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE1oSWZBZUNVRmxqc1RHZ0hNT3hEMTZfZWRoX1NSTVgwOGw3U0R6WFFhTXFEV0laOU1Pd243cWNLcVdYVVo3Z21BWVhkaVgtZkwyVE13R1dRZi1SaTQ?oc=5",
     "source": "에너지경제신문",
     "publishedAt": "2026-11-20T16:48:55.000Z"
-   },
-   {
-    "title": "[유통 브리프] 현대지에프홀딩스, 신세계프라퍼티, 롯데온, 애경산업",
-    "link": "https://news.google.com/rss/articles/CBMibEFVX3lxTE95TkozMEcwSlppUndXd2lnOENVcGtJXzl6cmdaRGxGXzh2REpQNm85N1dxQXh2dHdDd0xURkJMOURtZU9JNy1ycGpvSUx2WkFzODZXcGhEMmFVSG5RNXJta1o3UlZabU90MUFibw?oc=5",
-    "source": "ER 이코노믹리뷰",
-    "publishedAt": "2026-11-20T13:32:52.000Z"
-   },
-   {
-    "title": "현대백화점그룹, 전남광주 한부모가족 생활시설 개선에 5년간 5억 지원",
-    "link": "https://news.google.com/rss/articles/CBMiZEFVX3lxTFBQNGxVZXhHV1ZZd2hnQkFWQjFaUndDVHhHVFFDVjdVTUhrYlJDLUF4TC1EanEtZHZUN2hONGRSWUJ1MWNUNXJUbnptUDY4ejg4X2d6NF9WSmFKMWhwZk5jSU9GY20?oc=5",
-    "source": "베타뉴스",
-    "publishedAt": "2026-11-20T12:28:33.000Z"
    }
   ],
   "한샘": [
@@ -1157,12 +1145,6 @@
     "link": "https://news.google.com/rss/articles/CBMiggJBVV95cUxQc2YxQWVyV3FpRUlUQzU5cndPc1prMWxjbERqMnVJblZmNXlieWlodHk2dEM4cjB2Z2psaFNYbmsteGREQmU4TjBuUmlMT3hGalFyOVlTX0FXcjBPbm5iU0VqRnkyYWRiM3VtU0pDODMydWg4dGd0OUl0VVdwOFBxT0dwQ1JSZ0YtU3FmUWk1RFdMZkZBYmFpS2w3c3ZFRWhDSVFJRWFNQWNBQkdMZm12WW5kQjRnOE1DUmlpTHRhNVY5U20td3NGdjByS1VsVHF3c0lOU0t3SzhfWUlXMXNTTW53YXJaODl3SmxZc0FFZDNFZ1R1Mlhrd2R6T2tWX1UwMFE?oc=5",
     "source": "데일리안",
     "publishedAt": "2026-11-21T00:00:00.000Z"
-   },
-   {
-    "title": "[유통 브리프] 현대지에프홀딩스, 신세계프라퍼티, 롯데온, 애경산업",
-    "link": "https://news.google.com/rss/articles/CBMibEFVX3lxTE95TkozMEcwSlppUndXd2lnOENVcGtJXzl6cmdaRGxGXzh2REpQNm85N1dxQXh2dHdDd0xURkJMOURtZU9JNy1ycGpvSUx2WkFzODZXcGhEMmFVSG5RNXJta1o3UlZabU90MUFibw?oc=5",
-    "source": "ER 이코노믹리뷰",
-    "publishedAt": "2026-11-20T13:32:52.000Z"
    }
   ],
   "비트코인": [
@@ -4773,7 +4755,11 @@
   ]
  },
  "errors": {
-  "현대리바트": "현대리바트: HTTP 429",
-  "한샘": "한샘: HTTP 429"
+  "현대리바트": "현대리바트: HTTP 503",
+  "한샘": "한샘: HTTP 503",
+  "신세계까사": "신세계까사: HTTP 503",
+  "비트코인": "비트코인: HTTP 503",
+  "이더리움": "이더리움: HTTP 503",
+  "AI 안경": "AI 안경: HTTP 503"
  }
 }
