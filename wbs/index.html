@@ -253,11 +253,17 @@ tr.is-done td{color:var(--faint)} tr.is-done .ttl{text-decoration:line-through}
 .card .meta{display:flex;justify-content:space-between;gap:6px;align-items:center}
 
 /* people */
-.ppl table{min-width:780px}
+.ppl{overflow-x:auto;overscroll-behavior-x:contain}
+.ppl.drag{cursor:grabbing;user-select:none}
+.ppl table{width:max-content;min-width:100%;border-collapse:separate;border-spacing:0}
+.ppl th,.ppl td.wk{width:150px;min-width:150px;max-width:150px}
+.ppl td.who,.ppl th.who{position:sticky;left:0;z-index:2;background:var(--card);box-shadow:inset -1px 0 0 var(--line)}
+.ppl thead th{cursor:ew-resize}
+.ppl thead th.who{cursor:default}
 .ppl td.wk{vertical-align:top;min-width:120px}
-.ppl td.who,.ppl th:first-child{white-space:nowrap;min-width:92px;width:92px;vertical-align:top}
+.ppl td.who,.ppl th.who{white-space:nowrap;min-width:104px;width:104px;max-width:104px;vertical-align:top}
 .ppl td.who b{white-space:nowrap}
-.ppl .chip{display:block;font-size:12px;padding:3px 9px;margin:3px 0;border-radius:980px;background:color-mix(in srgb,var(--sc) 16%,transparent);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:180px;cursor:pointer}
+.ppl .chip{display:block;font-size:12px;padding:3px 9px;margin:3px 0;border-radius:980px;background:color-mix(in srgb,var(--sc) 16%,transparent);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;cursor:pointer}
 .ppl .load{font-size:11px;color:var(--faint);font-variant-numeric:tabular-nums}
 .ppl th.now{color:var(--danger)}
 
@@ -783,7 +789,7 @@ function renderPeople(v,list){
   const people=[...new Set(open.flatMap(ownersOf))].sort((a,b)=>a.localeCompare(b,"ko"));
   const noOwner=open.filter(t=>!ownersOf(t).length);
   if(!people.length&&!noOwner.length){v.innerHTML='<div class="empty"><h2>진행할 업무가 없습니다</h2>담당자가 지정된 미완료 업무가 여기에 주별로 모입니다.</div>';return}
-  const w0=weekStart(today());const weeks=[];for(let i=-1;i<7;i++){const d=new Date(w0);d.setDate(d.getDate()+i*7);weeks.push(d)}
+  const w0=weekStart(today());const weeks=[];for(let i=-4;i<13;i++){const d=new Date(w0);d.setDate(d.getDate()+i*7);weeks.push(d)}
   const inWeek=(t,ws)=>{const s=dayStart(parseD(t.start)||parseD(t.due)||today()),e=dayStart(parseD(t.due)||s);const we=new Date(ws);we.setDate(we.getDate()+6);return s<=we&&e>=ws};
   const cell=(ts,ws,i)=>{const hit=ts.filter(t=>i===0?(parseD(t.due)&&dayStart(parseD(t.due))<ws):false).concat(ts.filter(t=>parseD(t.due)&&inWeek(t,ws)));
     const byP=new Map();hit.forEach(t=>{const k=projOf(t)?t.projectId:"_"+t.id;if(!byP.has(k))byP.set(k,[]);byP.get(k).push(t)});
@@ -793,8 +799,26 @@ function renderPeople(v,list){
   const rows=people.map(name=>{const ts=open.filter(t=>ownersOf(t).includes(name));return `<tr><td class="who"><b>${esc(name)}</b><div class="sub">프로젝트 ${projCount(ts)}개</div></td>${weeks.map((ws,i)=>cell(ts,ws,i)).join("")}</tr>`}).join("")
     +(noOwner.length?`<tr><td class="who"><b>담당 미지정</b><div class="sub">프로젝트 ${projCount(noOwner)}개</div></td>${weeks.map((ws,i)=>cell(noOwner,ws,i)).join("")}</tr>`:"");
   const cw=weekStart(today()).getTime();
-  v.innerHTML=sortTabs(false)+`<div class="note">담당자별로 주마다 참여 중인 프로젝트를 모았습니다(미완료 업무 기준). 첫 칸에는 마감이 지난 업무의 프로젝트도 함께 보입니다. 프로젝트를 누르면 정보 창이 열려요.</div>
-    <div class="tbl-wrap ppl"><table><thead><tr><th>담당자</th>${weeks.map((ws,i)=>{const l=weekLabel(ws);return `<th class="${ws.getTime()===cw?"now":""}">${i===0?"지난주 이전":l.m+"월 "+l.w+"주"}${ws.getTime()===cw?" · 이번 주":""}</th>`}).join("")}</tr></thead><tbody>${rows}</tbody></table></div>`;
+  v.innerHTML=sortTabs(false)+`<div class="note">담당자별로 주마다 참여 중인 프로젝트를 모았습니다(미완료 업무 기준). 이름 칸은 고정되고 주 칸만 좌우로 넘어가요(가로 휠, Shift+휠, 끌기, 버튼). 가장 왼쪽 칸에는 그 이전에 마감이 지난 업무의 프로젝트도 함께 보입니다.</div>
+    <div class="g-tools"><div class="g-nav"><button type="button" class="btn" data-pnav="-1" aria-label="이전">‹</button><button type="button" class="btn" data-pnav="0">이번 주</button><button type="button" class="btn" data-pnav="1" aria-label="다음">›</button></div></div>
+    <div class="tbl-wrap ppl"><table><thead><tr><th class="who">담당자</th>${weeks.map((ws,i)=>{const l=weekLabel(ws);return `<th class="${ws.getTime()===cw?"now":""}">${l.m+"월 "+l.w+"주"}${i===0?" 이전":""}${ws.getTime()===cw?" · 이번 주":""}</th>`}).join("")}</tr></thead><tbody>${rows}</tbody></table></div>`;
+  wirePeople(v.querySelector(".ppl"));
+}
+/* 담당자 표: 이름 열은 고정, 주 칸만 좌우로 이동 (가로 휠·Shift+휠·머리줄 휠·끌기·버튼) */
+function wirePeople(el){
+  if(!el)return;
+  const fixed=()=>{const c=el.querySelector("th.who");return c?c.offsetWidth:0};
+  const now=el.querySelector("th.now");
+  const goNow=smooth=>{if(!now)return;el.scrollTo({left:Math.max(0,now.offsetLeft-fixed()-(now.previousElementSibling?now.previousElementSibling.offsetWidth:0)),behavior:smooth?"smooth":"auto"})};
+  if(state.pScroll!=null)el.scrollLeft=state.pScroll;else goNow(false);
+  el.addEventListener("scroll",()=>{state.pScroll=el.scrollLeft},{passive:true});
+  el.parentElement.querySelectorAll("[data-pnav]").forEach(b=>b.addEventListener("click",()=>{const n=+b.dataset.pnav;if(!n)goNow(true);else el.scrollBy({left:n*(el.clientWidth-fixed())*0.8,behavior:"smooth"})}));
+  el.addEventListener("wheel",e=>{
+    if(e.ctrlKey)return;const dx=Math.abs(e.deltaX),dy=Math.abs(e.deltaY);let h=0;
+    if(dx>dy)h=e.deltaX;else if(e.shiftKey||e.target.closest("thead"))h=e.deltaY;
+    if(!h)return;if(e.deltaMode===1)h*=32;else if(e.deltaMode===2)h*=el.clientWidth;
+    e.preventDefault();el.scrollLeft+=h},{passive:false});
+  el.addEventListener("pointerdown",e=>{if(e.pointerType!=="mouse"||e.button!==0||e.target.closest(".who"))return;gDrag={g:el,sx:e.clientX,sl:el.scrollLeft};gDragged=false});
 }
 
 /* ---------- editors ---------- */
@@ -884,6 +908,7 @@ function toast(msg){const r=$("#toastRoot");r.innerHTML=`<div class="toast" role
 
 /* ---------- events ---------- */
 document.addEventListener("click",async ev=>{
+  if(gDragged&&ev.target.closest(".gantt,.ppl"))return; /* 끌어서 넘긴 직후 클릭은 무시 */
   if(ev.target.closest("[data-stop]"))return;
   if(ev.target.closest("[data-close]")){closeEditor();return}
   const act=ev.target.closest("[data-act]");
