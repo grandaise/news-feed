@@ -279,9 +279,6 @@ tr.is-done td{color:var(--faint)} tr.is-done .ttl{text-decoration:line-through}
 .fld input,.fld select,.fld textarea{width:100%}
 .fld textarea{min-height:72px;resize:vertical}
 .fld .chkrow{display:flex;gap:14px;flex-wrap:wrap}
-.projpick{display:flex;gap:8px}
-.projpick #e_pyear{flex:0 0 auto;width:auto}
-.projpick #e_proj{flex:1 1 auto;min-width:0}
 .ownpick{display:flex;flex-direction:column;gap:6px;margin-top:8px}
 .ownpick .og{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
 .ownpick .ol{font-size:12px;color:var(--faint);width:44px;flex:0 0 44px}
@@ -529,7 +526,7 @@ function matchQuick(t,k){
 function taskYears(t){return [t.start,t.due].map(v=>{const d=parseD(v);return d?String(d.getFullYear()):""}).filter(Boolean)}
 function unitYearOf(t){const p=projOf(t);return String((p?p.year:t.year)||"")}
 function allYears(){const set=new Set([String(new Date().getFullYear())]);projects.forEach(p=>p.year&&set.add(String(p.year)));tasks.forEach(t=>{const y=unitYearOf(t);if(y)set.add(y);else taskYears(t).forEach(x=>set.add(x))});return [...set].sort()}
-function projInYear(p,y=state.year){if(!y)return true;if(p.year)return String(p.year)===y;const ts=tasks.filter(t=>t.projectId===p.id);const ys=ts.flatMap(taskYears);return !ys.length||ys.includes(y)}
+function projInYear(p){if(!state.year)return true;if(p.year)return String(p.year)===state.year;const ts=tasks.filter(t=>t.projectId===p.id);const ys=ts.flatMap(taskYears);return !ys.length||ys.includes(state.year)}
 function yearUnits(){
   if(!state.year)return null;
   const out=new Set(),loose=new Map();
@@ -838,7 +835,7 @@ function openTask(id,preset){
   if(!t)return;
   const ro=readOnly?"disabled":"";
   panel(id?esc(codeOf(t))+" 업무":"업무 추가",`
-    <div class="fld full"><label for="e_proj">프로젝트</label><div class="projpick"><select id="e_pyear" aria-label="프로젝트 연도" ${ro}>${(()=>{const cy=String((projById(t.projectId)||{}).year||state.year||curYear());const ys=[...new Set([...allYears(),cy])].sort().reverse();return `<option value="">전체 연도</option>`+ys.map(y=>`<option value="${y}" ${y===cy?"selected":""}>${y}년</option>`).join("")})()}</select><select id="e_proj" ${ro}></select></div></div>
+    <div class="fld full"><label for="e_proj">프로젝트</label><select id="e_proj" ${ro}><option value="">프로젝트 미지정</option>${projects.slice().sort((a,b)=>(+a.order||0)-(+b.order||0)).map(p=>`<option value="${esc(p.id)}" ${p.id===t.projectId?"selected":""}>${esc(p.name)}</option>`).join("")}</select></div>
     <div class="fld"><label for="e_stage">작업 분류</label><select id="e_stage" ${ro}>${opt(STAGES.map(s=>s.k),t.stage||"기타")}</select></div>
     <div class="fld"><label for="e_status">상태</label><select id="e_status" ${ro}>${opt(STATUSES.includes(normStatus(t.status))?STATUSES:STATUSES.concat([normStatus(t.status)]),normStatus(t.status))}</select></div>
     <div class="fld full"><label for="e_title">업무</label><input id="e_title" required value="${esc(t.title)}" placeholder="예: UI 디자인, 퍼블리싱, 개발(어드민)" ${ro}></div>
@@ -851,10 +848,6 @@ function openTask(id,preset){
     ${t.link&&/^https:\/\//.test(t.link)?`<div class="fld full"><a href="${esc(t.link)}" target="_blank" rel="noopener">링크 열기</a></div>`:""}`,
     `${id&&!readOnly?`<button class="btn danger" type="button" id="edDel">삭제</button>`:""}<div class="spacer"></div><button class="btn" type="button" data-close>취소</button>${readOnly?"":`<button class="btn primary" type="submit" form="edForm">${id?"저장":"추가"}</button>`}`);
   if(!id)setTimeout(()=>{const el=$("#e_title");el&&el.focus()},30);
-  const fillProj=()=>{const y=$("#e_pyear").value,cur=$("#e_proj").value||t.projectId||"";
-    const list=projects.filter(p=>p.id===cur||projInYear(p,y)).sort(projCmp);
-    $("#e_proj").innerHTML=`<option value="">프로젝트 미지정</option>`+list.map(p=>`<option value="${esc(p.id)}" ${p.id===cur?"selected":""}>${esc(p.name)}${y||!p.year?"":` (${esc(p.year)})`}</option>`).join("")};
-  fillProj();$("#e_pyear").addEventListener("change",()=>{$("#e_proj").value="";fillProj()});
   if(!readOnly)wireOwnerPick();
   $("#edForm").addEventListener("submit",async ev=>{ev.preventDefault();
     const data={projectId:$("#e_proj").value,stage:$("#e_stage").value,status:$("#e_status").value,title:$("#e_title").value.trim(),owner:$("#e_owner").value.trim(),
