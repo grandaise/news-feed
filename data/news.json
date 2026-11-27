@@ -1,7 +1,13 @@
 {
- "updatedAt": "2026-11-26T23:49:34.297Z",
+ "updatedAt": "2026-11-27T02:18:22.682Z",
  "keywords": {
   "현대리바트": [
+   {
+    "title": "아파트 고쳐 쓰는 시대…'4사 4색' 노후 단지 개선 전략",
+    "link": "https://news.google.com/rss/articles/CBMicEFVX3lxTE9GQzYySjNqdFZZMEktYWRNSzFDSFh4eUJKbllSOVY3RVhiQktfb1lHMXBuWUxMcmZxSVd4cHpSbTJOQW9VSFZ4WGpFRjF3SlFzbjhHOVA5cFVLWkFjWTdnTWwtQ3dZVkVqZXllNWJUNkI?oc=5",
+    "source": "신아일보",
+    "publishedAt": "2026-11-27T00:48:11.000Z"
+   },
    {
     "title": "수납장이 돌자 침대가 나왔다…1인가구 솔루션 '스페이스봇'",
     "link": "https://news.google.com/rss/articles/CBMiVEFVX3lxTE5EZ2NlQ2VjNFNSOHRaTkJLaUl3NUk0bl9HNUQ0a3pqam1USURDVDVybEdWNFZqNmJrQjBzalh5YzVvS2hkV19ERG5PTDIxTmxJUk1fUg?oc=5",
@@ -305,6 +311,42 @@
   ],
   "한샘": [
    {
+    "title": "[ESG리포트] 한샘, ‘공간개선 1000호’ 영상 산업통상부장관상 수상 外",
+    "link": "https://news.google.com/rss/articles/CBMiWEFVX3lxTE1yaW8zS1VLYk5aSF8zc1NtWG9VVHNyV0FoZ3R6bDlqX0NyS3luZjZSUE5RMEdrOHhZaGhjcHlQOFBEeV9QZzB0UjhXZWhVZTFUMTBra3hCNjc?oc=5",
+    "source": "뷰어스",
+    "publishedAt": "2026-11-27T01:54:00.000Z"
+   },
+   {
+    "title": "경기도사회복지협의회·㈜한샘,「일상 채움」 사업으로 도내 사회복지시설 환경개선 지원",
+    "link": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE9jV0stdjk3SG9zbm5PYXJJMmZjZ0d5djBkazJ3U2lYQmc5ZTRIeHFXclhlRVRDUGowSkEzYmJxNzlVQ1Vrbzk2ME1wdElxd2s?oc=5",
+    "source": "포천신문",
+    "publishedAt": "2026-11-27T01:14:56.000Z"
+   },
+   {
+    "title": "한샘·유한킴벌리 가치 확산 영상 CSR 어워드 대상",
+    "link": "https://news.google.com/rss/articles/CBMicEFVX3lxTE5yc25zblVQYnBmZ3dGX3pGMjhqbEw1TjZRNzJPRzJaRXE0SlJ2amswTTd2Qk5mQjlvQ0NIU3J6dHd1LXZiT3pqMXhEM2lwYmk3SjZkazJidzUxbGVDT0htNFlkVFFhVWhKUUgxWFhMdmXSAXRBVV95cUxPNmpqZGZORFJDMjUtWkJKZGZ4T1NfTVQyeVNKcjFvZVZfSUFwTHZaQmRNRHFLRkhxQkFoSk1uWUh2XzJUTlVZb19PQXRESmx0aGtFLURjbllxT1RKWm1RN2VYWmtqY1VpNmMyNFZpYXlEbzBiag?oc=5",
+    "source": "뉴스클레임",
+    "publishedAt": "2026-11-27T01:06:48.000Z"
+   },
+   {
+    "title": "한샘, ‘2026 CSR 필름 페스티벌 어워드’ 사회적 책임 부문 대상 수상",
+    "link": "https://news.google.com/rss/articles/CBMia0FVX3lxTFB0SklnNjA3V285U0s5NnlvdE9BekJKQlUzQTVDUlpFTmxjaUUxclpsSEdzV1A3WWlJOG5tNFVQaUo3UjVxLUtoa0xTM1JnVWd4VEpkNlp2YnlDTXNybkc3VmVwSjBLclVsbkNV?oc=5",
+    "source": "퍼블릭뉴스통신",
+    "publishedAt": "2026-11-27T01:06:41.000Z"
+   },
+   {
+    "title": "한샘, '공간개선 1000호' 영상으로 CSR 필름 페스티벌 장관상",
+    "link": "https://news.google.com/rss/articles/CBMiR0FVX3lxTE9DamhlVEZGaXc0anBreFptZmwwMmNyVVFYMnc0eU5nRUctZDNweUZoVU1DcVJaekY3VVg2TEhYZ0F2a053YWdJ?oc=5",
+    "source": "브레이크뉴스",
+    "publishedAt": "2026-11-27T00:59:00.000Z"
+   },
+   {
+    "title": "한샘, 공간개선 1000호 성과로 산업부 장관상",
+    "link": "https://news.google.com/rss/articles/CBMiZEFVX3lxTE0wRzNXOGtNWmYxNDhiaFFlZDN2VDhCLXNRT3BISnpaNUJTZjRtOXF4RFF2ak1PcWZpWXJzLTB3cmd4T0JmdEY0UWhkaC1VMkxBRXJsVTcxZHdIdVJmMkU5ZTZyNHY?oc=5",
+    "source": "뉴스1",
+    "publishedAt": "2026-11-27T00:01:56.000Z"
+   },
+   {
     "title": "한샘, '2026 CSR 필름 페스티벌' 산업통상부 장관상",
     "link": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE9ZbEpCZ2czVldCQlEyM2cybkZybmxRRDQtVmdsQmlKclkwWHhVOEhvRUxFSHlXdzdQaDF4Ul80SEFJSU5oeVB2dTM3dG5kOHdsblZXaVNnWWFVMmNwWEFpSQ?oc=5",
     "source": "아시아경제",
@@ -534,7 +576,7 @@
    },
    {
     "title": "한샘, 2년 연속 ‘지속가능성보고서상’ 수상",
-    "link": "https://news.google.com/rss/articles/CBMidkFVX3lxTE4wNzNkejBrVmRlSlZwdlBKSHB1RVA0VG11YnRHMVdiU2d0azFuNXlvcGE4TGttNUhUTjZLMnlHLVhJYk15TzJ6eW56VHJDUV9JSjhYNXdscnFZSFVNRFdfWGNVZWhTS0l4MXZha1dPQUFvZHl5Y0HSAWZBVV95cUxNdHYxeEJ3SjBSN29wSFh3V1lZRnZJRzJpTkZ3aFhKQ3djb00wcHJySFVObTdmS3NsYXhObkx4d1JfaDBhdHRFcWlGWUFoNzVEZTBBdXM3LTNTbE9ueF9GN0VYT1R5SGc?oc=5",
+    "link": "https://news.google.com/rss/articles/CBMiZkFVX3lxTE10djF4QndKMFI3b3BIWHdXWVlGdklHMmlORndoWEpDd2NvTTBwcnJIVU5tN2ZLc2xheE5uTHh3Ul9oMGF0dEVxaUZZQWg3NURlMEF1czctM1NsT254X0Y3RVhPVHlIZ9IBZkFVX3lxTE10djF4QndKMFI3b3BIWHdXWVlGdklHMmlORndoWEpDd2NvTTBwcnJIVU5tN2ZLc2xheE5uTHh3Ul9oMGF0dEVxaUZZQWg3NURlMEF1czctM1NsT254X0Y3RVhPVHlIZw?oc=5",
     "source": "동아일보",
     "publishedAt": "2026-11-25T06:43:11.000Z"
    },
@@ -567,6 +609,12 @@
     "link": "https://news.google.com/rss/articles/CBMiakFVX3lxTE1rbFhRcDhlcXNEZTlnRURKU0xob2IzQmY4T21laFgzZGhFczBmRTl1ODBVdjE5cVJ1Vms0NDNkQm1IQTdQYnlkNm1jNXhxRXVNcnlYMEwtdDRvaXp6elNDVVlMaWlObHZ2bGc?oc=5",
     "source": "한국면세뉴스",
     "publishedAt": "2026-11-25T05:34:51.000Z"
+   },
+   {
+    "title": "한샘, 지속가능성보고서상 2년 연속 수상",
+    "link": "https://news.google.com/rss/articles/CBMiZkFVX3lxTE1mS1ZVVVZGVVprZHRidmhHUkcySjB2Xy1SWHNTWEI2UHNyWTdub1dmOUVjRGtlOUtiZG1FN1pWVURIVFVIeGFNZ3gyWG1scnZqMGl2QmNTOXpJaXVBcm9kbGRZM0otUQ?oc=5",
+    "source": "열린뉴스통신",
+    "publishedAt": "2026-11-25T05:20:31.000Z"
    },
    {
     "title": "한샘, 대한민국 지속가능성대회 2년 연속 ‘지속가능성보고서상’",
@@ -633,12 +681,6 @@
     "link": "https://news.google.com/rss/articles/CBMiaEFVX3lxTFB0T0toUVphWU9FTmZJRXdxc2FhUWk1dEREcVNwc2RYbG52blFoM0NIY2pzYkpKZndKY1ZyX3JWYXlkaDRNYlNBVWZrR0dpOFlXby1EcVM1SzNsZlo1emgzZ1UtNjZhcXU0?oc=5",
     "source": "공감신문",
     "publishedAt": "2026-11-25T02:15:40.000Z"
-   },
-   {
-    "title": "한샘, '지속가능성보고서상' 2년 연속 수상",
-    "link": "https://news.google.com/rss/articles/CBMiYEFVX3lxTFBXWkVpZ0FOeVhfblBnMTU5YWtOd0VudDhJd0xZV1BkRkxIRkl2OGZiSkZFUllCV09SLUVBcmhRUmFIOXl1SHctVTF2TGNhMzRMNkJIaWxmWjFYM2ZxZmVmQg?oc=5",
-    "source": "아시아경제",
-    "publishedAt": "2026-11-25T01:34:54.000Z"
    },
    {
     "title": "한샘, ESG 공시 투명성 인정…KRCA 2년 연속 수상",
@@ -1035,96 +1077,6 @@
     "link": "https://news.google.com/rss/articles/CBMiVkFVX3lxTE5XbDMxZDRFX3Zxb3RreVZNSUlyRjdPRW8wX1k3QTZhdXZGekFYQXBtaVZ5NktncEg2bHhBUERzbXZDZkw1ZFkwaTJfX0RHWEl6X1Q0NUNn?oc=5",
     "source": "헤럴드경제",
     "publishedAt": "2026-11-20T02:31:55.000Z"
-   },
-   {
-    "title": "[유통 Pick] 제휴 서비스·환경 활동·매장 운영 다각화",
-    "link": "https://news.google.com/rss/articles/CBMia0FVX3lxTE5Qd0tpVDgzXzhYRkpEM3NuTU9MMFNNcFp6ZmJ1Tnk0ZUFQQVBrYlpkWU53OHo4U1JlQjFhaFJCV3NWaTg4QU9Jazktb2lsdnBVLTJRRFJFcFA1Mm1Tam1aYk9KVktMX05KNUFz?oc=5",
-    "source": "라이센스뉴스",
-    "publishedAt": "2026-11-20T02:15:30.000Z"
-   },
-   {
-    "title": "배스킨라빈스 쿠팡 KGC 外(유통家 이모저모)",
-    "link": "https://news.google.com/rss/articles/CBMidEFVX3lxTE9TN0R6eG5PM0RpTDBsLWQ5YjRQZmsybzhkbi1ORHJuc213eU9rQ2JMaWN4bjNEVkJ6NkE4NUZYMFhKTWsySnhjMHlMd2NwTVpqNEVjemdtOXNVLTJoalhkM2hRV1pwZnZyVmJvZTB6aDJUMk1Q0gF0QVVfeXFMT1M3RHp4bk8zRGlMMGwtZDliNFBmazJvOGRuLU5Ecm5zbXd5T2tDYkxpY3huM0RWQno2QTg1RlgwWEpNazJKeGMweUx3Y3BNWmo0RWN6Z205c1UtMmhqWGQzaFFXWnBmdnJWYm9lMHpoMlQyTVA?oc=5",
-    "source": "뉴스클레임",
-    "publishedAt": "2026-11-20T02:07:35.000Z"
-   },
-   {
-    "title": "[똑똑한소비] 쌍용C&B, 레고코리아, 대상, 골든블루, 매일유업, 템퍼, 한샘, 코웨이, 시몬스, 유니클로, 가연",
-    "link": "https://news.google.com/rss/articles/CBMiY0FVX3lxTFAwbV9FdW5ROUxXRGZMTl9Icjd4MWRLaUFaSzBTRlRCbnpoUmxjalNTa1JJaUJIaVdNVmxlbE84TEo2eVFZbHJfZHJYV2RTT2VhZVFrVjE0dDNQOUVlcjBCMjNvTQ?oc=5",
-    "source": "에너지경제신문",
-    "publishedAt": "2026-11-20T02:00:00.000Z"
-   },
-   {
-    "title": "[민주 유통가] 코웨이·SK인텔릭스·한샘",
-    "link": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTE1EdkZ3blNXS2c0OEdjUm9wQTBqNmI1MUZBcjRCWVRwNHJXTjhxb0NvQ0ZndUItY29zYnAzcDVoMmdreFpIb2xMSzZRZzBSUmRPRS1kVUo2NWNFZ2FqNXNkMFNRb2NiNWPSAWtBVV95cUxQVF9aVnhSWmZBQ3laak9oV1J6ZkowcVJod1pabVhfbU9tWGtaOXhNREtfaFVROS1YQ29HT2g4MU1EdkhudmcxdnZQdXVPdnU4anNDdDZXNHpvb3BNVWNGa2F2ZTFUaVdkZV9zSQ?oc=5",
-    "source": "민주신문",
-    "publishedAt": "2026-11-20T01:38:33.000Z"
-   },
-   {
-    "title": "한샘, 임직원 참여 ‘이메일 정리’ 캠페인 진행·커스텀 세라믹 식탁 ‘디에토’ 2종 출시",
-    "link": "https://news.google.com/rss/articles/CBMiZkFVX3lxTFA5R0Vac2l5alhyeHpWZ3Fzb3RJTzBBOEMyOG1RZ3o1OHNYb1FfUzVrV1dLSW9rempRcWU4cGRjaUVVS24yZ2JhQ25sMzhMVlBNa2xUaWg3VlJqZTdEeHV2SllzM3BsUQ?oc=5",
-    "source": "여성소비자신문",
-    "publishedAt": "2026-11-20T01:31:56.000Z"
-   },
-   {
-    "title": "한샘, 임직원 85명 '이메일 정리' 캠페인 마무리…545.09GB 비워",
-    "link": "https://news.google.com/rss/articles/CBMic0FVX3lxTE12ZHJwbHh3U3JWbG9QdV8wNHZ0SXpqaFRWUktUUkZ3SjRaZDNueWhNUzFsUVV5VzZRazcwVEphNlNIakhqbmpzZmQ5cWFkaWFsZUZtejUwVi1BV1hMSk0xYW1NYVQ5Q1NHWlhWNDh0T1JSUmfSAXNBVV95cUxNdmRycGx4d1NyVmxvUHVfMDR2dEl6amhUVlJLVFJGd0o0WmQzbnloTVMxbFFVeVc2UWs3MFRKYTZTSGpIam5qc2ZkOXFhZGlhbGVGbXo1MFYtQVdYTEpNMWFtTWFUOUNTR1pYVjQ4dE9SUlJn?oc=5",
-    "source": "넥스트데일리",
-    "publishedAt": "2026-11-20T01:25:07.000Z"
-   },
-   {
-    "title": "한샘, 임직원 85명 참여 이메일 정리 캠페인 진행…545GB 삭제",
-    "link": "https://news.google.com/rss/articles/CBMiakFVX3lxTE1Td2dNUm9ubHZhMnlyQjh2S3VBQmEyWHRxa2IyQjFyQUptX2F2SEVTdlpyT0kzaWNma0w1by1tbzlBUmhCaWhkeUVJWEFERzlBR2luWXlDQWNYRF9YUnBnNnRzOEZWVmRvQlE?oc=5",
-    "source": "한국면세뉴스",
-    "publishedAt": "2026-11-20T01:24:35.000Z"
-   },
-   {
-    "title": "\"이메일 비우고 탄소중립 실천해요\"…한샘 캠페인",
-    "link": "https://news.google.com/rss/articles/CBMieEFVX3lxTE9wbGZuWHZJcjJQYWhKLVBSQU9TUzJxTDVIVThfZjRlaGVZOGhkOThoUHQ5c0dOSWZoSHBkajY0VkxGaVJzR1VNUGZXelVMY0xGZlNtWk5JcmZDaktnX2psalpoRnVycEViZEV3Q0VncG9fODJHNXpnZNIBeEFVX3lxTE9wbGZuWHZJcjJQYWhKLVBSQU9TUzJxTDVIVThfZjRlaGVZOGhkOThoUHQ5c0dOSWZoSHBkajY0VkxGaVJzR1VNUGZXelVMY0xGZlNtWk5JcmZDaktnX2psalpoRnVycEViZEV3Q0VncG9fODJHNXpnZA?oc=5",
-    "source": "뉴시스",
-    "publishedAt": "2026-11-20T00:48:36.000Z"
-   },
-   {
-    "title": "[위클리오늘] 코웨이, 한샘(11.19)",
-    "link": "https://news.google.com/rss/articles/CBMibkFVX3lxTE0tZkZkZ3BVZ0JWQjZMVU5SYTdyNjhaV0E3NlJaWFNSM3gwZUpGd3piWF9nTWRocTJxYTJkLTFnNXZuMHRqUnRIaFcxbUtyMVM2bU5ZSXlrbVYtWlU0XzBsZlJQZU1kWHRhd3Z4Vld3?oc=5",
-    "source": "위클리오늘",
-    "publishedAt": "2026-11-20T00:39:55.000Z"
-   },
-   {
-    "title": "한샘, 이메일 545GB 삭제…임직원 참여 탄소저감 캠페인 진행",
-    "link": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTE5yT1NpMXFNLTl3YWcxVUs2OFpEN3B1SHpZYzBaM01hQlFwaWRUb2lmd3M3UzEyX0Y1TDlaMWNBT01PTVlPN1F6S0tLUkFFc2g0Y05oZVBmWDlXSUg3MFlJVlA1bVRBNkk?oc=5",
-    "source": "팍스경제TV",
-    "publishedAt": "2026-11-20T00:34:49.000Z"
-   },
-   {
-    "title": "세일즈포스 코리아, ‘인더스트리 서밋 2026’ 마쳐",
-    "link": "https://news.google.com/rss/articles/CBMiakFVX3lxTFBuM2ZDZ1R5dHJ3cS0tNVl1Q0tEZjFQVkk3ZVQwR0Z6WmhQTjAyRzRtdWVUWlE5eTVxV1gwVDJjbnlUYlJIMFBHT0JnN180aTNYS3EwWTBoOUd2dGJQdHU4Nm1ndnhwSjA2b0E?oc=5",
-    "source": "디지털경제뉴스",
-    "publishedAt": "2026-11-20T00:15:56.000Z"
-   },
-   {
-    "title": "한샘, 이메일 정리로 데이터 545GB 비워 탄소 감축",
-    "link": "https://news.google.com/rss/articles/CBMiaEFVX3lxTE9zQ0VKa3BDaS1QUEJBLXpIZjE4UE1SMUJDUUlDU2ZtUEZ1YnFTV0g4c1p4ZFd0RE5FQ0hjRUxPX3pMbGFlT1lYNWN6M0dCeUg1NGJLWmhfczRoY0x3M1VTZWRmUHlmX2la?oc=5",
-    "source": "https://www.2news.co.kr/",
-    "publishedAt": "2026-11-20T00:05:00.000Z"
-   },
-   {
-    "title": "한샘, 임직원 참여형 '불필요한 이메일 지우기' 캠페인 마쳐",
-    "link": "https://news.google.com/rss/articles/CBMiVEFVX3lxTFBBOXI2eC1QSm5LVzJBYjJaRFBsaU9IbTljejNlcFdkVG5mRnRTa2YzaTU2VkNETm9ZTndBVlBUY0NEenZFU0szMWxvYUUyTU9jRTUzTdIBVEFVX3lxTFBBOXI2eC1QSm5LVzJBYjJaRFBsaU9IbTljejNlcFdkVG5mRnRTa2YzaTU2VkNETm9ZTndBVlBUY0NEenZFU0szMWxvYUUyTU9jRTUzTQ?oc=5",
-    "source": "더팩트",
-    "publishedAt": "2026-11-19T23:56:00.000Z"
-   },
-   {
-    "title": "한샘, 임직원 85명 참여 '디지털 탄소발자국 줄이기' 캠페인 마무리",
-    "link": "https://news.google.com/rss/articles/CBMiaEFVX3lxTFBtRHhlSHA5TU5zZUdka3VjMElKVnp1NExodFp4eWE0LUV3SWdMVmphS2p3TVVOVlE5NjJSbWRVQks4SUhUcDRvZ1Zta1dsVXlQVExUeG43amdmWUxWanRocC11T1Z2YzBO?oc=5",
-    "source": "경인매일",
-    "publishedAt": "2026-11-19T23:50:25.000Z"
-   },
-   {
-    "title": "한샘, 이메일 정리 ESG 캠페인…데이터 545GB 삭제",
-    "link": "https://news.google.com/rss/articles/CBMiZEFVX3lxTE9uWWx4X1A4Z1RSd0lMX2xIaDZmblNMWTNXWDBvQ1d0UDhSeTF1clQ3cFlPS2IxR3ZZbUswc1BZcVYzdVhFM1o5bk13YU5yMDg3WUppOGNQbTJhSEtOcEQwRlBxaEI?oc=5",
-    "source": "뉴스1",
-    "publishedAt": "2026-11-19T23:49:58.000Z"
    }
   ],
   "신세계까사": [
@@ -1311,6 +1263,174 @@
   ],
   "비트코인": [
    {
+    "title": "블룸버그 애널리스트 \"비트코인(BTC), 10만 달러 회복하면 회의론자 돈 몰린다\"",
+    "link": "https://news.google.com/rss/articles/CBMiSkFVX3lxTE5tb1hVeVhpeEVZLW9yWkFIdmVaZ0xFVXpMaVc2c21acTQtM3pFTmh1X25BYUhDY2tpemtZT3pIY2cyamZJdDNmVUF3?oc=5",
+    "source": "코인리더스",
+    "publishedAt": "2026-11-27T02:10:00.000Z"
+   },
+   {
+    "title": "[비트코인 인사이트] 비트코인 6만달러선 공방 속 자금 이탈과 제도화 병행",
+    "link": "https://news.google.com/rss/articles/CBMiVEFVX3lxTE5QeXhnZXoxdXQwb0lDUGNySkRfYTctQ0NZNUdRSUw4UkdBQXdzSVBCc05aa29pTDZGWXkzTUg1QW1QUGR2Zmt6OHlaRzJ5eUxkYUV6YQ?oc=5",
+    "source": "이투데이",
+    "publishedAt": "2026-11-27T02:05:00.000Z"
+   },
+   {
+    "title": "비트코인 극단적 공포…매수 신호일까 함정일까",
+    "link": "https://news.google.com/rss/articles/CBMibkFVX3lxTFBHcnB6MFFBb0tLRTRyd2xoSmdLTDF4c0tYT204S25aNkpETUhYY3h1MFNVUVNRWFVkUW80TFVEOUZ2WnlHbm1FcFVGSGRtYkpWRE16a2hOSFpyaF82MEVJZzNqdXc1QU1YTWhsZ1dR?oc=5",
+    "source": "BeInCrypto",
+    "publishedAt": "2026-11-27T01:56:24.000Z"
+   },
+   {
+    "title": "8.5조원 털린 바이낸스, 한 달 만에 출금 서비스 정상화",
+    "link": "https://news.google.com/rss/articles/CBMiVkFVX3lxTE5hZUpGLU1GdjhaNmVkNldpbkVOYjNVTkJuQ0FLT1hQODFTT2VyU1AwUm1EUVJRRVdYOGRGYUxxRGpCWnN0R2hyTFQ3QlpvSml4NkxrN2RB?oc=5",
+    "source": "지디넷코리아",
+    "publishedAt": "2026-11-27T01:49:40.000Z"
+   },
+   {
+    "title": "비트코인 6만달러 반등에도 자금 이탈…투심 회복 난항",
+    "link": "https://news.google.com/rss/articles/CBMibEFVX3lxTE5GVHVGN1l0MTF3b21XRV9WNjJJa0xCWUMwRkFHWUd1eXl1clkwQ0p5c3IzUzdFTTljbjdVYXRiaWpOYnhiRFRldGhGQ21rdmQwNUFoaGk4aXhIZzgzdTE0aGRRSkxPcmdiN01NMw?oc=5",
+    "source": "스페셜경제",
+    "publishedAt": "2026-11-27T01:35:28.000Z"
+   },
+   {
+    "title": "'北 배후 의심' 바이낸스 해킹…5174억원 출처 은폐 거래 포착",
+    "link": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE8wa3ZKUDdjLVN6UDdkNE9ySUF6am5tSE1KclhRT3Y5VGJ4cUxzajFROGUxWnFIY0gzOFQtb0I2LXRmaFM2TmloOXJwYTVIZzZFSDlrNzRmQjBlTVUzWGRwYtIBeEFVX3lxTFBtRm9idmdmNlhPVnN0ZVRfS1FQa00wNERrTUtzWlJVVEo0V3o3VU1mNDVMTWdId2pvVUp6SkFUQV8xc0tTZXc4cFZBeXVpbVVaY2JYaGNKZTZYRnltcDQ0VVhQM2gwQk1VcDB2SjEzd2ZOSVUwYXBzZA?oc=5",
+    "source": "뉴시스",
+    "publishedAt": "2026-11-27T01:31:28.000Z"
+   },
+   {
+    "title": "비트코인, 캐는 비용보다 싼 가격... ETF 자금 이탈까지 ‘이중고’",
+    "link": "https://news.google.com/rss/articles/CBMickFVX3lxTE5oZlhXYlJ1ejBfODJmaVl2M25BWjhXWFNqUFZ5THE4Z1Z0VGNwdzFGb3dIb0Fob3FQb1g2TlV3VFltemltMGczZ0M0Wm40MS1kMXM4VXJJZC05cF9BWFlZTUs0ODlJUlFOc2pucU0tUmM2QQ?oc=5",
+    "source": "한양경제",
+    "publishedAt": "2026-11-27T00:53:04.000Z"
+   },
+   {
+    "title": "비트코인, 8200만원대 보합권 등락…美 현물 ETF 월간 자금 이탈 사상 최대",
+    "link": "https://news.google.com/rss/articles/CBMibEFVX3lxTE90M1BHRTVmVjU1aGpOU053WVJZTk40MXVhSW9ycUdGRy1FOHBBMml3akN1QzJsODFueUpQd0dsZnYxMVVrMy0yM0N3bHU1bjVVTFMyaDJSNUNmbC1vRVhqM205NHpZTjQxLUxKMw?oc=5",
+    "source": "와이드경제",
+    "publishedAt": "2026-11-27T00:51:06.000Z"
+   },
+   {
+    "title": "비트와이즈 \"비트코인(BTC), 금 앞지를 힘 남았다\"",
+    "link": "https://news.google.com/rss/articles/CBMiSkFVX3lxTFBzYzM1Q1JXT0FxTHdIbkJuV2NVQWNRTWZiOU95aHhtdjdUR1pNY3pzNWZ5MUdFdTR5YWRxeFdjX2g2ejBHaUs1eXhn?oc=5",
+    "source": "코인리더스",
+    "publishedAt": "2026-11-27T00:50:00.000Z"
+   },
+   {
+    "title": "비트코인 약세장 2022년 반복? 주요 갭 남아",
+    "link": "https://news.google.com/rss/articles/CBMib0FVX3lxTE93WllBVGNJWkFNbGdGWTA4dW5wcjg4RXlzQ0hyWXBnaDNZa2lsUnlVRWo0WFpkLVNNNjBCWWVQazlZem5JOFVJcVlSdFhIcGlpdFl3XzlfUlRsckJZZHhodGlNbWczNUpndjJiRXBaVQ?oc=5",
+    "source": "BeInCrypto",
+    "publishedAt": "2026-11-27T00:46:12.000Z"
+   },
+   {
+    "title": "테더 공급량 2022년 이후 최대 감소! 비트코인 반등 가로막는 유동성 위기",
+    "link": "https://news.google.com/rss/articles/CBMiSkFVX3lxTE5vWDdzOGhGWVlKTjB1em9Sc2g5RlZ5TEhfMXVLX1NSeUo4N2lzX0VSaGlwR0wzd0lOOGZjSUVXLUlacm9qa3N3MHhR?oc=5",
+    "source": "코인리더스",
+    "publishedAt": "2026-11-27T00:44:00.000Z"
+   },
+   {
+    "title": "비트코인 '항복 매도' 본격화…스트래티지 프리미엄 붕괴에 JP모건 경고",
+    "link": "https://news.google.com/rss/articles/CBMiSkFVX3lxTE10MF84bDdDaWFPZ2psTFNBNmhwUjY5b2U4S3Btcm9LSFRPclZDQk1Ndm03RnB2STZnRmZYSTZEaXdXRWkxVUtCdmdn?oc=5",
+    "source": "코인리더스",
+    "publishedAt": "2026-11-27T00:41:00.000Z"
+   },
+   {
+    "title": "비트코인(BTC) ETF, 7일간 30억 달러 탈출...월가 외면 언제까지 이어지나?",
+    "link": "https://news.google.com/rss/articles/CBMiSkFVX3lxTFB1WGw5ZjZibU04alRyblFDNVg5UW1wOTVOaWJHOWdYR3hPTUFYSFBGa1RQbjhSUUNCVU8yYU9lbHBiV1dfZURLald3?oc=5",
+    "source": "코인리더스",
+    "publishedAt": "2026-11-27T00:30:00.000Z"
+   },
+   {
+    "title": "6만 달러 버티는 비트코인…美 현물 ETF선 54억 달러 '썰물'[코인브리핑]",
+    "link": "https://news.google.com/rss/articles/CBMiZkFVX3lxTFBnOHczYWtiSzEyMTcxelQ4aVBTa3Fkek1ITnRpeVJ3bU1OQXRQNThkazlscFlKSmFzMV90ekJHTTFCaG9wN0oyN1NfYTllLTh4LWxDd1RCeGpxUWFhM2FiU3ZiVjJldw?oc=5",
+    "source": "뉴스1",
+    "publishedAt": "2026-11-27T00:24:38.000Z"
+   },
+   {
+    "title": "\"테더 공급, 두달 새 81억달러 감소…비트코인 반등에 부담\"",
+    "link": "https://news.google.com/rss/articles/CBMiUEFVX3lxTFBhdkhJckY3WVlMOURKM1pnRS1GNnhTc1N5c0dQdGRHNDhwQ1VXd3U0SW1lekxCakk0emxmOUdxYkhHb3prd0dDdV9HLXdYZmlj?oc=5",
+    "source": "블루밍비트",
+    "publishedAt": "2026-11-27T00:19:24.000Z"
+   },
+   {
+    "title": "[주간 코인플릭스] 26년 48주차 암호화폐 상승률 1위 ‘파이버스’",
+    "link": "https://news.google.com/rss/articles/CBMid0FVX3lxTE1VclpHU0lobTJ6a2x3enlEUnM5V1VLNVJJTlFXdDFHUWNkbG5RcXNkdTFxMG1DRWROYVlYV1JjNUpqSmFLdU5fQmQ0TnFuM2U0V3dZMlR5U1ZTNHVZWmlxZVAwTm5WLVAza2RuUGNSX21pRTZmNVBZ?oc=5",
+    "source": "비즈한국",
+    "publishedAt": "2026-11-27T00:19:02.000Z"
+   },
+   {
+    "title": "[시세] 비트코인(BTC) 반등 숨 고르기…6만 1,400달러 넘을까",
+    "link": "https://news.google.com/rss/articles/CBMiSkFVX3lxTFBxQUtqdndNbnhNaktETjBhcFhYQndyMktEenVpSkg0amh6N0dPaWFsaXJlWTQxTjBqRlFhN0JLVTROdnIwbUh5UlFR?oc=5",
+    "source": "코인리더스",
+    "publishedAt": "2026-11-27T00:10:14.000Z"
+   },
+   {
+    "title": "비트코인(BTC), 가격 분포 하위 1% 구간...적정가 낮췄는데도 '역대급 저평가'",
+    "link": "https://news.google.com/rss/articles/CBMiSkFVX3lxTFBTUFpEUFAzREIxcHVpeGZQQWxDdlVXSnlmMlhNek92elQzM0N0NjRNb28tSUdtQ2JnbzdRdmFlaWYxbmdXY3UtTzhB?oc=5",
+    "source": "코인리더스",
+    "publishedAt": "2026-11-27T00:10:00.000Z"
+   },
+   {
+    "title": "[시세] 이더리움(ETH) 제자리…1,664.94달러 지킬까",
+    "link": "https://news.google.com/rss/articles/CBMiSkFVX3lxTFBtTmU3V0JodUp0dDBFNUt3WUpRUDYyWk1GOWFwc0Rqc2trZjB4S1RwdkMzZ19RVHpkdldiNFloSDFaX1pQNFlNNjF3?oc=5",
+    "source": "코인리더스",
+    "publishedAt": "2026-11-27T00:08:47.000Z"
+   },
+   {
+    "title": "[시세] 솔라나(SOL) 반등 숨 고르기…70.66달러 지킬까",
+    "link": "https://news.google.com/rss/articles/CBMiSkFVX3lxTE5TUDFvdFlQUmpyX2ttQ3VDUHNZQjNHSlh6S1YzdTJudUN5LVZ1THJRU1NrRk85MjFXWXlIbWt5T2JQUEhMdHdCM1lR?oc=5",
+    "source": "코인리더스",
+    "publishedAt": "2026-11-27T00:04:35.000Z"
+   },
+   {
+    "title": "비트코인 8218만 원대 횡보, 유명 시장분석가 \"연말 '산타랠리' 가능성 있다\"",
+    "link": "https://news.google.com/rss/articles/CBMic0FVX3lxTFAzYXdmTVFVTnFjLU4xSDNTU2s0UmVYVGhTQWJNQTN6ZHd0a2U3UFFyMy1QeU1xb1E2dHNVNU5nQUNMeDhUY1NkNnhsZDZmSndxcF9lLUdMdWhQMzJkMkhJU212eE9KU3FHaEFXQ2tmTjZNTjQ?oc=5",
+    "source": "비즈니스포스트",
+    "publishedAt": "2026-11-27T00:04:20.000Z"
+   },
+   {
+    "title": "[코인뉴스] 시장은 극도의 공포…비트코인은 ‘동면 중’",
+    "link": "https://news.google.com/rss/articles/CBMiowJBVV95cUxNWHFlTlduc1lQVlJ4cWJNS3hYeVZWeTZGMTlIakJsYk9qdkNBcGlGNW5Xb0hZdkJEUldDTl9pSlhYLWRGLVNOT3phcmZVRDBNVjZYSGE3UVgtU1dKUDg5SWJjREx2T2w1MFRTdlZVS1JUMXpuODVyT1ZSWFM1MXFjX0xKbFc0UHAyTkRTREpDdjF3bkFtU1hDLTJVaUZzYUcyTTZQd3o0LWtBb3RlSXd3c1NoZm9RRUJVTVV4SjZxeW1ld2dXOUJmTUZZRl9CcmNFUERfRXVaMUpHMnJTeFZscXJpNWxMNV9oVWthdGlMTUVVZ3lVZ2lCMTh6b0VvU011RmZlUkY3UG95dEJUWnc5X3EtRFprazJsRkE3dVV6RFg1a2c?oc=5",
+    "source": "데일리안",
+    "publishedAt": "2026-11-27T00:04:00.000Z"
+   },
+   {
+    "title": "[시세] 시바이누(SHIB), 0.000003660달러 넘을까",
+    "link": "https://news.google.com/rss/articles/CBMiSkFVX3lxTFBfaUxBWm1HRVdvUzE4TDVjQXhEZGwwR1hDN3BvMFRZZVVnY2V2TVFSdTdqY3JDeUt4bENrcE94VVNwRG9INWtuNlF3?oc=5",
+    "source": "코인리더스",
+    "publishedAt": "2026-11-27T00:03:14.000Z"
+   },
+   {
+    "title": "비트코인, 6만달러선 유지… 추수감사절 반등에도 불안",
+    "link": "https://news.google.com/rss/articles/CBMigAFBVV95cUxPMU41Mml3ZHdVZHcyTWM0NUdINFZKaFF5MTVPQ2dYZ0xqMk1EZXJSZjFKVzJJVEdVV1MxQ3Z3NngwbGpYeVdRblNua3BRX0YwSGNtZlp1eHoyNERDcHozem9lTlBoSGtBaE51U1dvdGJpc0FiZXhGMnMwckEwYVFUNtIBlAFBVV95cUxPWl96SGVlVWJwdlFGVVhyNXJabzV4cnR3VTc1a09ISGdKbnd6OHR1SVFrWktKXzdOdEppTHNpb2FzZVVHZkJKRDhRdS1HZXVQNmkyUGhkUG00bWt5aVMxS2g4dnI3c1poNVdjRFRtc1doT256cjBJSFlEdzV5Zk82ZUs2LXpaTkdzTHR2ZkZBLTJETmNQ?oc=5",
+    "source": "Chosunbiz",
+    "publishedAt": "2026-11-26T23:57:00.000Z"
+   },
+   {
+    "title": "비트코인, 8200만원선 등락…美 현물 ETF 월간 순유출 '역대 최대'",
+    "link": "https://news.google.com/rss/articles/CBMiYEFVX3lxTFBWZS1GNW1kY20ycDBXQlJfX18zRVZYNURDaFJLakZtNWlRWEREbWU0ajl5MFFxOUxnd1VEcmUwMERFeWNPemJzd3N5cjRhS3hlRkkza3h2ZzVPTTNnODhQQ9IBeEFVX3lxTE9VdGl1S3dUNDBOWnZ4N0NadnhmZ19ZeW0zMkVpT1A2WWhUVHRXWjRkM0NPTWNTR3NKWmdROXFMSlNzRE4zNUpoZEMycW9BSnZYdVV0RnQwa29YQ1kyOEZ2b2xfTmlpNm9taWJPajRuMmZMUUVVMU9ISg?oc=5",
+    "source": "뉴시스",
+    "publishedAt": "2026-11-26T23:51:16.000Z"
+   },
+   {
+    "title": "[크립토 브리핑] 비트코인 소폭 반등에도 '극단적 공포'...주말 매도세 경고등",
+    "link": "https://news.google.com/rss/articles/CBMiZkFVX3lxTE5CRlhLY0tkcGd5dWRzTTMzY2RWN2o5QWkwMmIzcWUxemlNYTJoRUg4Yk93ZHVMNkpvZzJQRU9DbHhGdG9qU1JDNGo0cm5PX29mTHpqalVKSHdTWVVsZHpWYmluVFdBQdIBakFVX3lxTFB0TGd4aDlBSVFISUJzdi1BSnB5MUtTb29rYlZDaGpkdGZ5QnZzdERTVGlIOU5hSmRVeXlaY3NfRHZ1VElGUldfeFYwUDRRdnJtdXRCbkppeUdlRU1aRFpoRlJxS2ptRmlHMFE?oc=5",
+    "source": "테크M",
+    "publishedAt": "2026-11-26T23:47:56.000Z"
+   },
+   {
+    "title": "비트코인 6만달러선서 소폭 반등…투자심리는 ‘극도의 공포’ [코인 모닝콜]",
+    "link": "https://news.google.com/rss/articles/CBMigAFBVV95cUxNU2tLTGdVcGZReTVrVERBWDh0aTREWHdpVnNJenpfSWExY05YbWFpV3NmZTQ2MVdZNnBISWpJU3U4NmpJTERNelAwUGlibnNsbTFiUkM0TWFGU0xzcm0tb3dsQjM3ZlM4TmE2MEtkMk03dEx0b0hPTmZpNVRCNGYyMg?oc=5",
+    "source": "이데일리",
+    "publishedAt": "2026-11-26T23:45:21.000Z"
+   },
+   {
+    "title": "비트코인·금 급락에 우리기술투자·한화투자증권 등 관련주도 '긴장'",
+    "link": "https://news.google.com/rss/articles/CBMid0FVX3lxTE4zaUFxWXpfbHBjZVMwR2dwTW0xZzRjMF9iR1NzSVUtUHZBcGJ0RDM5M0dOWW9TZ3d2NVpULTc2YzFHTWlZaFZySHRyTHkxemY3TnFGRXE0N3R6WTMzbVVMSTd5VTV0bm9nY3diTDFqSDJMQ3hpSFdF0gF3QVVfeXFMTjNpQXFZel9scGNlUzBHZ3BNbTFnNGMwX2JHU3NJVS1QdkFwYnREMzkzR05Zb1Nnd3Y1WlQtNzZjMUdNaVloVnJIdHJMeTF6ZjdOcUZFcTQ3dHpZMzNtVUxJN3lVNXRub2djd2JMMWpIMkxDeGlIV0U?oc=5",
+    "source": "핀포인트뉴스",
+    "publishedAt": "2026-11-26T23:44:25.000Z"
+   },
+   {
     "title": "비트코인(BTC) 활동, 투자자 매입가보다 20% 아래...바닥 시그널?",
     "link": "https://news.google.com/rss/articles/CBMiSkFVX3lxTFBFVmhTNG1TVEJVb2lkMHROdXl2R3NOQ0U4clZyejAxblhYbWg1ZHlfaWQ0dkRrNm1FQWVQTDBmaEhEUjNJMFlWTVpR?oc=5",
     "source": "코인리더스",
@@ -1318,9 +1438,15 @@
    },
    {
     "title": "비트코인 6만 달러 회복…ETF 월간 순유출은 역대 최대 [디센터 시황]",
-    "link": "https://news.google.com/rss/articles/CBMiUkFVX3lxTE41WnFLMmdIWkYzTmFJc2tEQzFhSzM2bTV0VWRyNS0tNFRrVDJTODRyS0Rfdk1mODJ1d2lMNDNDeWk2TXRfckJ2VG85Z09NblBmd1E?oc=5",
+    "link": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTE43S0RUQmlwSlF2WnpFRDVYMFl5MmZaUy16RzRjUjNLTlVUTVZEcG1YYkpXVHhpZkk1XzlfTXBXUnVNaHlYbUt4Tjk3algxRV9uXzJEdUtoQmYyb1ZYVUdYRERvTFVrb3c?oc=5",
     "source": "www.decenter.kr",
     "publishedAt": "2026-11-26T23:32:49.000Z"
+   },
+   {
+    "title": "[코인뉴스] 비트코인 ETF 이탈 역대 최대…6만달러 회복",
+    "link": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTE4tMnI3azRSZHBLaUg5VHExb21rVmVmMXNXdnFkYmxVbVNKcHNWN2pEYWlfbVFtN29YR1g3QVVxeXowYUdhWHJDT09LanlzV3dGM0cxUnRGaUZIZVdmbEJ2ZVIzQlJzdk0?oc=5",
+    "source": "자본시장뉴스",
+    "publishedAt": "2026-11-26T23:30:00.000Z"
    },
    {
     "title": "비트코인 프라이버시 결함…위치 $0.35에 노출 가능",
@@ -1330,9 +1456,15 @@
    },
    {
     "title": "\"스트래티지 비트코인 대비 기업가치 역대 최저…시장 항복국면\"",
-    "link": "https://news.google.com/rss/articles/CBMic0FVX3lxTE0yeTdLZUg3TUptQkNYUjNydkhOcmpHMmlnOUdsMF96ellmUTdaQ1NoNldDUHB3Z2cydEZlUVl1VmVrdTlSa21mdVVvVWxDVG1sSGwzdzQ5dWV6aVRrTU5wNm1Pa1dHczNKNTdUYXZhZzZselU?oc=5",
-    "source": "마켓인",
+    "link": "https://news.google.com/rss/articles/CBMigAFBVV95cUxPdWFFMTQ2UnRnM1ktcXR0TU03RW1CWFJWWmhKdHhGTU9YU1dyTFVtUmxwMEwtTlA1QWw4ZVB2NTgwcGhmbW5HY1I5U3BFbjlXUHRYMlB4WWdZR3FyYWZFNllyc0NrR20wS0lEd3ZPeHdaMWRhczloUUdEOFUzS2JjZA?oc=5",
+    "source": "이데일리",
     "publishedAt": "2026-11-26T23:24:15.000Z"
+   },
+   {
+    "title": "공포·탐욕지수 50, 알트코인 지수 60…가상자산 시장 바닥 다졌나",
+    "link": "https://news.google.com/rss/articles/CBMid0FVX3lxTE0xUEtxVklpdDhtQ01zWHFTWHIzTXBTUnZlZGxwckFjX01SbGtUYzNhTHVaLVBsVkFGY0pORTRBaU9ucTA5MXR4SE1Gbl93SlN2MWFmNVZnR2w5bk1KQWVBTjZodmg0X1Z5WERmalZxd3dJM083amVv0gF3QVVfeXFMTTFQS3FWSWl0OG1DTXNYcVNYcjNNcFNSdmVkbHByQWNfTVJsa1RjM2FMdVotUGxWQUZjSk5FNEFpT25xMDkxdHhITUZuX3dKU3YxYWY1VmdHbDluTUpBZUFONmh2aDRfVnlYRGZqVnF3d0kzTzdqZW8?oc=5",
+    "source": "핀포인트뉴스",
+    "publishedAt": "2026-11-26T23:21:06.000Z"
    },
    {
     "title": "[아주경제 코이너스 브리핑] 비트코인 6만달러선 등락…반등 동력은 안갯속",
@@ -1345,12 +1477,6 @@
     "link": "https://news.google.com/rss/articles/CBMicEFVX3lxTE1UOGItdTFVdHk0WGRvTF85WjJKcTBKbnc2RVc5TlRtSWl4TC15TEdsc2NwUGE5WEk5dUxvUVpPd2sxOGJyb1plWmJ2OFZ1ZFJtWHF5aDBxVE1ya2dIMmJvQ0FYNTBIZTVMbC01WHBqUW0?oc=5",
     "source": "신아일보",
     "publishedAt": "2026-11-26T23:11:40.000Z"
-   },
-   {
-    "title": "공포·탐욕지수 50, 알트코인 지수 60…가상자산 시장 바닥 다졌나",
-    "link": "https://news.google.com/rss/articles/CBMic0FVX3lxTE9qZU5vNVQzRmJXZGxTUjdJbWhWblVfOEtsY0dIQnFBSDhILW5zVi13TDRXb202Z3R6MkY1UmtxUGpwVC1kMi1lUTRNSTdyQmktSkRvRV93bUdPZVdGZExCaWRlejJaSFR2TmZGbnB5ZVVVYknSAXdBVV95cUxNMVBLcVZJaXQ4bUNNc1hxU1hyM01wU1J2ZWRscHJBY19NUmxrVGMzYUx1Wi1QbFZBRmNKTkU0QWlPbnEwOTF0eEhNRm5fd0pTdjFhZjVWZ0dsOW5NSkFlQU42aHZoNF9WeVhEZmpWcXd3STNPN2plbw?oc=5",
-    "source": "핀포인트뉴스",
-    "publishedAt": "2026-11-26T23:11:19.000Z"
    },
    {
     "title": "비트코인·리플 동반 약세에도…업비트 뭉칫돈 몰린 알트코인은?",
@@ -1455,6 +1581,12 @@
     "publishedAt": "2026-11-26T21:47:31.000Z"
    },
    {
+    "title": "비트코인 100만 달러 축포 이면의 4억 달러 청산 공포 실체 - 월가 25만 달러 장밋빛 전망과 개미 무덤 된 파생시장",
+    "link": "https://news.google.com/rss/articles/CBMic0FVX3lxTE9lODFaZUxpMFpVQnptTlFqR0NIMnljMGRTWk9VdzNIZGJxZ0RqNzBrc2dnRjUwQVJQQm96TjhVdUliMjZaTVJ5Rm5FRHVEWmNNTDJvOUgyMXFoN0E4QXdjazc3bmFWc1pneERtREV5WkJEWjTSAXZBVV95cUxNaW9YUkxNSDk1ZFZONVIwcEYxbXRRUW95RVljTkh3U0pZeEg3Zkk1Q0hwcjMtTVZTbkh5Y1JIaU9wSGlxZmJzSEtWOFExOWp6M2lkMXBoVzFPXzVGM2pLckNQcV9qV1JmbFRSdkprN2dBSGh2dlVR?oc=5",
+    "source": "데일리머니",
+    "publishedAt": "2026-11-26T21:26:37.000Z"
+   },
+   {
     "title": "[오전 브리핑] 비트코인 8,256만4,000원…6만달러 회복, ETF 유출 지속",
     "link": "https://news.google.com/rss/articles/CBMiSkFVX3lxTFAwY2sxNEVYN3BHMDFGSFVrVUxIYXVuOEhCcWNrcDJURWxWRkdoczJnU2I3OTZYcUhSQi1BUXhNXzJPampUVzNFV1hB?oc=5",
     "source": "코인리더스",
@@ -1467,6 +1599,12 @@
     "publishedAt": "2026-11-26T21:00:00.000Z"
    },
    {
+    "title": "TD코웬 \"스트래티지, 비트코인 7만5000달러 기준 43년간 재무 의무 이행 가능\"",
+    "link": "https://news.google.com/rss/articles/CBMiUEFVX3lxTE9MRUoxMlhXd0pGTzY4ZDA5RjVpZDh4R3hGdkFPRWpwNnNScDJmbVNaU2xuWFpuc2t2dFd5dE5MVTFjNktTY25HMG1PYnh0Z3hr?oc=5",
+    "source": "블루밍비트",
+    "publishedAt": "2026-11-26T20:55:46.000Z"
+   },
+   {
     "title": "TD코웬 \"스트래티지, 비트코인(BTC) 7만5000달러 기준 43년간 재무 의무 이행 가능\"",
     "link": "https://news.google.com/rss/articles/CBMiUEFVX3lxTE9MRUoxMlhXd0pGTzY4ZDA5RjVpZDh4R3hGdkFPRWpwNnNScDJmbVNaU2xuWFpuc2t2dFd5dE5MVTFjNktTY25HMG1PYnh0Z3hr?oc=5",
     "source": "블루밍비트",
@@ -1474,9 +1612,9 @@
    },
    {
     "title": "18억달러 강제청산 뒤 무슨 일이… 비트코인·이더리움·XRP 동반 환호성",
-    "link": "https://news.google.com/rss/articles/CBMic0FVX3lxTE5iS2ktQ2IxYXZzY09weC13a3k4TVJkRmRwaHBlUUNLMkxTN1ZycWJTdjQ3YkNLV213ck0yeW1OYlpsc1BmWm9jcG80aGJkR2V0ZnVJaFZQd0VncUtlU0RsYXlkVDZOTjZLYy1EVXE0X1lLNmPSAXdBVV95cUxNWDJrbksyNkpJVGdzbE1oNUZHTHBiOWRQR3BQZVdIVngxWkYwTEplbWRKQ3VVdVlQMVNkNlktRm03VUEzdWM2Y0taMFd4UU5uYVY3YlQ0b2RPMmQzaERyMzN0Zl9nRGd5U0ZEZzFlMUltbjNUWVJGUQ?oc=5",
+    "link": "https://news.google.com/rss/articles/CBMid0FVX3lxTE1YMmtuSzI2SklUZ3NsTWg1RkdMcGI5ZFBHcFBlV0hWeDFaRjBMSmVtZEpDdVV1WVAxU2Q2WS1GbTdVQTN1YzZjS1owV3hRTm5hVjdiVDRvZE8yZDNoRHIzM3RmX2dEZ3lTRkRnMWUxSW1uM1RZUkZR0gF3QVVfeXFMTVgya25LMjZKSVRnc2xNaDVGR0xwYjlkUEdwUGVXSFZ4MVpGMExKZW1kSkN1VXVZUDFTZDZZLUZtN1VBM3VjNmNLWjBXeFFObmFWN2JUNG9kTzJkM2hEcjMzdGZfZ0RneVNGRGcxZTFJbW4zVFlSRlE?oc=5",
     "source": "핀포인트뉴스",
-    "publishedAt": "2026-11-26T20:15:11.000Z"
+    "publishedAt": "2026-11-26T20:17:52.000Z"
    },
    {
     "title": "JPMorgan, 마이크로스트래티지 통해 비트코인 신호 포착",
@@ -1593,12 +1731,6 @@
     "publishedAt": "2026-11-26T15:52:00.000Z"
    },
    {
-    "title": "비트코인 바닥? 갤럭시 13개 신호 체크리스트 답 있다",
-    "link": "https://news.google.com/rss/articles/CBMic0FVX3lxTE9fbTFEUExOWFRzRUxSOG1ua1oyWGFwb2ZJXzlvbEpfQ2tZdjBIOGJTcGFRSzVZc2lUNW9EYU5iNUFhMGJXRDBDOU5QQVpvMTVPM05BQ082SHk3VHhzZU1TSk9hQlhWQUQySy1LZ0lLUm5uOWs?oc=5",
-    "source": "BeInCrypto",
-    "publishedAt": "2026-11-26T15:39:51.000Z"
-   },
-   {
     "title": "ZEC 뉴스: Zcash 개발자들은 사용자들이 3억 달러 규모의 기존 프라이버시 시스템에서 자금을 이동시키기를 원한다",
     "link": "https://news.google.com/rss/articles/CBMiwwFBVV95cUxNMHk0SzJ0RjNwbHVXTEYyV3RidmJyeGU1Ty1WM3AxMEUxQVBEY0dZQzUxTGhkcUVPNkh3aFhWclo4UV9sR1p4d2N6SUstdWR5SEpXTkNTYmhybDQ4cC1FZGNkc2x2aTNtbUNVRm91R29XOFNOdGtXN2JsNlhxclU0V1RBQ0JUdkF4WVdsOG5LajlLQXhKVl9oaElmZWZfZUlrMGxpaC1WNGdlYi05T3hVa0NwLVgweXM2UkdLQnFNWDFXU2c?oc=5",
     "source": "CoinDesk",
@@ -1639,6 +1771,12 @@
     "link": "https://news.google.com/rss/articles/CBMiSkFVX3lxTE0xMmlSWHBTd2tlRGJDcUphMDNLTGdYazl3NGdpbzIzdFYyOG1YM3JjNHZURWpKSGdReXVkdWxUdzVyeW5uN0UyTzF3?oc=5",
     "source": "코인리더스",
     "publishedAt": "2026-11-26T13:52:17.000Z"
+   },
+   {
+    "title": "비트코인 바닥? 갤럭시 13개 신호 체크리스트 답 있다",
+    "link": "https://news.google.com/rss/articles/CBMic0FVX3lxTE9fbTFEUExOWFRzRUxSOG1ua1oyWGFwb2ZJXzlvbEpfQ2tZdjBIOGJTcGFRSzVZc2lUNW9EYU5iNUFhMGJXRDBDOU5QQVpvMTVPM05BQ082SHk3VHhzZU1TSk9hQlhWQUQySy1LZ0lLUm5uOWs?oc=5",
+    "source": "BeInCrypto",
+    "publishedAt": "2026-11-26T13:21:00.000Z"
    },
    {
     "title": "[시세] 맨틀(MNT) 8.90% 뛰었다…0.378달러 지킬까",
@@ -1744,7 +1882,7 @@
    },
    {
     "title": "비트코인 가격, 탈로스가 추수감사절 유동성 부족 경고하며 6만1,000달러 주시",
-    "link": "https://news.google.com/rss/articles/CBMicEFVX3lxTE5uRk83eXhoMzVIU0MyNzZ5YmlqQzUzWG5qSkxvRU1NbkRzbWx5QlU4TEEyUGxrUHFxRjdfNlFHNXlsMzRXc3MySEpiU1l5LWU1cm1LbVJwWGVua3VfZUN6b2ItWktJY0hoN01qdGtvMzQ?oc=5",
+    "link": "https://news.google.com/rss/articles/CBMib0FVX3lxTE14dndzVDVFR2pkb2pKdW1aNWJCM0pDS3M3X3dMaHhkYllTTDhXUnp2aVZvSkdKSnNZMUdTemNNaU5zWE9TbDJTbEtaR3gtRXk1MXdoOUwyWExNSDlLMDUxVVBHWVFPRm1oaG1BaUxGVQ?oc=5",
     "source": "TradingView",
     "publishedAt": "2026-11-26T11:22:59.000Z"
    },
@@ -1876,7 +2014,7 @@
    },
    {
     "title": "비트코인 ETF, 11월 순유출 50억 달러 상회…모건스탠리는 추세 역행",
-    "link": "https://news.google.com/rss/articles/CBMicEFVX3lxTE1wWGV4ajFaa2p1SjA4dUVvaHBvSW1UZUx1VDRXWWRLRHB6QnlObWlEdnBLWDBQQzh1NGhocll6SHFaN0UzZTNncGcteFc0TVcyVko2c3p3LXF0SVJ0SnZIVDk2ckllaUtlczJnUG1iVkw?oc=5",
+    "link": "https://news.google.com/rss/articles/CBMib0FVX3lxTE5yTWZhcmNlaVV5Ni1FX1hDdXFrV2haU2ZOUXcyRVo5ZXA2UWoxZlVXT0h6aXJncnNnUlJGczl6dDZvSjAxTVZyQmdFdnBuYUEwZS1pRVJJckhoS1liN3VpeFRpMFlERngzVWphSGE1TQ?oc=5",
     "source": "TradingView",
     "publishedAt": "2026-11-26T09:42:34.000Z"
    },
@@ -2323,195 +2461,75 @@
     "link": "https://news.google.com/rss/articles/CBMia0FVX3lxTFBJdU1IUmpaZU12NFFFWlVUSEp3bVhrcDZacnhod2prUmpGaTFfcFdnbWJEejhGTld4bVJwOTlWUG9FZTRTNDNjZjQyRTlpNm5mSnZpSVBuWXJVX3Y0ZVAyQ0Q0V0FIenZoMnA40gFvQVVfeXFMTkRjNmFQTnYwMGpScG01R01HZUhBb3JYNFl1VUIyQXhvWDBxTkVud3cwVlh4MVVBOEpEMXgtY0d0d1RsVWpIaHBHNWgtaDRrUlpjbjN3bEViNnpHOGs3TnJpQVZsYjY1bmZ1VkNka25B?oc=5",
     "source": "한국아이닷컴",
     "publishedAt": "2026-11-26T01:30:04.000Z"
-   },
-   {
-    "title": "[크립토 레이더]비트코인 급락에 채굴업체 '비상'…보유 물량 추가 매도 압박",
-    "link": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE1EdFpKMU8xcEloZ3RGNVktN3BYaFgzRzRjY3dNNXVrZjhCdHZWNndUMTF2MUV5SUJYUFUtbmxqVU9JQWEyeTJPWlFFR3c4RnFQQVREVjJMamo5VkdrTWJCMQ?oc=5",
-    "source": "아시아경제",
-    "publishedAt": "2026-11-26T01:13:58.000Z"
-   },
-   {
-    "title": "'에브리싱 크래시' 주가·비트코인에 금·은·구리까지 동반 급락",
-    "link": "https://news.google.com/rss/articles/CBMiYkFVX3lxTFBOSE02cTg3VHM4cnczLUp3QVJEa0VQRzhMSTVHVWt3eWNhSGttRUZqRC1ucmN2SVdUNkFIeGJoQ2dVYl8yRzR3eEpDaGw5a3BYQk5yb05QUHI2ODVBd09ZVUNR?oc=5",
-    "source": "아시아경제",
-    "publishedAt": "2026-11-26T01:09:05.000Z"
-   },
-   {
-    "title": "빗썸 비트코인 처분서 304억원 손실 … 렌딩·이벤트 영향",
-    "link": "https://news.google.com/rss/articles/CBMibkFVX3lxTE5Hby1SWGgyUWRxX2dhdm1hYXJqblpXT3ZsbVJWcjNnV2JwejNjME5MV0gyZFZpNTJsNWpNTThjRU9DQ3ZwSTgxT1VidmZzalRnTWE2eHZxTWNLYU9KRkxVNUgxNDNNN01TdGppQU5n?oc=5",
-    "source": "세이프머니",
-    "publishedAt": "2026-11-26T01:02:52.000Z"
-   },
-   {
-    "title": "美 전략적 비트코인 준비금 법안, 하원 본회의로…최소 20년 보유",
-    "link": "https://news.google.com/rss/articles/CBMic0FVX3lxTFBYTF9OaG5jS1dTQTBkaEozVEc1YWNCZEkxMGpwVUJKcklxeUdwa0NyRGhIcFRaYWU5UTItdHZxZS0xMjM2YUtMN3ZNeGFkenIzNWNseFFrdHFPMVZCakdKaFZHUzd2bUtaZGNXUW9BSEt3bFE?oc=5",
-    "source": "디지털투데이",
-    "publishedAt": "2026-11-26T01:02:14.000Z"
-   },
-   {
-    "title": "비트코인 '4만 달러대 추락' 경고…ETF 50억 달러 이탈에 금리 인상 확률 99.8%",
-    "link": "https://news.google.com/rss/articles/CBMiSkFVX3lxTFBlM3d3Q296ZWR2ZEcxQ0JyaUJ5QThaa2pjVmdBRnp5STJmaGUxd3JqendPdXNMMUIyM2NZUkFVdXdkSFlOVF9Pekpn?oc=5",
-    "source": "코인리더스",
-    "publishedAt": "2026-11-26T00:58:00.000Z"
-   },
-   {
-    "title": "비트코인, 8200만원선 회복…투자심리는 여전히 '극도의 공포'",
-    "link": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE94NnIwdzdhd2NDcEM2ekpNT2pseEJMQ2trYUJZa28ySkdDbHFZOFkwYjg3Z3ZzR0t4QXdxYXF2RUk4Z3puZzlLeEE1TUVqRG5GWkZsdWRKRlgxdFFhWTVjVtIBeEFVX3lxTE0xSnkxcTlIaGhkTks3MTRxNUd2NlR4NURCcTQzaFZjXzEzZm1PZjFQTXl3TWFRa1dsdERvdmhONndhZmlVNjg3V3RtNllJVjhwTU5mRUNMQkh0dmx1amVrZnItSHkzTzRNc0ltSF80bFVrMnpfVWdVMQ?oc=5",
-    "source": "뉴시스",
-    "publishedAt": "2026-11-26T00:56:46.000Z"
-   },
-   {
-    "title": "‘에브리씽 크래시’ 주가·비트코인에 금·은·구리까지 동반 급락",
-    "link": "https://news.google.com/rss/articles/CBMiYkFVX3lxTFBOSE02cTg3VHM4cnczLUp3QVJEa0VQRzhMSTVHVWt3eWNhSGttRUZqRC1ucmN2SVdUNkFIeGJoQ2dVYl8yRzR3eEpDaGw5a3BYQk5yb05QUHI2ODVBd09ZVUNR?oc=5",
-    "source": "아시아경제",
-    "publishedAt": "2026-11-26T00:54:00.000Z"
-   },
-   {
-    "title": "비트코인(BTC), 4분기 들어 -29%...2018년 급락 재현?",
-    "link": "https://news.google.com/rss/articles/CBMiSkFVX3lxTE1aVEJnOUFYMFJXVkItWFFZWkt0Q2NCNmk2ekRlbkhpcnp0bXVKdlU1aUpUN2owZ1ZfYVd3d0hLRlhPUDIyZDZHQm53?oc=5",
-    "source": "코인리더스",
-    "publishedAt": "2026-11-26T00:50:00.000Z"
-   },
-   {
-    "title": "6만 달러선에 갇힌 비트코인…반등 열쇠는 美 통화정책?[코인브리핑]",
-    "link": "https://news.google.com/rss/articles/CBMiZkFVX3lxTFBOTG1JaHlkU29hcXlHVXpVZGNtR24xYTNFZkU0X0hVa2NBOTFyUjdqRnFIQnZwX19qUk1wUVB5SUl5UWc0OTdOOG16Rk9MZC1GVGZnRGVBVm1aZk94bGFRT25jOTBrZw?oc=5",
-    "source": "뉴스1",
-    "publishedAt": "2026-11-26T00:45:06.000Z"
-   },
-   {
-    "title": "[속보] 비트코인 6만달러선 회복…리플·이더리움 등 주요 코인 '반등'",
-    "link": "https://news.google.com/rss/articles/CBMiaEFVX3lxTE1ETjA4QVFKbFhwMGtKTTFmcGRhZW00dlJlWGtVVWZSWW1LMENJMWJYbURXVlZPd3FBaXFsV1BEa1pvQ2l2Nlo3Tm1iZ0RYeHhMcFVBbmh6WGo4M0ZzcGQzSW1EZ0theXZf?oc=5",
-    "source": "CBC뉴스",
-    "publishedAt": "2026-11-26T00:36:14.000Z"
-   },
-   {
-    "title": "비트코인 한 달 새 26% 급락에도 신규 주소 늘었다…약세장 속 반전 신호?",
-    "link": "https://news.google.com/rss/articles/CBMic0FVX3lxTFBGMG1aeWxlOXJ6MWhoSGtNS1llOFpkbnU5aC05c1JzMmNvVGlyNmZWUGloVHdmTC1PanNXUVJlenNlT3ZOaXctMDhIZktfME44eFZaRHRTdktnVGRES2FYQU5jUV9QRFBDcV9ZVnJfQzd2dVE?oc=5",
-    "source": "디지털투데이",
-    "publishedAt": "2026-11-26T00:18:54.000Z"
-   },
-   {
-    "title": "반에크, 암호화폐 ETF 3종서 제미니 뺀다…코인베이스 수탁 유지",
-    "link": "https://news.google.com/rss/articles/CBMic0FVX3lxTE1DUlZGeTZHc29pOEhPTUUwVFBudlBMclVBbVlQRTBZQnVlVGd2RzBNRHI4bVNWS1J1YTM1ZVpOVDUxeWFTalJfQkUycG1xWEQwR28wRjBPN3ZMYmlybFZGdWRSdUVCVjFSUmU3R2hnQkFjYzA?oc=5",
-    "source": "디지털투데이",
-    "publishedAt": "2026-11-26T00:18:02.000Z"
-   },
-   {
-    "title": "\"급락한 비트코인, 추세 회복 열쇠는 현물 ETF·스테이블코인\"",
-    "link": "https://news.google.com/rss/articles/CBMiXkFVX3lxTFBibU1ka09ocmx5VmwzbTZMOGl1dXZKbFd1Q3lVWTN2dEpXVjMzbnNaSHh1Q2IwWU4zWGx0WkM5aS1CX3RJaEx2YjlDanZOemZkZTlYMXc3YW1HU2xpWlE?oc=5",
-    "source": "뉴스투데이",
-    "publishedAt": "2026-11-26T00:18:00.000Z"
-   },
-   {
-    "title": "체코 중앙은행, 비트코인 시험 보유 1년…보유량·평가액 여전히 베일",
-    "link": "https://news.google.com/rss/articles/CBMic0FVX3lxTE9XWkpnVmlleGV4b1VlZUYyUG53NW96cHo5MGhRUV9tQ21rTnpBeDNjRjd0ZkVBVXBzanhybFdERUlXcmhrOE02ZjJ6QkRmTzVCcHh5ai0xbEY5TEZQRndxWElKOTc0WjBXUkZzSTkzTG0tWkE?oc=5",
-    "source": "디지털투데이",
-    "publishedAt": "2026-11-26T00:17:51.000Z"
-   },
-   {
-    "title": "[코인뉴스] “대체 바닥이 어디야”…비트코인 또 경고등",
-    "link": "https://news.google.com/rss/articles/CBMirgJBVV95cUxOVXRqWF9fd1IzSVo2YXBtZ0VFbkdrbEZCY2xnek54RDA0OTMyeGVTVjZ1a2NjUjFRbnZvX294X2pMNC0yOTdvUTJ2T2NPM25wbTZmWENyR3FPQVUyZ3h2QngyUktmU1M0UXQwSUhjdFZkRXQ3WnZBaUVPODRpTFc4WFJEU1I5N0hhWUo1MjFXYWppeWU3YlY4Q2dYQ2RuaG11UnJIR3ZoTGw5ZVFWMTc2Mm52czlKMVBhaUF6WEpqX3dQYVB2bjRoQUZ6M3lUR005Q1FqQXVWanB4clJSWjRueVJsLUVpRF9QN3k0QVJ3MWktV29NbUNzbkppRFpkYk1ub2RHRkk1T2k2SlhrN2tNMGwxUXJxZmxWeTFPNWYyZ1BTd1JvNk5qcmRlNi12UQ?oc=5",
-    "source": "데일리안",
-    "publishedAt": "2026-11-26T00:16:00.000Z"
-   },
-   {
-    "title": "[시세] 베니스 토큰(VVV) 18.73% 껑충…24.83달러 지킬까",
-    "link": "https://news.google.com/rss/articles/CBMiSkFVX3lxTE9xc2w4bDVqTjZvcHZieE1wcERzdmZEY1lfWjZNcG4tSzNoZ3Nld0tZakZwekl4SmRxYUZ1TjN0X2VMYURWQzlGSjBR?oc=5",
-    "source": "코인리더스",
-    "publishedAt": "2026-11-26T00:13:07.000Z"
-   },
-   {
-    "title": "유로존 수익률 상승…비트코인·토큰화 금 유로 거래 증가",
-    "link": "https://news.google.com/rss/articles/CBMidEFVX3lxTE9iaHNabVlUSEtRdW5ZdUs5QlM1UWo4S0dVNXQtUllZdk1MNjlucjd4R0JHbkYtSzNGY3VrZ0hURWRwVkhzVTh5WlFyNXBnYl8xT3VpenkzaG4zNkUtQy1YdmpROUtDYXlTWGQtdllNekQ0YWIw?oc=5",
-    "source": "BeInCrypto",
-    "publishedAt": "2026-11-26T00:12:08.000Z"
-   },
-   {
-    "title": "[시세] 비트코인(BTC) 1.05% 반등…6만 843달러 넘을까",
-    "link": "https://news.google.com/rss/articles/CBMiSkFVX3lxTE1lWkpRLXZzMUIzaVRmWUVyMEpzOUIybGF5ckhzcld6enNHdXVkSUc3cmZlYjJrWmNENEJDNnZ6ZnNVWjlsSm85TDd3?oc=5",
-    "source": "코인리더스",
-    "publishedAt": "2026-11-26T00:08:29.000Z"
-   },
-   {
-    "title": "시장 공포 속 비트코인 캐시, 기술적 반등으로 3.54% 상승 | Top Stories | 코인마켓캡",
-    "link": "https://news.google.com/rss/articles/CBMidEFVX3lxTFA3eF85RHZHMGxOR1pHMUFDbWhhZDJXX0JXQ2RnbTExOFZQeVNtcGZfWUtGVHA2N3Y3U3ltMU5BVWNBcUxlVVZPcTF3QWQ5eVYxN0hDQWE3THdWR0lwZFZ4MGJJem5MMHBXcEJwTm5XaDNkV3pf?oc=5",
-    "source": "CoinMarketCap",
-    "publishedAt": "2026-11-26T00:04:00.000Z"
-   },
-   {
-    "title": "[시세] 시바이누(SHIB) 반등…0.000003383달러 지킬까",
-    "link": "https://news.google.com/rss/articles/CBMiSkFVX3lxTE9ZWDhIcTFaRm10alVlcERINWRrVTlIVHA4ZWhnRlVkM2ZtQjNlSkhJTldDRGRyS1F2NlMwZVdFc2NuMy1KamhxanBB?oc=5",
-    "source": "코인리더스",
-    "publishedAt": "2026-11-26T00:01:52.000Z"
-   },
-   {
-    "title": "비트코인 54% 폭락, 지금 얼마나 담아야 할까? 블랙록·모건스탠리의 답은",
-    "link": "https://news.google.com/rss/articles/CBMiSkFVX3lxTE9za2pxUHFQRkd0dG9QU2x4OVNPTnR1LTJkRFlLMl90ZFlJcmExQmdEcHBGc21Ha19Gb1V0RGFmckVhWGVhU3FiTjNB?oc=5",
-    "source": "코인리더스",
-    "publishedAt": "2026-11-25T23:56:00.000Z"
-   },
-   {
-    "title": "모건스탠리 1조9600억달러 포트폴리오 보니…비트코인 쏠림 속 XRP도 담았다",
-    "link": "https://news.google.com/rss/articles/CBMic0FVX3lxTE1DRllRRXFXV3dfbGR3c0pqZjFTYmx3X2gtSHphTF9iNDRPMmJaNzlsSWhjeE1SUnVsRTNPWkxmd1lUYWhxZlpYcHYxcUpfQ2o1MHdLR2kzVFI1MEFJczhvNGdNWnhQMGFuR0pDYTB1MnhRamM?oc=5",
-    "source": "디지털투데이",
-    "publishedAt": "2026-11-25T23:50:58.000Z"
-   },
-   {
-    "title": "비트코인(BTC), 7월 이후 처음 '완전 청산'...알고 보면 지금이 매집 기회?",
-    "link": "https://news.google.com/rss/articles/CBMiSkFVX3lxTE5uWjBJZ25QZmVQYnhKNk82OEE4c1NwWVJKV0ZDRHZsQVUxWi1pSHpYUEhWRWR5cHVXdUtwRHM2TXJJSzVKNTl6WkF3?oc=5",
-    "source": "코인리더스",
-    "publishedAt": "2026-11-25T23:50:00.000Z"
-   },
-   {
-    "title": "[단독]코인 리딩방·유튜버 법적 규제 추진…미인가 거래소 이용 권유도 금지 - 머니투데이",
-    "link": "https://news.google.com/rss/articles/CBMibEFVX3lxTE1QTm5Hc2IzOFB5a1JfVlN2eWVWeTJ1Z1ZxeUJzcWJqOWFnUVhkTnB0YVlDYnF4cUpJQTNMNHRUU1BBTlFOUEFJQ2ljUzN1ZVFfWXBleVZQQjlRbWZpdkdrbWZVOVRPQk5laFBnatIBckFVX3lxTE4zWElhemRRMzh0SDlrS2hpbHAtaGd3RmYxalQzZUxhdmRvN2xKNzgzcWpPT0tvYnRZMy13TWJqYmdka3VQa0ViaHk4SXhHUkdHRGJybkFiRkYtb3JidDJIR3FFQWdSUEFyOTlHOEFEeTdiQQ?oc=5",
-    "source": "머니투데이",
-    "publishedAt": "2026-11-25T23:46:39.000Z"
-   },
-   {
-    "title": "[단독]코인 리딩방·유튜버도 규제…미인가 거래소 이용 권유도 금지 - 머니투데이",
-    "link": "https://news.google.com/rss/articles/CBMickFVX3lxTE4zWElhemRRMzh0SDlrS2hpbHAtaGd3RmYxalQzZUxhdmRvN2xKNzgzcWpPT0tvYnRZMy13TWJqYmdka3VQa0ViaHk4SXhHUkdHRGJybkFiRkYtb3JidDJIR3FFQWdSUEFyOTlHOEFEeTdiQdIBckFVX3lxTE4zWElhemRRMzh0SDlrS2hpbHAtaGd3RmYxalQzZUxhdmRvN2xKNzgzcWpPT0tvYnRZMy13TWJqYmdka3VQa0ViaHk4SXhHUkdHRGJybkFiRkYtb3JidDJIR3FFQWdSUEFyOTlHOEFEeTdiQQ?oc=5",
-    "source": "머니투데이",
-    "publishedAt": "2026-11-25T23:46:39.000Z"
-   },
-   {
-    "title": "비트코인 8179만 원대 횡보, 미국 관세 위협 재점화 및 높은 물가지수에 관망세",
-    "link": "https://news.google.com/rss/articles/CBMic0FVX3lxTFBrTERTQVRHcnNEbGpmZ3VOMnp6RDdSVDRyWkU3U0hIX0lhUS04ejB1S0dqZk01N2lvaWNPV2x0Tmt0UVA3blRCVk5NWjBXRFhacVh1NDZxSG1DNlVodXgzUFFOMEFUU1RNdHpnRzdzQndYOTA?oc=5",
-    "source": "비즈니스포스트",
-    "publishedAt": "2026-11-25T23:44:21.000Z"
-   },
-   {
-    "title": "비트코인 8179만 원대 횡보, 미국 '관세 위협' 재점화·높은 물가지수에 관망세",
-    "link": "https://news.google.com/rss/articles/CBMic0FVX3lxTFBrTERTQVRHcnNEbGpmZ3VOMnp6RDdSVDRyWkU3U0hIX0lhUS04ejB1S0dqZk01N2lvaWNPV2x0Tmt0UVA3blRCVk5NWjBXRFhacVh1NDZxSG1DNlVodXgzUFFOMEFUU1RNdHpnRzdzQndYOTA?oc=5",
-    "source": "비즈니스포스트",
-    "publishedAt": "2026-11-25T23:44:21.000Z"
-   },
-   {
-    "title": "코인베이스 CEO \"비트코인 매도세는 일시적…투자자 돌아올 것\"",
-    "link": "https://news.google.com/rss/articles/CBMic0FVX3lxTFB2Vzd2UVBsT0duSThaMGNPSFV2ajdUTWZtVXRCdlM0M1J1OTZjbEUwUTRNQjZLZlJOWElZMUkzZjBhWHo1c21rdFlnSm1TTXdsZUkzcy1kWEUyeTIxN2VCRmJPQnNKSXNDYmE5akZaNVFGYVU?oc=5",
-    "source": "디지털투데이",
-    "publishedAt": "2026-11-25T23:42:43.000Z"
-   },
-   {
-    "title": "\"비트코인, 더 안 떨어진다\"…하락장서 55BTC 쓸어 담은 영국 CEO",
-    "link": "https://news.google.com/rss/articles/CBMic0FVX3lxTE5vY25kTGs0VXAyZF9DYWJ2T0dHR29aeS1rMmNDUF9YRzZMUldCeWg3TTZsODlSQ2JDRDNEYlNNNjl3SHRybXNDQjE0VlRoenNwWW02bWxuejBPNUJmSlRzMHlscXZZcXEya3dFMnQ2dUhDLUU?oc=5",
-    "source": "디지털투데이",
-    "publishedAt": "2026-11-25T23:42:26.000Z"
-   },
-   {
-    "title": "비트와이즈 CIO \"비트코인, 2036년 160만달러 간다…이것도 보수적\"",
-    "link": "https://news.google.com/rss/articles/CBMic0FVX3lxTE9qTkNxVUJBc016STRMN0QtbV9wanpwNU5WeFMtX0xFV1JuY3laZ2NtbWdhRDJtdzNVSW5nbWV4ZnJhNmFJQlNEblJGalBqQTF6WnVaZXhSTW5nbnVRem9PZ1hmYVFDVEpOWlR2QXRnblI1amM?oc=5",
-    "source": "디지털투데이",
-    "publishedAt": "2026-11-25T23:41:57.000Z"
-   },
-   {
-    "title": "[롤러코스피] 비트코인보다 더 널뛴 코스피…올해 사이드카만 62번",
-    "link": "https://news.google.com/rss/articles/CBMicEFVX3lxTE5XbDhnVGYyUXFUZ0Raa250Ul81TFEwNl9oWDVxWTgyNWxHMWJpZDlxY25fSU9tNjZsQVVVTlF3bklZeW9ubDB1ZDhyMlNVdlBKemdneGxReW9fOWptdE9zZ2NNT2F4UzRPMXVjVGlBNXA?oc=5",
-    "source": "연합인포맥스",
-    "publishedAt": "2026-11-25T23:35:08.000Z"
    }
   ],
   "이더리움": [
+   {
+    "title": "비트코인 6만달러 반등에도 자금 이탈…투심 회복 난항",
+    "link": "https://news.google.com/rss/articles/CBMibEFVX3lxTE5GVHVGN1l0MTF3b21XRV9WNjJJa0xCWUMwRkFHWUd1eXl1clkwQ0p5c3IzUzdFTTljbjdVYXRiaWpOYnhiRFRldGhGQ21rdmQwNUFoaGk4aXhIZzgzdTE0aGRRSkxPcmdiN01NMw?oc=5",
+    "source": "스페셜경제",
+    "publishedAt": "2026-11-27T01:35:28.000Z"
+   },
+   {
+    "title": "'北 배후 의심' 바이낸스 해킹…5174억원 출처 은폐 거래 포착",
+    "link": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE8wa3ZKUDdjLVN6UDdkNE9ySUF6am5tSE1KclhRT3Y5VGJ4cUxzajFROGUxWnFIY0gzOFQtb0I2LXRmaFM2TmloOXJwYTVIZzZFSDlrNzRmQjBlTVUzWGRwYtIBeEFVX3lxTFBtRm9idmdmNlhPVnN0ZVRfS1FQa00wNERrTUtzWlJVVEo0V3o3VU1mNDVMTWdId2pvVUp6SkFUQV8xc0tTZXc4cFZBeXVpbVVaY2JYaGNKZTZYRnltcDQ0VVhQM2gwQk1VcDB2SjEzd2ZOSVUwYXBzZA?oc=5",
+    "source": "뉴시스",
+    "publishedAt": "2026-11-27T01:31:28.000Z"
+   },
+   {
+    "title": "테더 공급량 2022년 이후 최대 감소! 비트코인 반등 가로막는 유동성 위기",
+    "link": "https://news.google.com/rss/articles/CBMiSkFVX3lxTE5vWDdzOGhGWVlKTjB1em9Sc2g5RlZ5TEhfMXVLX1NSeUo4N2lzX0VSaGlwR0wzd0lOOGZjSUVXLUlacm9qa3N3MHhR?oc=5",
+    "source": "코인리더스",
+    "publishedAt": "2026-11-27T00:44:00.000Z"
+   },
+   {
+    "title": "비트코인(BTC) ETF, 7일간 30억 달러 탈출...월가 외면 언제까지 이어지나?",
+    "link": "https://news.google.com/rss/articles/CBMiSkFVX3lxTFB1WGw5ZjZibU04alRyblFDNVg5UW1wOTVOaWJHOWdYR3hPTUFYSFBGa1RQbjhSUUNCVU8yYU9lbHBiV1dfZURLald3?oc=5",
+    "source": "코인리더스",
+    "publishedAt": "2026-11-27T00:30:00.000Z"
+   },
+   {
+    "title": "\"테더 공급, 두달 새 81억달러 감소…비트코인 반등에 부담\"",
+    "link": "https://news.google.com/rss/articles/CBMiUEFVX3lxTFBhdkhJckY3WVlMOURKM1pnRS1GNnhTc1N5c0dQdGRHNDhwQ1VXd3U0SW1lekxCakk0emxmOUdxYkhHb3prd0dDdV9HLXdYZmlj?oc=5",
+    "source": "블루밍비트",
+    "publishedAt": "2026-11-27T00:19:24.000Z"
+   },
+   {
+    "title": "[주간 코인플릭스] 26년 48주차 암호화폐 상승률 1위 ‘파이버스’",
+    "link": "https://news.google.com/rss/articles/CBMid0FVX3lxTE1VclpHU0lobTJ6a2x3enlEUnM5V1VLNVJJTlFXdDFHUWNkbG5RcXNkdTFxMG1DRWROYVlYV1JjNUpqSmFLdU5fQmQ0TnFuM2U0V3dZMlR5U1ZTNHVZWmlxZVAwTm5WLVAza2RuUGNSX21pRTZmNVBZ?oc=5",
+    "source": "비즈한국",
+    "publishedAt": "2026-11-27T00:19:02.000Z"
+   },
+   {
+    "title": "이더리움 글램스터담 후디행 12월 16일…메인넷은 빈칸",
+    "link": "https://news.google.com/rss/articles/CBMiSkFVX3lxTE1iVnhyb2hLWF9ZRVFyVG1ucVlMVlFJUWx0WENBT2ZTQ1c4WlFDdm9DcXRZbXFmTWI0NmlxbE1lZEFyaFpoNUR5Z0hR?oc=5",
+    "source": "코인리더스",
+    "publishedAt": "2026-11-27T00:16:23.000Z"
+   },
+   {
+    "title": "부테린 \"하드월렛 속 반도체도 검증해야...자산 탈취 위험\"",
+    "link": "https://news.google.com/rss/articles/CBMickFVX3lxTE5YQ1I2eUZidEpmb211bzllc3VBdEtlbVltWmEteEwyNy1qYW9QLV9hck5YZ3RsNXFmc1MtZ3NZbF9UazFwSU82dGh6WkVTWE1lckhIOHZyS1Izdng1QlZnQUlHX2JsQVliRWtrRnlfNnVkdw?oc=5",
+    "source": "디지털애셋",
+    "publishedAt": "2026-11-27T00:15:00.000Z"
+   },
+   {
+    "title": "[시세] 이더리움(ETH) 제자리…1,664.94달러 지킬까",
+    "link": "https://news.google.com/rss/articles/CBMiSkFVX3lxTFBtTmU3V0JodUp0dDBFNUt3WUpRUDYyWk1GOWFwc0Rqc2trZjB4S1RwdkMzZ19RVHpkdldiNFloSDFaX1pQNFlNNjF3?oc=5",
+    "source": "코인리더스",
+    "publishedAt": "2026-11-27T00:08:47.000Z"
+   },
+   {
+    "title": "비트코인 6만달러선서 소폭 반등…투자심리는 ‘극도의 공포’ [코인 모닝콜]",
+    "link": "https://news.google.com/rss/articles/CBMigAFBVV95cUxNU2tLTGdVcGZReTVrVERBWDh0aTREWHdpVnNJenpfSWExY05YbWFpV3NmZTQ2MVdZNnBISWpJU3U4NmpJTERNelAwUGlibnNsbTFiUkM0TWFGU0xzcm0tb3dsQjM3ZlM4TmE2MEtkMk03dEx0b0hPTmZpNVRCNGYyMg?oc=5",
+    "source": "이데일리",
+    "publishedAt": "2026-11-26T23:45:21.000Z"
+   },
+   {
+    "title": "공포·탐욕지수 50, 알트코인 지수 60…가상자산 시장 바닥 다졌나",
+    "link": "https://news.google.com/rss/articles/CBMid0FVX3lxTE0xUEtxVklpdDhtQ01zWHFTWHIzTXBTUnZlZGxwckFjX01SbGtUYzNhTHVaLVBsVkFGY0pORTRBaU9ucTA5MXR4SE1Gbl93SlN2MWFmNVZnR2w5bk1KQWVBTjZodmg0X1Z5WERmalZxd3dJM083amVv0gF3QVVfeXFMTTFQS3FWSWl0OG1DTXNYcVNYcjNNcFNSdmVkbHByQWNfTVJsa1RjM2FMdVotUGxWQUZjSk5FNEFpT25xMDkxdHhITUZuX3dKU3YxYWY1VmdHbDluTUpBZUFONmh2aDRfVnlYRGZqVnF3d0kzTzdqZW8?oc=5",
+    "source": "핀포인트뉴스",
+    "publishedAt": "2026-11-26T23:21:06.000Z"
+   },
    {
     "title": "바이낸스로 일주일 새 2.83억 달러 ETH 순유입… 현물 ETF 7일 연속 이탈 겹쳐",
     "link": "https://news.google.com/rss/articles/CBMicEFVX3lxTE55aHg1bVJwb0hsZEd2R1BYdW5GM016S19sdjF1M0MwN3dXYmhEdmpjeEIyVmRBNlg1endkR1VTVWJqWkMwN0hGTzRhR195YVFUMUZ2WUdzckZEbVJ4RUt4UF9kMDFQTDlCZV8tdFhUOWk?oc=5",
@@ -2529,12 +2547,6 @@
     "link": "https://news.google.com/rss/articles/CBMicEFVX3lxTE1UOGItdTFVdHk0WGRvTF85WjJKcTBKbnc2RVc5TlRtSWl4TC15TEdsc2NwUGE5WEk5dUxvUVpPd2sxOGJyb1plWmJ2OFZ1ZFJtWHF5aDBxVE1ya2dIMmJvQ0FYNTBIZTVMbC01WHBqUW0?oc=5",
     "source": "신아일보",
     "publishedAt": "2026-11-26T23:11:40.000Z"
-   },
-   {
-    "title": "공포·탐욕지수 50, 알트코인 지수 60…가상자산 시장 바닥 다졌나",
-    "link": "https://news.google.com/rss/articles/CBMic0FVX3lxTE9qZU5vNVQzRmJXZGxTUjdJbWhWblVfOEtsY0dIQnFBSDhILW5zVi13TDRXb202Z3R6MkY1UmtxUGpwVC1kMi1lUTRNSTdyQmktSkRvRV93bUdPZVdGZExCaWRlejJaSFR2TmZGbnB5ZVVVYknSAXdBVV95cUxNMVBLcVZJaXQ4bUNNc1hxU1hyM01wU1J2ZWRscHJBY19NUmxrVGMzYUx1Wi1QbFZBRmNKTkU0QWlPbnEwOTF0eEhNRm5fd0pTdjFhZjVWZ0dsOW5NSkFlQU42aHZoNF9WeVhEZmpWcXd3STNPN2plbw?oc=5",
-    "source": "핀포인트뉴스",
-    "publishedAt": "2026-11-26T23:11:19.000Z"
    },
    {
     "title": "유에스디에스(USDS) 거래대금 1,030억 1위…업비트 비트코인은 보합",
@@ -2595,6 +2607,12 @@
     "link": "https://news.google.com/rss/articles/CBMiWEFVX3lxTE5BTlZYcDNvakJMU05RWld0alIzSk0yNUZ4LXVlaEVLMjhNS2hFMUJidkpMWWpqSDM2d0ktWTV5cUctSTNMN1JiX2ZodFRIMEotN0ZpWWFDVk_SAV5BVV95cUxPWmUwUTVISkg0ZHp0OE5ZVVAwemRkTG1RaFdjUDFTZjhEMDFlNHQtbFVHWDFxM0puYnotQ2JfRjdpaWhUYUx2dXVNUXVWYXdKVlRaWmVGZzY4LUNkZWRn?oc=5",
     "source": "토큰포스트",
     "publishedAt": "2026-11-26T19:56:31.000Z"
+   },
+   {
+    "title": "XRP 저점서 10.7% 튀었다…‘1달러 벽’ 넘을까",
+    "link": "https://news.google.com/rss/articles/CBMiSkFVX3lxTE10bU42WVFSdWh6UFNQdEZzcjJ6R1dlcW5tMTBWUE9SaHdiUk5KNk42MElwMTJxM0RRcGdBRVlla2VLYXVvaF9jdlJB?oc=5",
+    "source": "코인리더스",
+    "publishedAt": "2026-11-26T19:53:19.000Z"
    },
    {
     "title": "이더리움, 숏 8,000만 달러 청산에 1,700달러 회복…고점보다는 39% 낮다",
@@ -2759,10 +2777,22 @@
     "publishedAt": "2026-11-26T10:24:46.000Z"
    },
    {
+    "title": "비트코인 6만 달러 회복에도 ETF 역대 최대 자금 이탈…5만 달러대 초반까지 밀리나?",
+    "link": "https://news.google.com/rss/articles/CBMiSkFVX3lxTE9ERlU2bmJBOUR1VVhGeEVUdXB0SXYwVmFFb2FORmdZMUQ2NW9mN1lqTER4N2FOMkNCdW5XVUxkSUFZb2lGQ2dWYjZ3?oc=5",
+    "source": "코인리더스",
+    "publishedAt": "2026-11-26T10:12:00.000Z"
+   },
+   {
     "title": "이더리움, AI·양자컴퓨터 대비 암호체계 대전환…'케착-256' 권고",
     "link": "https://news.google.com/rss/articles/CBMiaEFVX3lxTE9IN0dDWVBjdl9kYnUzd1FGUUtLMVhDLXl5c1MweHo1ZTNRX01Da2pJWmJ3bmpVUTZ6WmxSNnhnX0cwZGNJQVlMbk1VUzlsbW5sQ3VPNExhbzh3OFRZR0t2S2VlSkRNTWlB?oc=5",
     "source": "IT타임스",
     "publishedAt": "2026-11-26T09:51:17.000Z"
+   },
+   {
+    "title": "美 물가·성장 모두 강했다…Fed 긴축에도 비트코인 5만8000달러 지킬까 [강민승의 트레이드나우]",
+    "link": "https://news.google.com/rss/articles/CBMiUEFVX3lxTE1wckxvbjA3cHNnX0VDWk0tY0dnYjVKMnJvRVhPUURxcmxRS1h2QU95OU1NZng3NjUzTzI1WGYyTFFGUC1xZUE3Qm1VSC1lLWZu?oc=5",
+    "source": "블루밍비트",
+    "publishedAt": "2026-11-26T09:12:42.000Z"
    },
    {
     "title": "[퇴근길시황] 코스피 4700선 회복⋯비트코인 6만달러 탈환에도 ETF 5.2억달러 이탈",
@@ -2841,6 +2871,12 @@
     "link": "https://news.google.com/rss/articles/CBMiWEFVX3lxTE1GOFZkd2lsWXZMN01ORjJPUF9ZVjItMnBua3Z1alhvT3pXUU5GbzZxWWUyNHRURjhNTGdqbU9tc0Y4NEI3ckNScEcxYmhhbGRVV0JtaHVSQUTSAV5BVV95cUxOa2d1WjNYTGJXRTNUc1hHNV9HX0lqSk9jdlJWR3lvWnhKbEVaY0w2TjBRYldVMEl4MVluWFdBSXBDU3JvczFfcXYwblRJTlVNaWNEbWdMNGFtQWt0Z3VR?oc=5",
     "source": "토큰포스트",
     "publishedAt": "2026-11-26T07:03:03.000Z"
+   },
+   {
+    "title": "강세 모멘텀과 엇갈린 기술적 신호 속에서 ETH는 상승분을 유지할 수 있을까요?",
+    "link": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxNTE5XczFCeFBKMUV3a1VFaV9QbHJnblhTak8xZU9fSDlBeWwwLXB2dm5oclZDdGpvX3VOTTZxdUVtMHA5T0x0ZDNVelNicWtzRGZxRjBEOHNXYnlJRTE2MTZxckJ2Zm95eFBPMlJ5VzlyaFAyOWVlTUMwbWJhdE9WRmRoTE1yVC1zempyYVAyYU9ZYUVmc2RsRTBZdkF2bWJ0RXFyVmxmQ1k?oc=5",
+    "source": "Traders Union",
+    "publishedAt": "2026-11-26T06:13:41.000Z"
    },
    {
     "title": "[시세] 이더리움(ETH) 시장 따라 튀었다…1,733달러 넘을까",
@@ -2928,7 +2964,7 @@
    },
    {
     "title": "이더리움 클래식 8090원…코어게스 유지보수도 논의",
-    "link": "https://news.google.com/rss/articles/CBMibkFVX3lxTE5lOTg5V01ZLUNtNHlYaVYxNjJfckN6NG92WEZoTjk1VU4ta05QNHF1R0E1WjYtc1pVMElUYzFoejAyOXhnOFlUT0EwUGQ5Y2RFWEo5QnRHdjg0a01iN3BNTzY5QV9SUjZmbkFMRTZR0gFyQVVfeXFMUFh2VVlEc2U0OE9odlpkQnRKMFN2WmhhWE93TlVMbjB6ODJveUxleXdQX1ZHMU0xZVZxdHdBUTZaTWU1OHUtRVBfdG5lVVR2bGhDdGlRUXVDN0dQbk9BcXRLSWl3Mk80OXZtd2hoMTZ4SzJB?oc=5",
+    "link": "https://news.google.com/rss/articles/CBMickFVX3lxTFBYdlVZRHNlNDhPaHZaZEJ0SjBTdlpoYVhPd05VTG4wejgyb3lMZXl3UF9WRzFNMWVWcXR3QVE2Wk1lNTh1LUVQX3RuZVVUdmxoQ3RpUVF1QzdHUG5PQXF0S0lpdzJPNDl2bXdoaDE2eEsyQdIBckFVX3lxTFBYdlVZRHNlNDhPaHZaZEJ0SjBTdlpoYVhPd05VTG4wejgyb3lMZXl3UF9WRzFNMWVWcXR3QVE2Wk1lNTh1LUVQX3RuZVVUdmxoQ3RpUVF1QzdHUG5PQXF0S0lpdzJPNDl2bXdoaDE2eEsyQQ?oc=5",
     "source": "잡포스트",
     "publishedAt": "2026-11-26T04:38:13.000Z"
    },
@@ -3077,6 +3113,12 @@
     "publishedAt": "2026-11-26T00:08:57.000Z"
    },
    {
+    "title": "시장 공포 속 비트코인 캐시, 기술적 반등으로 3.54% 상승 | Top Stories | 코인마켓캡",
+    "link": "https://news.google.com/rss/articles/CBMidEFVX3lxTFA3eF85RHZHMGxOR1pHMUFDbWhhZDJXX0JXQ2RnbTExOFZQeVNtcGZfWUtGVHA2N3Y3U3ltMU5BVWNBcUxlVVZPcTF3QWQ5eVYxN0hDQWE3THdWR0lwZFZ4MGJJem5MMHBXcEJwTm5XaDNkV3pf?oc=5",
+    "source": "CoinMarketCap",
+    "publishedAt": "2026-11-26T00:04:00.000Z"
+   },
+   {
     "title": "피터 브란트 \"이더리움, 1383달러 지지선 붕괴 시 500달러 미만 폭락 경고\"",
     "link": "https://news.google.com/rss/articles/CBMic0FVX3lxTE42azVINkROZnNHNHg4SlNyS1ZiNHUzenhEalNLYmlIQXU5UzZwekdUU294RVIzYldlUThMVjFSMHVseTFpZUI2M193V3piVlg3OUlRWWdPeEZtRG1FVEpmY1BLVlNqTkZva2FaV3hhV0pkU2c?oc=5",
     "source": "핀포인트뉴스",
@@ -3090,9 +3132,9 @@
    },
    {
     "title": "해킹 피해 속출에 칼 빼 들었다… 이더리움 재단, 차기 업그레이드 난항 예고",
-    "link": "https://news.google.com/rss/articles/CBMic0FVX3lxTFBYSHdVSUZkVjNGR0JEWVZFRk9ESUNJemh1ajB4NUJoVWtyY3QxSkl0ZFlkSTRmY1BfSE52dlpsSFdMbnNFMGhpSWJmSWN5MjVKdkNoSE1pR2VmS2IweG5kTEdDaWh3c0JWaGlWZ2Q4MXN3Q0nSAXdBVV95cUxNakxlZExyVm9QS1VUTHZlM1Y0RUR3aU9hdTVueTBkR19YYy1LS0l2RHdXc0dGTnpCcE1CZTRLSkZEZnQ1TEtBaFFYTU5taFpURzNkMGhPb1NFUVhPZHJGVWg1RGhtZGF2dlY3M1VXNXJqUlJ2dUg5OA?oc=5",
+    "link": "https://news.google.com/rss/articles/CBMid0FVX3lxTE1qTGVkTHJWb1BLVVRMdmUzVjRFRHdpT2F1NW55MGRHX1hjLUtLSXZEd1dzR0ZOekJwTUJlNEtKRkRmdDVMS0FoUVhNTm1oWlRHM2QwaE9vU0VRWE9kckZVaDVEaG1kYXZ2VjczVVc1cmpSUnZ1SDk40gF3QVVfeXFMTWpMZWRMclZvUEtVVEx2ZTNWNEVEd2lPYXU1bnkwZEdfWGMtS0tJdkR3V3NHRk56QnBNQmU0S0pGRGZ0NUxLQWhRWE1ObWhaVEczZDBoT29TRVFYT2RyRlVoNURobWRhdnZWNzNVVzVyalJSdnVIOTg?oc=5",
     "source": "핀포인트뉴스",
-    "publishedAt": "2026-11-25T23:22:10.000Z"
+    "publishedAt": "2026-11-25T23:27:47.000Z"
    },
    {
     "title": "포메이션 시큐리티즈, 솔라나서 미 상장주식 토큰 거래 플랫폼 개설 신청",
@@ -3239,6 +3281,12 @@
     "publishedAt": "2026-11-25T15:32:10.000Z"
    },
    {
+    "title": "비트코인 전일비 2.01% 하락…김치 프리미엄 1.35% 기록",
+    "link": "https://news.google.com/rss/articles/CBMiaEFVX3lxTE9zeU9pVlNtMlNpUUNfbkJINllrb3RNSUZFajhTeW03eWVQM0lOUEtTdDllcjA0QjZGT0F2YXNBTWxHTkkydzBsc0toVWxsNE92eHRNV1hlRm5sZkZUYnRLNlRPbHI2c1lZ?oc=5",
+    "source": "IT타임스",
+    "publishedAt": "2026-11-25T15:10:03.000Z"
+   },
+   {
     "title": "프랭클린템플턴 암호화폐 지수 ETF, 내달 초 하이퍼리퀴드 편입",
     "link": "https://news.google.com/rss/articles/CBMiUEFVX3lxTE15bkY3TGpTTXNJWUxQS1FPS1ZSMURSUG5OUG5PbEZWajk2bnJkYXJvZjF4elhON2pIQjZWOGJEOGQ5bnJXSjBaZHRpczFDR1Vw?oc=5",
     "source": "블루밍비트",
@@ -3267,6 +3315,12 @@
     "link": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE5ST0UxNU5pRl82LVY2Ml9FMVlqei1KdzAwTF90RFZydXNQWlFpMUZRcjJPOU8xd2VuSnpvZzg0VHNlVGRaZlJmR3ViVW41WW01dlhSS1VhczJoc1ZQZ2ZrcNIBZkFVX3lxTFAyT2hJajVMR29oaVVoZ1ZGdnNFQUZvcF9OTlRMUl83QnlsMVN2dGVyZWtBZEI0VW5yMl9TTlBmS1lQRzNpMEcwQlNHSjBSbDg0cDhScEcycW5yeEJtZVgxdE43WXRwUQ?oc=5",
     "source": "토큰포스트",
     "publishedAt": "2026-11-25T14:01:03.000Z"
+   },
+   {
+    "title": "오늘의 암호화폐 뉴스: 비트코인 ​​5만 8천 달러 돌파를 향한 치열한 경쟁이 심화되는 가운데, 이더리움은 1,237달러 하락 위험에 직면하고 XRP 롱 포지션은 손실을 보고 있습니다.",
+    "link": "https://news.google.com/rss/articles/CBMi8AZBVV95cUxPSDAzMlB5dnoyOU5OZ2I3OWk1RmdpMVE2NlNkNjl5c0U2OGc4aFNYZU13YjRtS3k5YUZnYTZFQnhONjR0am44NC0tZDN1S1NiQjhORy1MUVhQcTdvMXNaeXExd2g4eS1UUi1QX0dYbFFVNlU2TlRZR3gtYXlFNExvdjZhTGxjUkFNM0xUMG43cGZESW1BQW9hUjlyM1YxYWVlYVlwR2FWY3ZjMGlNZU0xNERyMEFVMFB6NEhtRWtVeG1nY0pnWUNwcElwWUlZUHJyVGpZU0hnekdJZXhGUnR2Mm9UYU1CQk1wWlZSZHhHSm11cnV3cTRlTDRBWEtIM1ZKLUJFTnNBb0VMZmdrVjBpcURqbm0wNDdvMUdkaFFpLVhCanNWVXg1R1NESGpiQ0xhUUtHelc1MFNvSF9wbnk3Z29SVmx5SlZMQkhLbmRnTmtLQWdDeTJ0czZCa3VKR2Z3OXV2Y0NZcnFnOVdSSEZPOF83dWthblJOZHJETFlINVlfVmVoMng5NzZMbURXN3ZLRFhpdzRXYUJNRnpHOFpPZ3RXQ3VmZjdTeW51TDkwNncwYzhVYlZaR1kzWlNDdmZRR282VHNSYXBXNnVfdGFsdXVRbEpjbXhtSTkwYW5DT1FKLXJUU2pMUkZlb0dwZnFENUZwRm9JZ3dPb0I1N2Qtd1JDVUlMOUVZLVRHbkFUWXpRYzUxQnlLTUxIR0tqV1dSYVF0TENPRkVjRk53b3dheUhOMS1Ob2hPVHJSaF96NzhocXVQWTJMclU2Y3h4SnBSdUhYUzB4VjR6TlJfRlVTU1NRenBqamlRMzh0bU1QVVNKUThDNWx6Y3RpWkIxOUt6Vi16dnczWWZaT2dZUnREUWJsZUtZZlcySHZZdm5uMGN6NGpacWw1UUZkcFhxWUhNRUJ4SnBYZjNJVkNKTjhTUnBScGlxQ1FOQmxvamp5YXRiV25na05hZU4xNHZwR25jN0lYMHZKYXhOZnFzYmhiMF9PcHVDeE9JMWtjdFByUnRPRXN4NmpORm9oRERpOTVDZktXT0hOTVpMLXlhSWx5b1pmRVQzSWp2N3NvN0pyWGl3cnJqZWFmUW84bVYzeklrOEZzeWlWWFpxd1BjdjFNYndoU29lby1vMGFkSThwQVBScmptUjI3azhFQnFGTF9a?oc=5",
+    "source": "Brave New Coin",
+    "publishedAt": "2026-11-25T13:03:15.000Z"
    },
    {
     "title": "비트디지털, 이더리움 2만9825개 매각해 갤럭시 담보대출 절반 상환",
@@ -3581,6 +3635,12 @@
     "publishedAt": "2026-11-25T04:09:44.000Z"
    },
    {
+    "title": "AI 에이전트로 비트코인 거래 가능할까…가격 급등락 우려도",
+    "link": "https://news.google.com/rss/articles/CBMic0FVX3lxTE1WbFExNmMxeUdPVmpVTnN2TEl0aTR0ZGhhUExJU3dCQm9mVGlELTNKd0V2M0k4MGFweGRUZ0laTi1tRGtQMnJaZVVPX05pc2k2UDlsclRubkJiLWZhX2h6V3dsUWZOSkswUkxQT1lNT3hLYkE?oc=5",
+    "source": "디지털투데이",
+    "publishedAt": "2026-11-25T04:05:00.000Z"
+   },
+   {
     "title": "주요 암호화폐 3종 가격 전망: 비트코인, 이더리움, 리플 – 과매도 국면의 암호화폐 시장, 연중 저점 주시하며 BTC·ETH·XRP 하락세 지속",
     "link": "https://news.google.com/rss/articles/CBMikwJBVV95cUxNWkl4TUZadWQwSGJETnJINE1iSWU2WUU1b1ZXWFZWd3NqS0ZoVzVlbVNiVnlRMFpKbkgzcHBpcm1JLWEtMUx6Tk5Ba3kyWEFoTEU1T01IaGk5YW10UWVBNU9ZZk50MHlodnN1SDM1TTljNWMzdFNMajlEbFQtaGlBRUZQejRuTjVRaTdOcG5WczgxTkJsakJESU9tS3hDMFpVSDZRYnBrNkNPaGZHb0FfdmtIMkNYMlNfVkdWQUZWSlgwZHF6M1FyUlp6U0pPY1VfR3ZIRFZGNkFQZ2Q1MFdHMHFVNHRXamFmQ0s3akVsWV9IcUJ2c3VnTE1URzBwcTVCNllwWlR1TkVuVzU5MEVBZnlSaw?oc=5",
     "source": "www.tmgm.com",
@@ -3603,122 +3663,128 @@
     "link": "https://news.google.com/rss/articles/CBMiSkFVX3lxTE45Vi16SWZYbU50bC1EQnJjY3dvLXYzbVNEc3VxaHhXcWhURjFWcVRtNXdRSzkzRVQxN2Y2akpFS2JONERrQU8wTGNR?oc=5",
     "source": "코인리더스",
     "publishedAt": "2026-11-25T03:47:41.000Z"
-   },
-   {
-    "title": "CFTC, 파생상품 거래소 준비금으로ㅈ암호화폐 인정…비트코인(BTC)·스테이블코인 포함",
-    "link": "https://news.google.com/rss/articles/CBMiSkFVX3lxTE43WDBLSHVGa3FWeDVrc0FfaldBbDBNQ05peGkwaERxejRfVjZMUnV2V0pDdXdSeFpvYmQ2UTRscWZsSElIR1doTGdR?oc=5",
-    "source": "코인리더스",
-    "publishedAt": "2026-11-25T03:10:00.000Z"
-   },
-   {
-    "title": "자금 흐름 24시｜BTC·ETH 순유출 속 USDT·USD1 순유입",
-    "link": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE1vV1k3ZEFwQi1QM3FQZTBERGtVaFJ2SktLLWJ0M21IR1REQm9mOE9ONnFCdU1GUlJPMGpGMDZvRG0zUVVLTUQxT2o5cU5tQVhlSGpWYUZSUHIzeWdLd1ctONIBZkFVX3lxTE14U250Q2JFWXRDNHpIV095dmZNenJyX1F3cjM1ODh0U0FLS3dqVXB5dVpqTDRBb0s2eWRnMkN6eWNkRjlRc1FfT3pxTEg4Wml0b0hxNTZ1NDZIcHBQNGFPalBXVExUZw?oc=5",
-    "source": "토큰포스트",
-    "publishedAt": "2026-11-25T03:05:07.000Z"
-   },
-   {
-    "title": "[오후 시세브리핑] 암호화폐 시장 하락세… 비트코인 59,113달러, 이더리움 1,653달러",
-    "link": "https://news.google.com/rss/articles/CBMiWEFVX3lxTE40RWpSbzBCMW9JX0EwNDAyeGFxaUZfVHYyeTltVW9rTVBHU1JLRUVlTGI4bkZVUm5LVXJuNUZBTDlEUzhHQVd3WVRvSHp5eUoySGh4WDcyOGvSAV5BVV95cUxPTUQ1c0lFRUpwbVhLVjlZMDNKMkdaU1R2Y2ZUcmp3cDVoV2YzQkNZd25qTFpnYmlzQ0IydldzSUVBcVVKSGMzejJlSk13dWl5eTN0aG1sU1lJU1VpYl9n?oc=5",
-    "source": "토큰포스트",
-    "publishedAt": "2026-11-25T03:01:49.000Z"
-   },
-   {
-    "title": "서동주 \"월급 전부 비트코인·이더리움 샀더니 3개월 만에 3배…집도 샀다\" > 연예뉴스",
-    "link": "https://news.google.com/rss/articles/CBMiSkFVX3lxTFB5VU43U2dtY1lJYnpYelg4bmNhVEhkb2ZOMGliTFdHS0tIeF9lOWd5TXZ1RGx3RkdfNVlRZk5WTmEyMjlkOTV0YnhR?oc=5",
-    "source": "SeattleN",
-    "publishedAt": "2026-11-25T02:52:01.000Z"
-   },
-   {
-    "title": "이더리움 개발 자금난 심화…개발자 지원 조직 \"필요한자금 유치 어려움 겪어\"",
-    "link": "https://news.google.com/rss/articles/CBMiWEFVX3lxTE94c3lIek5Pd0NhVHRsY29paDlkbjdpYWo0ekRhN3lFSGpBTHFURzA1LUF6MlZJUDhhcFUtOUNycTVJNWd5VHBOVXVDVlFMWDcwTC1NYWNNeDA?oc=5",
-    "source": "블록미디어",
-    "publishedAt": "2026-11-25T02:45:04.000Z"
-   },
-   {
-    "title": "이더리움(ETH) ETF 28억 달러 샜다…PCE가 갈림길?",
-    "link": "https://news.google.com/rss/articles/CBMiSkFVX3lxTE1HU3E3YTJVVldpc2VieE5FaGRWdFZET2JjX3BqakpEM2RIb1pIX2ZaVmJON1JlSUhqbUlYUmRuWGNZd181ZllIcU13?oc=5",
-    "source": "코인리더스",
-    "publishedAt": "2026-11-25T02:34:04.000Z"
-   },
-   {
-    "title": "비트코인·이더리움·XRP·도지코인, 트럼프 관세 불안 속 하락···‘놀라운’ BTC 매수 기회 전망",
-    "link": "https://news.google.com/rss/articles/CBMivgJBVV95cUxOM2N0Z3dVZjU3MWF1Y0pXdTBiVUtha3NaQldOcnVVdWphaVd6YndnSnNqb045NzhBMVg2d2RYUE9odXp0Y2xkeFVidFU1cERPdnVFMmp4U3VUMUlnVWx3VW9SUUVtd2Q0YzVEem1EdnF5blExQjFrN1Jrdy1DTGdNUDVTcnhmZ1N6akhuNnFJMThvcWxLUnV3bWVib0JwdUcwZ3p4UFhZTURmOXpKelk5cjRqbk9Lbl9lZno3ZjhMb3dkazYxRUdQaWFPOHFhNGo1QS03bklidHhMVmNLdHVlM1hJWmFZQi1RcHM5NHduMmxveVM2RktuUXpwaWFLSHpnRzI2WVh6aXBMNkdEbVBUS3FzRU5CS3c0MzloQzJPNWxudUR6OGlTUjhnTTlGUzZqcXNrcnE3bWhiZDg1cWc?oc=5",
-    "source": "Benzinga",
-    "publishedAt": "2026-11-25T02:32:57.000Z"
-   },
-   {
-    "title": "[체인 플로우] 하이퍼리퀴드 순유입 1억600만 달러 1위...이더리움은 2억1000만 달러 순유출",
-    "link": "https://news.google.com/rss/articles/CBMiWEFVX3lxTE5TajNTSEVIanhJWXFMeGN0b0xhM0x4QWhIdVhmMG8xbDA3Q2hTdVJyQ3phZzBTRnNzbW16cFJTdkRmWjhvQXB2QXN4RW8tdDM2M3pONmlCaWbSAV5BVV95cUxPcE4zSHI1dFo3Z3FFVlVKeXdaVWxJaWxmTzFEQmhxb2V4V1A3N1I4c2wwMXNYa2NiSVI1S1o4di1ESFBKLTNWNmZ6WjZZUFNZQk5HdUxGQUF4c3pHNlVn?oc=5",
-    "source": "토큰포스트",
-    "publishedAt": "2026-11-25T02:30:21.000Z"
-   },
-   {
-    "title": "비트코인 6만달러선 또 '붕괴'…극단적 공포 상황 [크립토브리핑]",
-    "link": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE95RUFwNGZCc0oxeW1DeUZLOXpUcThyUFF1VzhQS3FMU184Y0Z3b2dhczlLeG1YdFBDVE1wQ1NncmtGR0ZIcFNZS0tKMm1HbzJfV09nSGhOMUVJQQ?oc=5",
-    "source": "파이낸셜뉴스",
-    "publishedAt": "2026-11-25T02:06:23.000Z"
-   },
-   {
-    "title": "23억 달러 美 국채 토큰 ‘USDY’, 스텔라·이더리움 오간다",
-    "link": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTE9ZUVEtZmVXQUFfcnhfLVRNdWw2YWUtSzNxY3RKM3dvczZraU5ZMW1CUzBwdEkyUHVfbFBNOHV4Nk9HeEE0R2VlNlZIb3JfS09pZzh3VHpsSkJIcHRGUVpqeUV4dHA5c0nSAWtBVV95cUxQSElOcUc4YWtuakIzREkzOGNfQjdpWlJRSUdlRjd5ZFlfM0pvazAyODNDeFBHVDNOTWxaV2dtUGRoaEQ0MGdnZGZKZmx3aFB5N2dZSUFmRzRnT2tuVGcxR3VNVGg5b01BRzFCUQ?oc=5",
-    "source": "비온미디어",
-    "publishedAt": "2026-11-25T01:50:12.000Z"
-   },
-   {
-    "title": "나스닥 상장사 BTCS, 이더리움 절반 이상 팔아 아베 대출 상환…청산 위험 낮췄다",
-    "link": "https://news.google.com/rss/articles/CBMic0FVX3lxTE93VjB5RlJIbm53OFFfalRNZ0MwLXpBUFhzck5HaVRJZEhYLUduTnprNnJzV2VtWlhESTdnVVU2UVFGaWdFNm5ZUURoVlJaVlkwdko1dkNfd0gwTzg4dG55S2xQUHU0UDllZGtwcFdxMTBleFk?oc=5",
-    "source": "디지털투데이",
-    "publishedAt": "2026-11-25T01:43:57.000Z"
-   },
-   {
-    "title": "모스크바거래소, 12월 암호화폐 거래 개시…USDT에 부가세 22%",
-    "link": "https://news.google.com/rss/articles/CBMic0FVX3lxTFBxclItb00wTDRLbnRpUWhDZTJjNTVvM0lpVmtQZHpkVTM3bDBzSlhvdXR4QjRGRENtQ3JralE1VVdRU0dBNVhBWU1MN2JZX28tblBHcmQxS1dJMU1xaXdCaV9UQ0Z1VE84Mm5jQU5OZlNrbDA?oc=5",
-    "source": "디지털투데이",
-    "publishedAt": "2026-11-25T01:43:40.000Z"
-   },
-   {
-    "title": "은행도 삼성도 뛰어든 코인 지갑 전쟁, 진짜 승부수는?",
-    "link": "https://news.google.com/rss/articles/CBMiW0FVX3lxTFByNi1xc05XQzRLcXdydGtudWxZUkpIS09LdGxBaV9GOUt1WXhBaWVlSEZuOXBBR2ZPZEF1elNHUHItQUFEcVdCREhMVnU4b1hYSTJzY2Rvek1jSFE?oc=5",
-    "source": "네이버페이 머니스토리",
-    "publishedAt": "2026-11-25T01:36:50.000Z"
-   },
-   {
-    "title": "이더리움 재단: AI가 더 이상 물러설 수 없는 하드코어 업그레이드를 강요하고 있...",
-    "link": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE1kSTdfOGdHTGktUlNwZm1CYjVxU0Jxc1lUcTBLT1JuX24zUGUyY3g5X20tUVA1NU94UUlPQVUyN0Rid1JhVmtDbXVWODI1S2EyVU9oNUxzRWR5NEE?oc=5",
-    "source": "ChainCatcher",
-    "publishedAt": "2026-11-25T01:26:37.000Z"
-   },
-   {
-    "title": "비트마인 이머전, 화요일 주가 8% 이상 하락한 이유는?",
-    "link": "https://news.google.com/rss/articles/CBMizwJBVV95cUxORjhrN0tMWE13UXlucWVlZmRob1ZYUTdFOHZVenNoZUV5RDVfZThXbkk5Rl8wOTBpOEl4MWxaOG9heThJQ0N5YzZPdEZUMElObWtDcXZjQjg2UHVnRFFsckZIR2FfM1VNdFRBa0pHeEMwbDhjS29xN296Zm9BYW9oU0ZuWkpMVTlES1lsUDE1aEVSOGtUTi1mdkRybmJoYXJETkdPWWptMGp4ZkZQOVREWGVVOVllSWYzNXNHZUNYUVlCb0JReVd3Z0lnTDZtWG5xbVpvTTJ1RUVrS0tLSFNOc3Z6NWNub3BTeXU1NXBhaGV2bGFERGpTY1pXekx4SEotZVotbUhlU1lwN1VnWVl5Ums2RlV0dUNteVd6YVUwMTVMc043Yjk2VnVvNk5WZ3dWWk9YTW5aWDBzS1Zyd2h3UEVtZGJLUXpic2RjQVp3TQ?oc=5",
-    "source": "Benzinga",
-    "publishedAt": "2026-11-25T01:18:45.000Z"
-   },
-   {
-    "title": "이더리움, 양자컴퓨터보다 AI가 더 시급한 위협? 암호체계 전면 개편 착수",
-    "link": "https://news.google.com/rss/articles/CBMiSkFVX3lxTE4wZ3o0OXAyS2c2Nl9XckpmZHNMejJqTTJEQUZpOVFvWkVZZExqTEE2Snd6UmU3OHV4ZThsTzJzd3BCTDlRajJRV293?oc=5",
-    "source": "코인리더스",
-    "publishedAt": "2026-11-25T01:17:00.000Z"
-   },
-   {
-    "title": "美 CFTC, 비트코인·이더리움 금융준비금으로 일부 인정…'헤어컷' 적용",
-    "link": "https://news.google.com/rss/articles/CBMiakFVX3lxTE9HdGxZaXY0anJyZXExQXk4QVlrMEFCX1ZpRlhSUEdvUFBfUWNCY2UtWGRiV01SZTdnSE0zN2xGLWZiVlBNaWFfQ2tpUl9RaDZyT011dTdlZDQzRGtLaHN2dEtseTRDbFJ4SUE?oc=5",
-    "source": "nbn 시사경제",
-    "publishedAt": "2026-11-25T00:57:14.000Z"
-   },
-   {
-    "title": "[이더 옵션 데일리] 미결제약정 57억3132만 달러…1760달러 콜옵션 거래량 1위",
-    "link": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE1EYlU2YWp5a3pPVUJCVS1jaHdPd1FTaFR1d2gwSU5rZE5nSFBaSW5JZDAta1prNUFoRTZJQ2ZtYzc2VkxxM25hR0ZLV2MxOWRHdUlNNXBsWkFZbTR4MGpIVtIBZkFVX3lxTE9VN1QyZ19BSnRqWlVaODJqU0E2QWdNR19PQUpOOFoxSVNPRWRSc2V3UW5WSFlDbUtvdlVxQ0tiV0dzQzRBd2tjTGF2Zms1QWp5MC12Vk81SU9FUHMwTzRLZUJpN29EQQ?oc=5",
-    "source": "토큰포스트",
-    "publishedAt": "2026-11-25T00:51:19.000Z"
    }
   ],
   "AI 안경": [
+   {
+    "title": "에이디에스, AI 안경용 핵심 기술 확보…양산 검증 추진",
+    "link": "https://news.google.com/rss/articles/CBMiT0FVX3lxTFBWR1NmQkdpZ1VfQXdvUHV0V29hdy03VFg5c056aWdVTUNiREg2c1MzYTNDY1FHVEZyZFFFNlNmelhtamhpU1VvZlV1elJVVWM?oc=5",
+    "source": "와우테일",
+    "publishedAt": "2026-11-27T02:16:18.000Z"
+   },
+   {
+    "title": "\"AI로 입학해도 치과의사 가능해\" 서울대 교수 주장",
+    "link": "https://news.google.com/rss/articles/CBMigAFBVV95cUxQdU5pU2VFRFVXNVFMVFJLOVVQVWZBVUpqUnM4WGl1X0dmTjlISEdJS3ktYXJzV3BNMXVtdEVrSWNOUWFOTTBNaG1JdlRLT1RIMV84aGVvYTZMb0pya0tJMlVJWlFTWmxxYWd3ZkNnSEt1OHFzM2lQSjVXR0dabV84ZQ?oc=5",
+    "source": "이데일리",
+    "publishedAt": "2026-11-27T02:01:16.000Z"
+   },
+   {
+    "title": "커지는 AI 안경 커닝 시험 의혹...제주, 고교 기말고사 학교 와이파이 차단",
+    "link": "https://news.google.com/rss/articles/CBMic0FVX3lxTE9wRDl1UEZkcjZtMk5OTjA4TmRWaEdTenhONENBcmJFYUphQmsxc1hOZ3g4WlZ6Ty1QcWJ5YW1jNE9uMkptVlk1RzFiZ0RtbWhRMGU2NEg3UkZabm1NSV9PekhxbEE4YUNRTVlfTGE0Rm5McTA?oc=5",
+    "source": "헤드라인제주",
+    "publishedAt": "2026-11-27T01:42:01.000Z"
+   },
+   {
+    "title": "AI 안경만 잡으면 뭐하나…'가짜 수험생·성적표'엔 무방비",
+    "link": "https://news.google.com/rss/articles/CBMigAFBVV95cUxNbi1rR1JpTlozVE04eHVkS0FVc3U2NXFXaTdHeURtaUxLOHJoc1NXNkZTTmpkTm42dEI4VjVnanJaNTVHYkJCVi1NMzc3bTZYRnM2X2JuVWs3X1ZSTktLbWhuMXdXOGtoMlpMaUlnY2Z5MFdqallTYkZtZURaVnhBTw?oc=5",
+    "source": "이데일리",
+    "publishedAt": "2026-11-27T01:41:53.000Z"
+   },
+   {
+    "title": "AI 안경으로 시험지 찍자 15분 만에 정답…해커톤서 드러난 허점 : 사회",
+    "link": "https://news.google.com/rss/articles/CBMiS0FVX3lxTE1ocnR4Uy1nSS1CRC15TXJPdlgycVdLcFZWS0UwSDBHZzU5VVpEcERjZU15UEFveUtadlVBcUlnYS04X0pqX1k2WlNnMA?oc=5",
+    "source": "재경일보",
+    "publishedAt": "2026-11-27T01:18:40.000Z"
+   },
+   {
+    "title": "AI 안경과 다른 길… 에이서, 172인치급 화면 품은 AR 글래스 'GR100F' 국내 출시",
+    "link": "https://news.google.com/rss/articles/CBMia0FVX3lxTE1jdXkwbG5TWW5VbXlsTGNLcmtlbXNCUFNTVGhuUDVNTWtudDRGX2Y4UTBqZW9wSzhPcV9KY2stemtwSjBxT2h1aG03SkE5dHBsUXFuc0h3Q0V0bDhzQ1dyTlhDTllvX3c2OTRJ0gFrQVVfeXFMTWN1eTBsblNZblVteWxMY0tya2Vtc0JQU1NUaG5QNU1Na250NEZfZjhRMGplb3BLOE9xX0pjay16a3BKMHFPaHVobTdKQTl0cGxRcW5zSHdDRXRsOHNDV3JOWENOWW9fdzY5NEk?oc=5",
+    "source": "에이빙",
+    "publishedAt": "2026-11-27T01:13:52.000Z"
+   },
+   {
+    "title": "법정에 선 ‘AI 안경’…네덜란드서 판매금지 위기",
+    "link": "https://news.google.com/rss/articles/CBMiU0FVX3lxTE0wLVk0a2xZRVJlN21MRXNxM0NHNUJtT2lHOUtnbk1CSEY1a0x5SXJzcmdXS3BWQ2psNEhfbGRDcFM1ckZfUVhpQk9QMG00T3oxZmxZ?oc=5",
+    "source": "JTBC",
+    "publishedAt": "2026-11-27T01:13:47.000Z"
+   },
+   {
+    "title": "수능장 뚫은 'AI 안경'… 이정헌 \"AI 안전 예산, 224분의 1밖에 안 돼\" [진중한시선 EP5.]",
+    "link": "https://news.google.com/rss/articles/CBMicEFVX3lxTFA1LWE3UUxIZC1zSHh3NE1lN05PeDJxRzdYS2NGTzNhZEhFQkZfanNfLWdOTWZIVWJacGhGYkN6YmZya3VnYklGdzhMTzlRcjRpZGIteWg4NDh0eXdYbUZMWDNrVUNReUFBVU5uOHN6MzU?oc=5",
+    "source": "SK브로드밴드 회사소개",
+    "publishedAt": "2026-11-27T01:03:24.000Z"
+   },
+   {
+    "title": "[가보니] \"AI 풀이 금지\" 함정 뚫렸다…AI 커닝 비상에 다층방어 '맞불'",
+    "link": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE0yWk9nTDh3T3o0eE9HOGZtdnJDYVY5cURENzVYTUxleWlkVnctWHdnOEplaVZUQW94bS01Z3AwbHpMYUtkc0c1bEdyLTZ0WUZsbUZvbkFaVzQtSE9wQjNGNNIBYEFVX3lxTE0yWk9nTDh3T3o0eE9HOGZtdnJDYVY5cURENzVYTUxleWlkVnctWHdnOEplaVZUQW94bS01Z3AwbHpMYUtkc0c1bEdyLTZ0WUZsbUZvbkFaVzQtSE9wQjNGNA?oc=5",
+    "source": "연합뉴스",
+    "publishedAt": "2026-11-27T01:00:00.000Z"
+   },
+   {
+    "title": "“걸리면 공무원 시험, 하나는 뚫리겠지 ”…단속 비웃는 AI 커닝",
+    "link": "https://news.google.com/rss/articles/CBMiXkFVX3lxTFBrcUZsS1dqM0V0QTFjT2lYOVUydHk4bml5NU5DZDVzdkR0TVF2WnViNTZmRF9zSERodkVib0w5ZjlZMU9OcW5ramNrSXlIdjc0QXJYZEdtNTR3N0NGTFE?oc=5",
+    "source": "주간경향",
+    "publishedAt": "2026-11-27T00:56:00.000Z"
+   },
+   {
+    "title": "\"몰카 넘쳐난다\"…네덜란드서 메타 AI 안경 판매중지 소송",
+    "link": "https://news.google.com/rss/articles/CBMiU0FVX3lxTE9fVzVWb0cwTzUyQ1dhRU1ZdlZCSEs3M2ljMmFld0U2Sm9CSERORS1IR19keWlrRVhudWJxNEJHY2hjVUh6ZVZ3VFAzcE52VGJtdF8w?oc=5",
+    "source": "뉴스1",
+    "publishedAt": "2026-11-27T00:47:03.000Z"
+   },
+   {
+    "title": "불법 토익 대리시험, '650만원·개인정보 위협'...AI 부정 대응도 허점",
+    "link": "https://news.google.com/rss/articles/CBMiYkFVX3lxTE9PMlNCWlNDT1hDNkZoMU9WN0h6RW9IZGs5WE01NVdiVmpvMkNrS202dmpZdFJub1AwdmRvYThESmt2VnZWVzZYUng2RUFhQkY3SFJ0SUNpdHRSNVJhR1BqYVV3?oc=5",
+    "source": "CWN",
+    "publishedAt": "2026-11-27T00:45:00.000Z"
+   },
+   {
+    "title": "수능 덮친 ‘AI 커닝’ 공포, 대학가로 확산… 기말고사 앞두고 비상",
+    "link": "https://news.google.com/rss/articles/CBMia0FVX3lxTE9Fb0xCWHZpc1hiNzh3ZTlzT01mdlNGdUlHcDlRWEd0aHZ2alJMTnZCR1JXa2NJWFUycVRwSGZ0OHZVRHR5NmV6VkpSZ2F4X0lyallhQWhjTGNveVphc3d1V25XZVNvN1ZETkRJ?oc=5",
+    "source": "현대경제",
+    "publishedAt": "2026-11-27T00:40:52.000Z"
+   },
+   {
+    "title": "토익시험도 AI 커닝?···“전문 노하우 있어 깔끔하다”",
+    "link": "https://news.google.com/rss/articles/CBMiXkFVX3lxTE1FVmVUUnhWemR1NzBXdWNMTnB5M0NnMlk3UUREdzhvU1ktY2N0bjVQUkRXcmVFSm5Qdmt3SUIwLXhsd0tTcU9KTkpzVFgyVFdNRlcyc2J3c0VMc3lsV3c?oc=5",
+    "source": "주간경향",
+    "publishedAt": "2026-11-27T00:40:00.000Z"
+   },
+   {
+    "title": "연필은 최대 두 자루, 안경에는 보안 씰…토익 시험장도 보안 강화",
+    "link": "https://news.google.com/rss/articles/CBMia0FVX3lxTE94d0pEdE55bjVUYnRkYnk3WEJsNGlzYXVwR2t1Tjc0b09uekVFMTJRMnFQVmtlTU5adXRNbHluX3JmRVlqNnQyOERkdUFJckh5Zy16enZwQnZZZDJDakpMQlRNc1pBYkdUbXRn0gFUQVVfeXFMUHlBendNLVNNSVRjdXM3M0lpdV9YZkpoR1g3bXdJU2xzTXdLUzNvMk9ndHJ1RUFNMzZBZDJZN3pRQ2NPWXVmWk9QS3FPMjZubmx6Z19L?oc=5",
+    "source": "세계일보",
+    "publishedAt": "2026-11-27T00:14:45.000Z"
+   },
+   {
+    "title": "[신병민 건축가의 도면 밖 이야기] AI 안경을 쓴 건축사",
+    "link": "https://news.google.com/rss/articles/CBMiaEFVX3lxTE1YUEVRaGdibExUemxGTEdFWjZpc2NGaGpkRkUyVVA1d3F2ckJYb01rTkwwb1hJT0tEQ215TEwzQUdfSk4yVTFOQ0d6RURsV1dZeF9zZ1lMak5hbDhuNmI2YTktYjA5NmtY?oc=5",
+    "source": "FETV",
+    "publishedAt": "2026-11-27T00:00:00.000Z"
+   },
    {
     "title": "법정에 선 ‘AI 안경’…네덜란드서 판매금지 위기 [소셜픽]",
     "link": "https://news.google.com/rss/articles/CBMiVEFVX3lxTFBWWFJ2QWNEOEhicHM0bnhXaVFyMUhKUjJxQnRFZ0c4UVFVeEFvMk1hNnNDd0dpVk82LUo1Z214UThzQTdUMjJnWExNV3pmYjR5aXZwZw?oc=5",
     "source": "JTBC",
     "publishedAt": "2026-11-26T23:26:00.000Z"
+   },
+   {
+    "title": "시험공화국은 왜 AI 안경 하나를 두려워하나",
+    "link": "https://news.google.com/rss/articles/CBMiTkFVX3lxTE9kNGtMb0ZLWEpmaUxRbTNDRkItR3BQYnhWLXFvRW81QUltX1NqQjRpZFA0b2xpQ1F3bVNzY0U2ckdzQ3hRNFBoVkhjUGRDQQ?oc=5",
+    "source": "브런치",
+    "publishedAt": "2026-11-26T23:25:11.000Z"
+   },
+   {
+    "title": "[AI두들] AI 안경: 커닝 따위가 문제가 아니었다",
+    "link": "https://news.google.com/rss/articles/CBMiakFVX3lxTE9tQi1TbGZ1cjV1cm1mSmRDTXpfRjlBQlZzNUZMWGdJdzN3QTJuSnAzRmhXeDNnZ3VJbjdVcEJHdl9rdXpYUk5ZRlBwNkhSakNpaExaeVJlblJpY05EUy1CdENBZkhTY2hQU0E?oc=5",
+    "source": "월요신문",
+    "publishedAt": "2026-11-26T22:52:54.000Z"
+   },
+   {
+    "title": "\"미성년자 사귀는 법·엉터리 복약지도\"…AI 안경, 커닝만 문제 아니다 > 시애틀 뉴스/핫이슈",
+    "link": "https://news.google.com/rss/articles/CBMicEFVX3lxTFBWR28wMWNKWC1wZWxoUEh2TDFlTGVzWDk1dWY1VUZ2MEl6VU1kWklQcVMyOWJ5c3JKeW80cnI0UzVtVkNPaGNLMEtwVVRrM0pLcWI5OHpoUENxcE9GdlJzVHBwYUM4TnVMblhkVzdYcDg?oc=5",
+    "source": "SeattleN",
+    "publishedAt": "2026-11-26T22:23:54.000Z"
    },
    {
     "title": "중고교 내신시험 'AI안경 커닝' 4명…초록 불빛에 들통나 0점 처리 > 뉴스포커스",
@@ -3763,6 +3829,18 @@
     "publishedAt": "2026-11-26T17:52:31.000Z"
    },
    {
+    "title": "공공의 적으로 떠오른 스마트 아이웨어, 논란에도 가파른 성장세",
+    "link": "https://news.google.com/rss/articles/CBMiggFBVV95cUxQdUVWMEZGa1RlaXFfUzNaOUVkVnRtbl9RZDVKaDZKdEJ1UWkzOHVjdlFFLUpLTEVHdEJEcHcwWnEzWWdtZERGT3EwZnoxTGs4TmVxMnNfSmhEb2pZaFpwMExpM18wQmNja19vZVY4SG8wOXlLSndhWjZabHhOUHlJSFl3?oc=5",
+    "source": "어패럴뉴스",
+    "publishedAt": "2026-11-26T15:08:52.000Z"
+   },
+   {
+    "title": "\"이미 AI 안경으로 합격한 사람 있다, 수능도 뚫릴 것\" 강성태 섬뜩 경고 > 뉴스포커스",
+    "link": "https://news.google.com/rss/articles/CBMic0FVX3lxTE1scFBBSV9UWmFGc1ZNWXEzb2trLXpNbUJSdjM3eE9SN2xHUGR1X3dWemVkTHNvcFY3US1vcEh4emlCaDh6NV9KbFlYSnVZTE0wNFE2T2FqVFdObVo2enl4SUg1dWdmem92eVVob2ZoSThsY2s?oc=5",
+    "source": "SeattleN",
+    "publishedAt": "2026-11-26T14:50:32.000Z"
+   },
+   {
     "title": "“토익 시험장서 샤프 못 쓴다”… AI 안경 부정행위 차단에 초강수",
     "link": "https://news.google.com/rss/articles/CBMibEFVX3lxTFB2dGp6bm9DS082dWtobXB4aWlrejBxblVyeGI1MHFfbVZoU3htMXlqeGNZbGEwZHptX3A1YkZla2dQX3JfR2ludTBvZkhwb1BTbTA0bzhZOGVxTVROcmJfMU5PNFo3ay1yancyWg?oc=5",
     "source": "뉴스탭",
@@ -3770,15 +3848,39 @@
    },
    {
     "title": "토익도 'AI 커닝' 차단...안경에 스티커·샤프 금지",
-    "link": "https://news.google.com/rss/articles/CBMiXkFVX3lxTFA2ZEdubnNURU5HR0hqdjNsLUpweDFpdndFREdTOHFKbG9nUkZwZG02WWZWV2hwN3JUenRaQzBZRGxJOTBUcnRaamI0S1d2clJXX0REc0RTcUk1cXZEdWc?oc=5",
+    "link": "https://news.google.com/rss/articles/CBMidkFVX3lxTFBBYTQ0RC15SENfSEdDcHNkenhVVDZWdlFZQWF3dDRjVWNhdTB3QU5abWpYb2hDcWJySEpjNksxdjhhVGY2amlJQjZIXzAtLW0yU3NNNVdGM0d0WHh5M0h5ZW5NcnpHMGRDcXV6OEZ0Qks2NGY2cUE?oc=5",
     "source": "YTN",
     "publishedAt": "2026-11-26T13:40:00.000Z"
    },
    {
     "title": "토익도 ‘AI 커닝’과 전쟁…안경테에 스티커 붙이고, 샤프 안돼",
-    "link": "https://news.google.com/rss/articles/CBMirAFBVV95cUxNcHA0WklEb3dIT2JMMjVzc0FSN01SZm96dmVJWWpsU0V5WFRvYTRJa3F6TTdQODZpdG9SV1loNERoQnlNalN1S0lBWWl4WlN2U25yQmdVUTNFZFdsc2FCeUZZZmZMdEg0SWRZZE5WSTZ1ZDFmanVmNktoQlQ2MnktT0M3c0FfZERtS2ZjSm0zT0pZMFNHcFluOXZ6b2V6T3hhbEtRTElJdkYzS3FJ0gFfQVVfeXFMUDZzSDk1U0J1RmV2RjFWUkdCWUZ5ajJrUHVzaHpCMDFYZTM2UzBaOGdCSEdubnlNVWxtd09hMTBpZUVYdE5SRmIweGU3dWs0ODJCYzdZQnFzaHlvZHhPRHc?oc=5",
+    "link": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE9ScEVibzMtQlVZX0NtMG9HMzlFZFRleHVHaTZvZWN0UFRIdDRlTkxzUnV1RER1dzZ0YUpkWmhFbFRwOVd0TmU5LTJCaXpXNV9jSy1oMGg1ck53d9IBX0FVX3lxTFA2c0g5NVNCdUZldkYxVlJHQllGeWoya1B1c2h6QjAxWGUzNlMwWjhnQkhHbm55TVVsbXdPYTEwaWVFWHROUkZiMHhlN3VrNDgyQmM3WUJxc2h5b2R4T0R3?oc=5",
     "source": "경향신문",
     "publishedAt": "2026-11-26T13:20:00.000Z"
+   },
+   {
+    "title": "\"수능 때 앞치마 입히고 QR코드 찍자\"…AI커닝 막을 별별 아이디어 > 뉴스포커스",
+    "link": "https://news.google.com/rss/articles/CBMic0FVX3lxTE5hdU82RDJCRDJnY001QmxRSE5wQnRKcWNqcEx4ZUNjQ0hyeEdqRjRWSGVOcmVjQkFLc3VCaGhtN2plT2JTRnhReHRzVms1ZlhKdm9SNWNTLVlFUXRNX1d3bWtLNll3cEQzelRycWR2V0ZZdnc?oc=5",
+    "source": "SeattleN",
+    "publishedAt": "2026-11-26T13:12:36.000Z"
+   },
+   {
+    "title": "[현지 보고]Ai 시대 아이폰은 사라지나?",
+    "link": "https://news.google.com/rss/articles/CBMiSEFVX3lxTE52Y0c1Z3czanFOc3Z0eFRDbEh6cWNWRG05dnhkeDRTcmJObVQ3cU4yVnQ3cFdiUFNaRUxORXhpZnh1bHlRVFJ2Vw?oc=5",
+    "source": "브레이크뉴스",
+    "publishedAt": "2026-11-26T12:54:00.000Z"
+   },
+   {
+    "title": "처음으로 고개를 들라는 컴퓨터",
+    "link": "https://news.google.com/rss/articles/CBMiU0FVX3lxTE01c3ZtUjhQcERjMkVvVXN3Um9PYi1ZdmlicEc0T3JLcFBnbERmMWJPUnNxQ29FVWZHNGxOYnBCTldWTlhEVTFmNi1sYlU5RjVRU1FZ?oc=5",
+    "source": "브런치",
+    "publishedAt": "2026-11-26T12:40:04.000Z"
+   },
+   {
+    "title": "토익도 AI 안경 단속…보안 씰 붙인다",
+    "link": "https://news.google.com/rss/articles/CBMickFVX3lxTE1jMUxPNDRhM0xMaC1KWkx1MVBjQzEwYVFLT0tvcmN1ekszYzlldDdMOWNOZWt5TU84T2JrTGVmNW5pQ3NveUktYnJ4UGZ1aGRvZG01bFhMZGhILXJWN3pBOERpVmlpRmNkQy1WX01VNE45UdIBckFVX3lxTE1jMUxPNDRhM0xMaC1KWkx1MVBjQzEwYVFLT0tvcmN1ekszYzlldDdMOWNOZWt5TU84T2JrTGVmNW5pQ3NveUktYnJ4UGZ1aGRvZG01bFhMZGhILXJWN3pBOERpVmlpRmNkQy1WX01VNE45UQ?oc=5",
+    "source": "에듀플러스",
+    "publishedAt": "2026-11-26T12:14:11.000Z"
    },
    {
     "title": "AI 안경부터 초소형 드론까지...최첨단 커닝범 잡는 이색 모바일 게임, 메가문 ‘AI커닝을 잡아라!’ 출시",
@@ -3803,6 +3905,12 @@
     "link": "https://news.google.com/rss/articles/CBMiXEFVX3lxTFB4WVIwWnpOb2pYNTRubkRodWlxbWQwSE5CcUpEWEdBTl9EZzZmdFVaam9CeDV3RHlPdjR1aC1WandCbGFGVU84Q2tuS3kzUUgxMkx2VEstb3gzV09K?oc=5",
     "source": "인벤",
     "publishedAt": "2026-11-26T10:32:53.000Z"
+   },
+   {
+    "title": "수능 딱 하루 남았는데 커닝은 결국 '사람 눈' 판별…혼란 불가피 > 뉴스포커스",
+    "link": "https://news.google.com/rss/articles/CBMiTEFVX3lxTE83dkt3Q2E2ZDFwWGZ5WXA4aGE3NG5aY212V1Zma0lBaXJXbl9HcDRaRG41aktBWkJjc21Iem9CWGNYTWtVOHF2OGdHeTI?oc=5",
+    "source": "SeattleN",
+    "publishedAt": "2026-11-26T09:52:08.000Z"
    },
    {
     "title": "안경·시계 전수검사에 단추 스티커까지…경북대 28일 논술고사",
@@ -3884,7 +3992,7 @@
    },
    {
     "title": "29일 토익 시험부터 수험생 안경 전수검사·보안 씰 부착…샤프·손목시계 착용 금지",
-    "link": "https://news.google.com/rss/articles/CBMiXkFVX3lxTE1FRV9RVE03eHlUdjBDdzMtZVdmS3NtT25HU3RfYlJIQW1iZ2dDNWZzSV9VN0dyRHUxSHI3WTg0bVlhMFJBTjN0YXltTWdtY19hd1JJM29CVl9DeTR4M3c?oc=5",
+    "link": "https://news.google.com/rss/articles/CBMiVkFVX3lxTFAtYThMNmVoNldtakp0SUZ2eXJhSHgwMDFmZ053S0lwbFJwYl9hXzRjbmN5Z2RIZ3E1RXVBeVVkblloTEk4c3JycXRMTjAybVkwbVg0TjlB?oc=5",
     "source": "피앤피뉴스",
     "publishedAt": "2026-11-26T06:41:46.000Z"
    },
@@ -3935,12 +4043,6 @@
     "link": "https://news.google.com/rss/articles/CBMiVEFVX3lxTE1FVWIxTG5VUkhTT29TNDdLOHZ5T2dWbVQ2T2U0bVp2T0ZjdmFsc3lqV1ptbjFmLW5Rb3RYaHNfRkZMY1hlWEpkVHlHd1BDc2ZKdlI2Nw?oc=5",
     "source": "JTBC",
     "publishedAt": "2026-11-26T06:03:00.000Z"
-   },
-   {
-    "title": "토익도 AI 안경 단속…보안 씰 붙인다",
-    "link": "https://news.google.com/rss/articles/CBMibkFVX3lxTFBnVTdYTzJqMmNFQzZQMk53WUVCcVR3ZVRkYTdHZDFIdnhYQjV1M0NveG5UY2plRk9ncEtNWlB4bElMS1hLZEJuT1ZSM0RWYWxBNGx0UkpLQlRodGFyV3RDOU5yck1sSlRVZDVLeUFB0gFyQVVfeXFMTWMxTE80NGEzTExoLUpaTHUxUGNDMTBhUUtPS29yY3V6SzNjOWV0N0w5Y05la3lNTzhPYmtMZWY1bmlDc295SS1icnhQZnVoZG9kbTVsWExkaEgtclY3ekE4RGlWaWlGY2RDLVZfTVU0TjlR?oc=5",
-    "source": "에듀플러스",
-    "publishedAt": "2026-11-26T06:00:00.000Z"
    },
    {
     "title": "토익도 AI 부정행위와 전쟁…‘안경 바꿔치기’ 못 하게 스티커",
@@ -4075,12 +4177,6 @@
     "publishedAt": "2026-11-25T21:08:06.000Z"
    },
    {
-    "title": "\"이미 AI 안경으로 합격한 사람 있다, 수능도 뚫릴 것\" 강성태 섬뜩 경고 > 뉴스포커스",
-    "link": "https://news.google.com/rss/articles/CBMiTEFVX3lxTFBTblh0RDd6ZkN0dE5jRnVIRGQwejlRMTd1Rlh2MVEtR2lael96T0tuZThCRlNGeWtZLW5CdVNJdjNKempMdElQcGxyS0k?oc=5",
-    "source": "SeattleN",
-    "publishedAt": "2026-11-25T20:15:25.000Z"
-   },
-   {
     "title": "구글 AI 안경의 두 얼굴, 젠틀몬스터와 워비파커 사이",
     "link": "https://news.google.com/rss/articles/CBMiUEFVX3lxTE9qMlJ0N2otS3dsS1JxSzFVbFByb2kzWTRCTklBekJtRlJETFRPUEhaYlU3ak5XeHBveXR1VUZzQXZQNl9JejZOVUx3OUFveFFj?oc=5",
     "source": "브런치",
@@ -4115,12 +4211,6 @@
     "link": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE10S2NCdkYzbDR6b29EeUs4Rl96MGlabjFOZ1hYTzBRT3dFNC00eF9pOG0zeWU4QWFEZHZ1dFdQWHpJMVFLU3Z0bEcwNEg0eUZrbEpINFVSbk5RdHRJU29ueQ?oc=5",
     "source": "뉴스1",
     "publishedAt": "2026-11-25T14:12:49.000Z"
-   },
-   {
-    "title": "시험공화국은 왜 AI 안경 하나를 두려워하나",
-    "link": "https://news.google.com/rss/articles/CBMiTkFVX3lxTE9kNGtMb0ZLWEpmaUxRbTNDRkItR3BQYnhWLXFvRW81QUltX1NqQjRpZFA0b2xpQ1F3bVNzY0U2ckdzQ3hRNFBoVkhjUGRDQQ?oc=5",
-    "source": "브런치",
-    "publishedAt": "2026-11-25T14:03:03.000Z"
    },
    {
     "title": "곽효정 시의원 \"AI 시험 부정행위 막아야\"",
@@ -4201,10 +4291,10 @@
     "publishedAt": "2026-11-25T07:57:00.000Z"
    },
    {
-    "title": "\"미성년자 사귀는 법·엉터리 복약지도\"…AI 안경, 커닝만 문제 아니다 > 시애틀 뉴스/핫이슈",
-    "link": "https://news.google.com/rss/articles/CBMiSkFVX3lxTFBQdklBbXZqcmVpemRMUlpNelJwejA2bUpEZXVyWFIyOUFNWklwYVUtR1FPeVg4R0FfNlQ0M0pPQkh4LU9kejNHY3R3?oc=5",
-    "source": "SeattleN",
-    "publishedAt": "2026-11-25T07:40:55.000Z"
+    "title": "AI 부정행위 우려… 하반기 언론사 채용시험 비상",
+    "link": "https://news.google.com/rss/articles/CBMiZkFVX3lxTE1DQWUzVm05cUZRWm9ST1JSTXpFS3k3aTFzZW02Zi1ua3FoWEN4c1pOamlXWmxMRGRVZ0ctWmRadDR0c0VmSFhDODA4VWI2R1ZmWF90WXNlNTJxYUtEUldydDlsMjFsdw?oc=5",
+    "source": "한국기자협회",
+    "publishedAt": "2026-11-25T07:56:18.000Z"
    },
    {
     "title": "네덜란드는 일련의 위험한 결함 발생 후 AI 스마트 안경에 대한 경고를 발표했습니다.",
@@ -4217,6 +4307,12 @@
     "link": "https://news.google.com/rss/articles/CBMiTEFVX3lxTFBuT1A3cWdHX3czOXpoMGdQa2dBZDVlWXk5a25pcUlYLTN1QWw5MWEyc1JYM1NpTlBIUnEwdmlQLXl4dFNFZjJ5aXBGRl8?oc=5",
     "source": "SeattleN",
     "publishedAt": "2026-11-25T06:55:59.000Z"
+   },
+   {
+    "title": "지우개에 카메라 숨기고 AI 안경 개조까지…수능 사흘 앞 '초비상' > 뉴스포커스",
+    "link": "https://news.google.com/rss/articles/CBMiTEFVX3lxTFB3RHRXRU5qYUhzMDNrcjdVRFJKZm51WFp3YmZvMmtGZmRiaVIwMlh4dXREa0FjTUtLYmZuOWtGOUYtZ3lUQjZPNWR4d1I?oc=5",
+    "source": "SeattleN",
+    "publishedAt": "2026-11-25T06:43:30.000Z"
    },
    {
     "title": "세종시의회 곽효정 의원, AI 부정행위 사각지대 해소 촉구",
@@ -4471,12 +4567,6 @@
     "publishedAt": "2026-11-24T15:10:00.000Z"
    },
    {
-    "title": "수능 딱 하루 남았는데 커닝은 결국 '사람 눈' 판별…혼란 불가피 > 뉴스포커스",
-    "link": "https://news.google.com/rss/articles/CBMiTEFVX3lxTE83dkt3Q2E2ZDFwWGZ5WXA4aGE3NG5aY212V1Zma0lBaXJXbl9HcDRaRG41aktBWkJjc21Iem9CWGNYTWtVOHF2OGdHeTI?oc=5",
-    "source": "SeattleN",
-    "publishedAt": "2026-11-24T14:38:36.000Z"
-   },
-   {
     "title": "멀쩡한 안경까지 시험을 치른다",
     "link": "https://news.google.com/rss/articles/CBMiTEFVX3lxTE1VWnh2dm9kLS0wbmNoWnA2SUtGR3RjbTJIVVg2VDNGR1VpZGdOSFptdnVrbnBpbWtMUU9jcFZweVFZZkR3ei1fMlppejE?oc=5",
     "source": "브런치",
@@ -4499,12 +4589,6 @@
     "link": "https://news.google.com/rss/articles/CBMiZkFVX3lxTE15U1lvWTVqcG0yWVJMWGp1QjNfbW13RlJJaVhmc1pEUVFISGpoUHhSVEdudlNhUlBndG5ramdSd3NMVG1zRFZCZmhSTTlYN2xNNlgzVDBiNzR6Z1ZzMThtdk0xWkJHUQ?oc=5",
     "source": "교육을 비추다",
     "publishedAt": "2026-11-24T12:44:50.000Z"
-   },
-   {
-    "title": "지우개에 카메라 숨기고 AI 안경 개조까지…수능 사흘 앞 '초비상' > 뉴스포커스",
-    "link": "https://news.google.com/rss/articles/CBMic0FVX3lxTE1NVFRZUTQzUFc1d2tMSHhpUFVIVFAta3pPaXVnNnJaemYtY1Zzd0I5dzBBWkFYRE1RMkVDclVOM2JSNGVJUkpOUmpGNS10WEpzc3dCdThSTGZKV09oLWNOZUdITVN2UEZHM3NqNUVkWU1LZ1E?oc=5",
-    "source": "SeattleN",
-    "publishedAt": "2026-11-24T12:41:07.000Z"
    },
    {
     "title": "“오프라인도 AI 부정행위 뚫리는데”…기업 ‘온라인 채용 시험’ 비상",
@@ -4601,12 +4685,6 @@
     "link": "https://news.google.com/rss/articles/CBMiZEFVX3lxTE5YZ0Y2bFhoQ0ZPVFhMclZJQWRKZ3ZScTRKVWE1UjFrYmZBb25BQUZfUVE4VDE0SHBMckttUF9uU1Fpa3Z2cnh6dzdtQTFQSG51bUFqVDRyQlR4aW1tS1Zjdzl6Rzc?oc=5",
     "source": "뉴스1",
     "publishedAt": "2026-11-24T07:23:14.000Z"
-   },
-   {
-    "title": "\"수능 때 앞치마 입히고 QR코드 찍자\"…AI커닝 막을 별별 아이디어 > 뉴스포커스",
-    "link": "https://news.google.com/rss/articles/CBMic0FVX3lxTE5hdU82RDJCRDJnY001QmxRSE5wQnRKcWNqcEx4ZUNjQ0hyeEdqRjRWSGVOcmVjQkFLc3VCaGhtN2plT2JTRnhReHRzVms1ZlhKdm9SNWNTLVlFUXRNX1d3bWtLNll3cEQzelRycWR2V0ZZdnc?oc=5",
-    "source": "SeattleN",
-    "publishedAt": "2026-11-24T07:14:29.000Z"
    },
    {
     "title": "앞치마에 탐지기까지 총동원된 대학가…해외는 'AI 시대 평가 틀'부터 바꿨다",
@@ -4787,132 +4865,6 @@
     "link": "https://news.google.com/rss/articles/CBMic0FVX3lxTE5uUE5RUUlJdGpGTDFfWDJGTzFpTWhSSTBiLTZYWUxjNXlCZjhGYWtlal9WYjBMMTk1Z1pGUzJLQk5pLWtCb1Ywa0tTWGFUSFcwemw0ZDZTZ1poTWNCd2pGZTZNZmtHRmZsZlYyNFd6aGl2OXM?oc=5",
     "source": "디지털투데이",
     "publishedAt": "2026-11-24T02:19:37.000Z"
-   },
-   {
-    "title": "4만 원에 뚫린 시험 공정성...중국 AI 안경 써보니",
-    "link": "https://news.google.com/rss/articles/CBMihAFBVV95cUxNV0E3eDBiT2t4eUJSQndFRklmcy02bGIzTEc0WUFwbjhpTXBwQnptdzBwaUR2QTBQQkJCNVpISmQxNHNWbVhRc09GZi13bkFlUHZrUVR5WGotVEtSalZabUQ1R05mNFFwRlNsYzVmUDFiUGp5d3JMd2FPZFE1SDZaRHE4dzY?oc=5",
-    "source": "YTN 사이언스",
-    "publishedAt": "2026-11-24T02:04:07.000Z"
-   },
-   {
-    "title": "\"누가 AI 안경 썼나\"…서울대 의대생 3명, 수능 풀어본 결과는?",
-    "link": "https://news.google.com/rss/articles/CBMi-AFBVV95cUxONndEZTJmYlhRR2NXQnpHOVNaandxT3BaU0tKNmFENVpwVzI3bFc2UjF3MUx6YmtVd3ROWDFSLVM0UkthM3M1NENMdzBhbmVTVzlDVzNVek1FSklIVWtCU2IxRXJBRjNwNElKRGtqSW1sOWRocGVSQzc2WTVWbDJQcjJZZjA4R25jQ24yV0p0YlBQZjdfbHVHd19waEdMc2VRTkVDUld0RWdaemZvN2h0LVlCN0xzYUxNdDB3cTNmYVZVM05LTFd5QkpOUXNJQ1RUS1BHQXVkMEpIZGI0YUJNTmx1elMzalRfaWJQM29RQjZpOVlDbXEzUg?oc=5",
-    "source": "데일리안",
-    "publishedAt": "2026-11-24T01:59:00.000Z"
-   },
-   {
-    "title": "AI 안경 부정행위 막는다… 전북교육청, 고교 평가관리 강화",
-    "link": "https://news.google.com/rss/articles/CBMiX0FVX3lxTE9TbWhoSWJxbkl4ZjM3RFR1MTUyUHRqdHpiRHFYVjYxMEZmd3lZaWJOWkFDSTRPWWF5Sl9fME1hYlNSQ2MxTG5LczZQTmlVR0pkQWtvamhUVEp4ZHpYNnRN?oc=5",
-    "source": "완주신문",
-    "publishedAt": "2026-11-24T01:56:44.000Z"
-   },
-   {
-    "title": "고교 내신 AI안경 쓰면 최대 퇴학",
-    "link": "https://news.google.com/rss/articles/CBMiWkFVX3lxTFA1S0hma1NUUGxDM0pGWmQ4SG9PS1FRazJxWFFHcFJwajBPQ1ZWY1hrME9sb3ppblU5RGZpMWJDZVVzVURBTlVYWTBWNXo3a2FESWMzOFhUVmNtdw?oc=5",
-    "source": "파이낸셜뉴스",
-    "publishedAt": "2026-11-24T01:56:20.000Z"
-   },
-   {
-    "title": "내신시험서 스마트기기 부정행위 땐 '당일 전 과목 0점'…최대 퇴학 권고",
-    "link": "https://news.google.com/rss/articles/CBMiXEFVX3lxTE1ic2piMkJnMFB0MW1Eb0hCdVY0TDBKb2gwTDRYUjBjZUVVSnpSVDNWV0hFdVRiNjVST0daYUFCaFkyMVVxWWppdjAxQ004OFVkZS1TOGVDcEVycE10?oc=5",
-    "source": "뉴스핌",
-    "publishedAt": "2026-11-24T01:46:00.000Z"
-   },
-   {
-    "title": "국가자격시험 AI 부정행위 근절…스마트기기 전담 감독관 확대배치·제재 강화",
-    "link": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE9wOF93UVk4cnFwd1NiZFBLVDVzM0RRTkMySFdhLVRzVk83NWoyWWhJMm5aVG95WW9Cd2JRNmRMSGVucEpBR3B2enlOQnpoaUNUa19ORHRwUXBNQdIBWEFVX3lxTE1vbFpUXzFkV2JpSzc3c0lqVEg0OXRZT3pCSnlBWUNydjBxVFRISjY2MWthTWRHLXd5YmZEc3M4UnF2ZU5TN3Jra3g3aVNndzZMS1BHbXJUOEY?oc=5",
-    "source": "아주경제",
-    "publishedAt": "2026-11-24T01:45:57.000Z"
-   },
-   {
-    "title": "인하대, 수시 논술고사 금속탐지기 활용 확대…AI 부정행위 차단",
-    "link": "https://news.google.com/rss/articles/CBMiVEFVX3lxTE1NSDVoamFEVGV0bU1KcVFnRFZGQ09yV1pJZjdTRmNDNHBNRWgybm9FeXdjVzA2U3I0aDdjLThOM3ROeFE2X0hnOURWNXpnaWtteTRfUg?oc=5",
-    "source": "뉴스1",
-    "publishedAt": "2026-11-24T01:43:49.000Z"
-   },
-   {
-    "title": "\"얘들이 내 배를 짼다니 든든\"…대화하며 수능 풀어도 국어 97점, 누구길래",
-    "link": "https://news.google.com/rss/articles/CBMiYkFVX3lxTE5QRWtENVU4RDJ0WWY4SEdaMkN2bUxLR1JKT2RRdFlVaWktNmx2WmhsLXU2S2I1emVXTVY0Y2cydmo3TFBKa1NZOU9nOFUtdTFZTUJtVFFPRS1Ic0dlWUZadDhB?oc=5",
-    "source": "매일신문",
-    "publishedAt": "2026-11-24T00:43:21.000Z"
-   },
-   {
-    "title": "“수능 치팅 논란이 불 지폈다”…AI 안경 시장 달구는 ‘포스트 폰’ 전쟁",
-    "link": "https://news.google.com/rss/articles/CBMiV0FVX3lxTE4xMVk4QWRpN1VieWVrVEVSV0FFblJWbENqNV9CdENyZ2FsOW1DVnZiaGI3VEF5TWxPRkJhLXV0emZieTQ2YnZkSTd1ckZ4MWV2TnJ1YWNxVQ?oc=5",
-    "source": "부산경남대표방송 KNN 뉴스",
-    "publishedAt": "2026-11-24T00:37:00.000Z"
-   },
-   {
-    "title": "AI 안경 부정행위...게임은 어디까지 금지할까",
-    "link": "https://news.google.com/rss/articles/CBMiakFVX3lxTE8wUmNqVHhvNE1QWUNpTkxrdzEwSVJuYmF3aTdmTjhzZUhNRUg4dUFEMkhRYmVOQkdPTDlCQ3NENlN0QWlBU0dVNmZRYVFXNC1RRVFMa2tsUnFSdHNTRWs4NEFCSXE2SW1QU2fSAWpBVV95cUxPMFJjalR4bzRNUFlDaU5Ma3cxMElSbmJhd2k3Zk44c2VITUVIOHVBRDJIUWJlTkJHT0w5QkNzRDZTdEFpQVNHVTZmUWFRVzQtUUVRTGtrbFJxUnRzU0VrODRBQklxNkltUFNn?oc=5",
-    "source": "게임와이",
-    "publishedAt": "2026-11-23T23:59:16.000Z"
-   },
-   {
-    "title": "'AI 안경' 없이 '깔깔'…서울의대생 성적 다 밝혔다",
-    "link": "https://news.google.com/rss/articles/CBMiakFVX3lxTE9BeVgyLUdwcUJfazQzMTB5TzFjZXlmdkFRSF83VmpOR1dMV2JMNGtnNUF2Xy1xTGVhRWtDZFA0VjNnVEl6TGxvay1EUWx3Y0R1NHdVNmdrR3VLQXpHUnpqMjZGaU1ldXZxd3fSAWZBVV95cUxOX3JpTHpxX25VZjBDNHprTmtRdGNrQ2NTLUNSN0FXYUhNVEZneTFLSVRRcDJFQ0h3czNyMHQ0VERLRGF2bHFTOGNlRDc5Y21XdXlzMVlaY21objN5TUFTdjZobXdLQmc?oc=5",
-    "source": "SBS 뉴스",
-    "publishedAt": "2026-11-23T22:43:31.000Z"
-   },
-   {
-    "title": "'AI 안경' 없이 '깔깔'…서울의대생 실력검증 '화제'",
-    "link": "https://news.google.com/rss/articles/CBMihgFBVV95cUxPV25wcTBJejYtRUpDTTl4NzVxQ09IWlJMclE5ZWE0NTBlY3kzeWI4STRfRGJmQ0hzWl82czd6SW5fNnVYcEhTMUUwQURLU0N5YTBPQ1pVZ05vTEU1Mk9kdXZQbHcwSGNkM0NUWEprR1FOTmtlZzJ6TGJ2LXVocW81X3FHUEV6Z9IBZkFVX3lxTE5fcmlMenFfblVmMEM0emtOa1F0Y2tDY1MtQ1I3QVdhSE1URmd5MUtJVFFwMkVDSHdzM3IwdDRUREtEYXZscVM4Y2VENzljbVd1eXMxWVpjbWhuM3lNQVN2Nmhtd0tCZw?oc=5",
-    "source": "SBS 뉴스",
-    "publishedAt": "2026-11-23T22:43:31.000Z"
-   },
-   {
-    "title": "“이런 애들이 내 배를 짼다니”…AI 논란에 ‘수능 풀이’ 나선 서울대 의대 신입생들, 결과는",
-    "link": "https://news.google.com/rss/articles/CBMia0FVX3lxTE9tVTlMTjZSa3dtRkRTQktNQmZ2X1dzd29PVVh1Z1YtTjZLYnBVNTZPMWFTcE5ZWkRBRC03eUQwMVN4UXNxaWZOdjF3eGFBMUtQWUI0eERKTEltLXZUX2lpdVQ4aElVc3pfQkZB?oc=5",
-    "source": "TWIG",
-    "publishedAt": "2026-11-23T22:37:31.000Z"
-   },
-   {
-    "title": "“내 얼굴 찍고 있나?”…‘AI 안경’ 불안감 타고 뜨는 ‘안티 AI’ 보안 시장 [AI 안경 쇼크]",
-    "link": "https://news.google.com/rss/articles/CBMibEFVX3lxTFBvTHNzSFpsejRKOXNJRFlzWXdhVHFaY0F0WXRJZFAzcnFRazBDN1oyUE1oTWhqY0tmQTNmM0xqaHF5eHRJU3Y3aHpOOU5KVHgyZ1FjUVp4R1VxRHg3Szk3VG0yRFI3TW9vYlVfYQ?oc=5",
-    "source": "한경매거진",
-    "publishedAt": "2026-11-23T21:03:00.000Z"
-   },
-   {
-    "title": "얇은 안경테에 반도체·배터리 꾹꾹…‘AI 안경’에 숨은 돈맥 지도 [AI 안경 쇼크]",
-    "link": "https://news.google.com/rss/articles/CBMibEFVX3lxTFBkejliYjNfX1BVcWN6VjVLbUFpb1oyNkQxd2RRdjk3SU5wdmZjSGhuMHo1U1ZYREJQYUZPcWlwVVp2RHZSSWpxRVNJOThha1RFR05FRHhaa3JYVk92TlhpNG9OS1hvWmpPMDBDRg?oc=5",
-    "source": "한경매거진",
-    "publishedAt": "2026-11-23T21:02:00.000Z"
-   },
-   {
-    "title": "“치팅 논란이 불 지폈다”…삼성 완판으로 달아오른 ‘포스트 폰’ 전쟁 [AI 안경 쇼크]",
-    "link": "https://news.google.com/rss/articles/CBMibEFVX3lxTFBlSmx2RC1YeGhpdXo2N011SkVfTEJKaWZ0SURpRkpCUEk1QWlmZUxOVTJHNkFFNExKZ1NFeUpzeDdsdUJ6ZU1LV1FwdEg5Mkc0WWNucjhoOHFwVURnNmlpQTEtY2RfVlBSYllIWg?oc=5",
-    "source": "한경매거진",
-    "publishedAt": "2026-11-23T21:00:00.000Z"
-   },
-   {
-    "title": "\"암호 시험지부터 안경테 X선 검사기까지\"…AI 커닝 막을 기발한 아이디어들",
-    "link": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE9zZFFITmY0d05CUThUZl9oQ3JPNWxCd0ZvZU9PLTI3NmE3OHVsUGpmWG9mRU96NXRZN0RQTFExVFROOHktVXVyN0xnTnFMRnhEQUhEMURSdmlwcnlrN1Z1RtIBeEFVX3lxTE5YXzRoNnhoRlYtQ1d3c3hVLWRTa2liU3JvekN1cUpBSFl2SU1GODhJX0ppTVROSG9lS3lBRFFMTVFSenYzeHJ4c0NROEh2Y05OTjE0dDVwVXN1cjc3Mm5JQXhHZ0I5YTJDYXRBSm11MG1xRGtaMWFXXw?oc=5",
-    "source": "뉴시스",
-    "publishedAt": "2026-11-23T21:00:00.000Z"
-   },
-   {
-    "title": "AI 스마트안경 부정행위 현실화…소방·경찰시험도 관리 ‘주의보’",
-    "link": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE1CUC1PNExiRjRqTGxDdEtrUnpnbkFPaENWN1M0ZjBkVlZmVDRLc2dQaktIOHpNWXlXUkJFR3FrVjVjaTJXc0l6MTdnRmFWaTJybEVNTTNOS0p3czQ?oc=5",
-    "source": "경기일보",
-    "publishedAt": "2026-11-23T20:00:00.000Z"
-   },
-   {
-    "title": "\"AI 안경 썼나 검증해 보자\"…서울대 의대생 3명 수능 풀었더니",
-    "link": "https://news.google.com/rss/articles/CBMiWkFVX3lxTFBPTk9xRzVGbmoxQmlIZmRFUDlEMk1XMk9CUElJY0dNaUJ2RGdNcGZRSE1EdWd6b01scWVkdTNSTlltVF9OMC10akRrcHJPeGV6T0FHTVdJVW1KZw?oc=5",
-    "source": "파이낸셜뉴스",
-    "publishedAt": "2026-11-23T19:40:00.000Z"
-   },
-   {
-    "title": "\"AI로 합격한 사람 너야?\"…'수능 검증' 나선 서울대 의대 신입생 3인방",
-    "link": "https://news.google.com/rss/articles/CBMiYkFVX3lxTFBIQzB4andha0d0VUlYVks4anZkc1I2R2Z4RWR4ZW5hSkxhWTJiblVvWFZINEdsWTZNaXRFbF9jTjB6Rkt3T3kzMmZNT1p2cTVFQlBzV3RaV1phZFA1NE1tbnlR?oc=5",
-    "source": "뉴스1",
-    "publishedAt": "2026-11-23T19:00:00.000Z"
-   },
-   {
-    "title": "안경 바꾸고 시계도 못 차고…혼란 속 치러진 논술 시험",
-    "link": "https://news.google.com/rss/articles/CBMiUkFVX3lxTE9lYUpWU21GSEw0N3poaGEtX2J6bjZBVkpjSWdwaUlIZDhpdUcyanlxbDMtTzhSd28yMkRZXzBkV2ljdXlsZVRSNkNXUDVuQnZMV3c?oc=5",
-    "source": "JTBC",
-    "publishedAt": "2026-11-23T16:48:36.000Z"
    }
   ]
  }
