@@ -18,7 +18,7 @@
 :root{
   --bg:#f5f5f7; --card:#ffffff; --card-2:#fbfbfd; --fill:rgba(118,118,128,.12); --fill-2:rgba(118,118,128,.08);
   --text:#1d1d1f; --muted:#6e6e73; --faint:#86868b; --line:rgba(0,0,0,.08);
-  --accent:#0071e3; --accent-soft:rgba(0,113,227,.1); --on-accent:#ffffff;
+  --accent:#0071e3; --accent-soft:rgba(0,113,227,.1); --on-accent:#ffffff; --accent-2:#4c9df0;
   --danger:#ff3b30; --danger-soft:rgba(255,59,48,.12); --warn:#c77700; --warn-soft:rgba(255,149,0,.14); --ok:#248a3d; --ok-soft:rgba(52,199,89,.14);
   --st-plan:#ff9500; --st-design:#ffcc00; --st-pub:#34c759; --st-dev:#007aff; --st-etc:#8e8e93;
   --c-site:#007aff; --c-svc:#5856d6; --c-content:#ff9500; --c-etc:#8e8e93;
@@ -30,7 +30,7 @@
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
   --bg:#000000; --card:#1c1c1e; --card-2:#2c2c2e; --fill:rgba(118,118,128,.24); --fill-2:rgba(118,118,128,.16);
   --text:#f5f5f7; --muted:#a1a1a6; --faint:#8e8e93; --line:rgba(255,255,255,.1);
-  --accent:#2997ff; --accent-soft:rgba(41,151,255,.16); --on-accent:#ffffff;
+  --accent:#2997ff; --accent-soft:rgba(41,151,255,.16); --on-accent:#ffffff; --accent-2:#64b3ff;
   --danger:#ff453a; --danger-soft:rgba(255,69,58,.18); --warn:#ffb340; --warn-soft:rgba(255,159,10,.18); --ok:#30d158; --ok-soft:rgba(48,209,88,.16);
   --st-plan:#ff9f0a; --st-design:#ffd60a; --st-pub:#30d158; --st-dev:#0a84ff; --st-etc:#98989d;
   --c-site:#0a84ff; --c-svc:#5e5ce6; --c-content:#ff9f0a; --c-etc:#98989d;
@@ -38,7 +38,7 @@
 :root[data-theme="dark"]{
   --bg:#000000; --card:#1c1c1e; --card-2:#2c2c2e; --fill:rgba(118,118,128,.24); --fill-2:rgba(118,118,128,.16);
   --text:#f5f5f7; --muted:#a1a1a6; --faint:#8e8e93; --line:rgba(255,255,255,.1);
-  --accent:#2997ff; --accent-soft:rgba(41,151,255,.16); --on-accent:#ffffff;
+  --accent:#2997ff; --accent-soft:rgba(41,151,255,.16); --on-accent:#ffffff; --accent-2:#64b3ff;
   --danger:#ff453a; --danger-soft:rgba(255,69,58,.18); --warn:#ffb340; --warn-soft:rgba(255,159,10,.18); --ok:#30d158; --ok-soft:rgba(48,209,88,.16);
   --st-plan:#ff9f0a; --st-design:#ffd60a; --st-pub:#30d158; --st-dev:#0a84ff; --st-etc:#98989d;
   --c-site:#0a84ff; --c-svc:#5e5ce6; --c-content:#ff9f0a; --c-etc:#98989d;
@@ -55,6 +55,24 @@ a{color:var(--accent);text-decoration:none} a:hover{text-decoration:underline}
 .btn,.rowbtn,.linkbtn{border:0;background:var(--fill-2);border-radius:980px;padding:7px 14px;cursor:pointer;font-weight:500;white-space:nowrap;transition:background .15s,transform .1s,opacity .15s}
 .btn:hover,.rowbtn:hover{background:var(--fill)} .btn:active,.rowbtn:active{transform:scale(.97)}
 .btn.primary{background:var(--accent);color:var(--on-accent)} .btn.primary:hover{opacity:.88;background:var(--accent)}
+.btn.light{background:var(--accent-2);color:var(--on-accent)} .btn.light:hover{opacity:.88;background:var(--accent-2)} /* 하위 버튼(+ 업무): 프로젝트 버튼보다 밝은 파랑 */
+/* 시스템 전환(My Dashboard ↔ WBS): 왼쪽 위 제목을 누르면 펼쳐지는 메뉴 */
+.sys{position:relative;min-width:0}
+.sys-btn{display:inline-flex;align-items:center;gap:10px;border:0;background:none;padding:4px 8px 4px 4px;margin:-4px 0 -4px -4px;border-radius:12px;color:var(--text);font:inherit;cursor:pointer;max-width:100%}
+.sys-btn:hover{background:var(--fill-2)}
+.sys-btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.sys-btn .sys-chev{width:14px;height:14px;flex:none;color:var(--faint);transition:transform .18s}
+.sys-btn[aria-expanded="true"] .sys-chev{transform:rotate(180deg)}
+.sys-menu{position:absolute;left:0;top:calc(100% + 8px);z-index:50;min-width:250px;background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:0 12px 32px rgba(0,0,0,.14),0 2px 6px rgba(0,0,0,.06);padding:6px;display:flex;flex-direction:column;gap:2px}
+.sys-menu[hidden]{display:none}
+.sys-item{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:11px;color:var(--text);text-decoration:none}
+.sys-item:hover,.sys-item:focus-visible{background:var(--fill-2);outline:none}
+.sys-menu .sys-item svg{width:28px;height:28px;flex:none;color:var(--accent)}
+.sys-item b{display:block;font-family:"S-CoreDream-6Bold",var(--font);font-weight:normal;font-size:15px;line-height:1.2}
+.sys-menu .sys-item small{display:block;color:var(--faint);font-size:12px;margin-top:2px;font-family:var(--font)}
+.sys-item .sys-now{margin-left:auto;color:var(--accent);font-size:15px;font-weight:700}
+.sys-item[aria-current="page"]{background:var(--accent-soft)}
+
 .btn.danger{color:var(--danger)}
 .rowbtn{padding:4px 11px;font-size:12.5px}
 .linkbtn{background:none;color:var(--accent);padding:4px 0;font-size:13.5px}
@@ -270,7 +288,7 @@ tr.is-done td{color:var(--faint)} tr.is-done .ttl{text-decoration:line-through}
   .brand{grid-area:brand} .actions-top{grid-area:actions} .top .tabs{grid-area:tabs;justify-self:center;overflow-x:auto;max-width:100%}
 }
 @media (max-width:640px){
-  header.top{position:static}
+  header.top{position:relative;z-index:30}
   .top .wrap{grid-template-columns:minmax(0,1fr) auto}
   .brand small{display:none}
   .actions-top .btn{padding:6px 11px;font-size:13px}
@@ -294,10 +312,10 @@ tr.is-done td{color:var(--faint)} tr.is-done .ttl{text-decoration:line-through}
 
 <header class="top">
   <div class="wrap">
-    <h1 class="brand">
-      <svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="9" fill="currentColor"/><rect x="7" y="8" width="12" height="4" rx="2" fill="#fff"/><rect x="11" y="14" width="13" height="4" rx="2" fill="#fff" fill-opacity=".8"/><rect x="15" y="20" width="10" height="4" rx="2" fill="#fff" fill-opacity=".6"/></svg>
-      <span>WBS</span><small id="sync">불러오는 중</small>
-    </h1>
+    <div class="sys brand">
+      <h1 class="brand" style="margin:0"><button type="button" class="sys-btn" id="sysBtn" aria-haspopup="menu" aria-expanded="false" aria-controls="sysMenu" title="시스템 바꾸기"><svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="9" fill="currentColor"/><rect x="7" y="8" width="12" height="4" rx="2" fill="#fff"/><rect x="11" y="14" width="13" height="4" rx="2" fill="#fff" fill-opacity=".8"/><rect x="15" y="20" width="10" height="4" rx="2" fill="#fff" fill-opacity=".6"/></svg><span>WBS</span><svg class="sys-chev" viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 6l4.5 4.5L12.5 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button><small id="sync">불러오는 중</small></h1>
+      <div class="sys-menu" id="sysMenu" role="menu" hidden><a class="sys-item" role="menuitem" href="../"><svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="9" fill="currentColor"/><rect x="7.5" y="17" width="4.2" height="7.5" rx="2.1" fill="#fff" fill-opacity=".55"/><rect x="13.9" y="12.5" width="4.2" height="12" rx="2.1" fill="#fff" fill-opacity=".8"/><rect x="20.3" y="7.5" width="4.2" height="17" rx="2.1" fill="#fff"/></svg><span><b>My Dashboard</b><small>뉴스 · 메일 · 일정 · 투자 · 부동산</small></span></a><a class="sys-item" role="menuitem" href="./" aria-current="page"><svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="9" fill="currentColor"/><rect x="7" y="8" width="12" height="4" rx="2" fill="#fff"/><rect x="11" y="14" width="13" height="4" rx="2" fill="#fff" fill-opacity=".8"/><rect x="15" y="20" width="10" height="4" rx="2" fill="#fff" fill-opacity=".6"/></svg><span><b>WBS</b><small>프로젝트 · 업무 일정 관리</small></span><span class="sys-now" aria-hidden="true">✓</span></a></div>
+    </div>
     <nav class="tabs" role="tablist" aria-label="보기">
       <button class="tab" role="tab" data-view="wbs" type="button">WBS 표</button>
       <button class="tab" role="tab" data-view="gantt" type="button">간트</button>
@@ -305,9 +323,8 @@ tr.is-done td{color:var(--faint)} tr.is-done .ttl{text-decoration:line-through}
       <button class="tab" role="tab" data-view="people" type="button">담당자</button>
     </nav>
     <div class="actions-top">
-      <a class="btn" href="../" title="My Dashboard로">대시보드</a>
-      <button class="btn" id="addProjBtn" type="button">+ 프로젝트</button>
-      <button class="btn primary" id="addBtn" type="button">+ 업무</button>
+      <button class="btn primary" id="addProjBtn" type="button">+ 프로젝트</button>
+      <button class="btn light" id="addBtn" type="button">+ 업무</button>
     </div>
   </div>
 </header>
@@ -926,6 +943,13 @@ load();
 let lastLoad=Date.now();
 document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible"&&Date.now()-lastLoad>60000&&!$("#editorRoot").firstChild){lastLoad=Date.now();saving.then(load)}});
 })();
+</script>
+<script>
+(()=>{const b=document.getElementById("sysBtn"),m=document.getElementById("sysMenu");if(!b||!m)return;
+const set=o=>{m.hidden=!o;b.setAttribute("aria-expanded",String(o));if(o)(m.querySelector("[aria-current]")||m.querySelector("a")).focus()};
+b.addEventListener("click",e=>{e.stopPropagation();set(m.hidden)});
+document.addEventListener("click",e=>{if(!m.hidden&&!e.target.closest(".sys"))set(false)});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!m.hidden){set(false);b.focus()}});})();
 </script>
 </body>
 </html>

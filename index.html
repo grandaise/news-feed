@@ -11,20 +11,15 @@
 <link rel="icon" href="favicon-32.png" type="image/png" sizes="32x32">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
-<link rel="stylesheet" href="app.css?v=202611260837">
+<link rel="stylesheet" href="app.css?v=202611270945">
 </head>
 <body>
 <header>
   <div class="top">
-    <h1 class="brand">
-      <svg class="logo" viewBox="0 0 32 32" aria-hidden="true">
-        <rect width="32" height="32" rx="9" fill="currentColor"/>
-        <rect x="7.5" y="17" width="4.2" height="7.5" rx="2.1" fill="#fff" fill-opacity=".55"/>
-        <rect x="13.9" y="12.5" width="4.2" height="12" rx="2.1" fill="#fff" fill-opacity=".8"/>
-        <rect x="20.3" y="7.5" width="4.2" height="17" rx="2.1" fill="#fff"/>
-      </svg>
-      <span>My Dashboard</span>
-    </h1>
+    <div class="sys">
+      <h1 class="brand"><button type="button" class="sys-btn" id="sysBtn" aria-haspopup="menu" aria-expanded="false" aria-controls="sysMenu" title="시스템 바꾸기"><svg class="logo" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="9" fill="currentColor"/><rect x="7.5" y="17" width="4.2" height="7.5" rx="2.1" fill="#fff" fill-opacity=".55"/><rect x="13.9" y="12.5" width="4.2" height="12" rx="2.1" fill="#fff" fill-opacity=".8"/><rect x="20.3" y="7.5" width="4.2" height="17" rx="2.1" fill="#fff"/></svg><span>My Dashboard</span><svg class="sys-chev" viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 6l4.5 4.5L12.5 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button></h1>
+      <div class="sys-menu" id="sysMenu" role="menu" hidden><a class="sys-item" role="menuitem" href="./" aria-current="page"><svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="9" fill="currentColor"/><rect x="7.5" y="17" width="4.2" height="7.5" rx="2.1" fill="#fff" fill-opacity=".55"/><rect x="13.9" y="12.5" width="4.2" height="12" rx="2.1" fill="#fff" fill-opacity=".8"/><rect x="20.3" y="7.5" width="4.2" height="17" rx="2.1" fill="#fff"/></svg><span><b>My Dashboard</b><small>뉴스 · 메일 · 일정 · 투자 · 부동산</small></span><span class="sys-now" aria-hidden="true">✓</span></a><a class="sys-item" role="menuitem" href="wbs/"><svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="9" fill="currentColor"/><rect x="7" y="8" width="12" height="4" rx="2" fill="#fff"/><rect x="11" y="14" width="13" height="4" rx="2" fill="#fff" fill-opacity=".8"/><rect x="15" y="20" width="10" height="4" rx="2" fill="#fff" fill-opacity=".6"/></svg><span><b>WBS</b><small>프로젝트 · 업무 일정 관리</small></span></a></div>
+    </div>
     <nav class="views" id="views">
       <button data-view="home">홈</button>
       <button data-view="news">뉴스</button>
@@ -32,7 +27,6 @@
       <button data-view="plan">일정</button>
       <button data-view="invest">투자</button>
       <button data-view="apt">부동산</button>
-      <a class="views-link" href="wbs/" title="WBS 보드">WBS</a>
     </nav>
     <div class="actions-top">
       <span class="updated" id="updated"></span>
@@ -268,6 +262,13 @@
 </dialog>
 
 <div id="toast"></div>
-<script type="module" src="app.js?v=202611260837"></script>
+<script type="module" src="app.js?v=202611270945"></script>
+<script>
+(()=>{const b=document.getElementById("sysBtn"),m=document.getElementById("sysMenu");if(!b||!m)return;
+const set=o=>{m.hidden=!o;b.setAttribute("aria-expanded",String(o));if(o)(m.querySelector("[aria-current]")||m.querySelector("a")).focus()};
+b.addEventListener("click",e=>{e.stopPropagation();set(m.hidden)});
+document.addEventListener("click",e=>{if(!m.hidden&&!e.target.closest(".sys"))set(false)});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!m.hidden){set(false);b.focus()}});})();
+</script>
 </body>
 </html>
