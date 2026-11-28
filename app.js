@@ -1377,16 +1377,31 @@ async function loadGmail() {
   if (!mail.gmail.token && !gmailSavedToken()) return;
   try {
     if (!mail.gmail.email) mail.gmail.email = (await gapi("profile")).emailAddress || "";
-    const list = await gapi(`messages?maxResults=30&q=${encodeURIComponent("in:inbox newer_than:7d")}`);
-    const metas = await Promise.all((list.messages || []).map((m) =>
-      gapi(`messages/${m.id}?format=metadata&metadataHeaders=From&metadataHeaders=Subject&metadataHeaders=Date`)));
-    mail.gmail.items = metas.map((m) => ({
-      id: `g-${m.id}`, gid: m.id, threadId: m.threadId, provider: "gmail", label: "Gmail", account: mail.gmail.email,
-      from: parseFrom(header(m, "From")), subject: header(m, "Subject") || "(제목 없음)",
-      date: new Date(+m.internalDate).toISOString(), snippet: decodeEntities(m.snippet || ""),
-      seen: !(m.labelIds || []).includes("UNREAD"), hasAtt: false,
-    }));
+    const fresh = await gmailFetch("in:inbox newer_than:7d");
+    const ids = new Set(fresh.map((x) => x.id));
+    mail.gmail.items = [...fresh, ...mail.gmail.items.filter((x) => x.more && !ids.has(x.id))];
   } catch (e) { mail.gmail.err = e.message; }
+}
+const GMAIL_STEP = 30; // Gmail 기본으로 불러오는 개수 (더 보기도 같은 개수씩)
+async function gmailFetch(q, more = false) {
+  const list = await gapi(`messages?maxResults=${GMAIL_STEP}&q=${encodeURIComponent(q)}`);
+  const metas = await Promise.all((list.messages || []).map((m) =>
+    gapi(`messages/${m.id}?format=metadata&metadataHeaders=From&metadataHeaders=Subject&metadataHeaders=Date`)));
+  return metas.map((m) => ({
+    id: `g-${m.id}`, gid: m.id, threadId: m.threadId, provider: "gmail", label: "Gmail", account: mail.gmail.email,
+    from: parseFrom(header(m, "From")), subject: header(m, "Subject") || "(제목 없음)",
+    date: new Date(+m.internalDate).toISOString(), snippet: decodeEntities(m.snippet || ""),
+    seen: !(m.labelIds || []).includes("UNREAD"), hasAtt: false, more,
+  }));
+}
+// Gmail 더 보기: 지금 받은 것 중 가장 오래된 메일보다 이전 메일을 GMAIL_STEP 통 더
+async function gmailMore() {
+  const oldest = mail.gmail.items.reduce((m, x) => Math.min(m, Date.parse(x.date)), Date.now());
+  const got = await gmailFetch(`in:inbox before:${Math.floor(oldest / 1000)}`, true);
+  const ids = new Set(mail.gmail.items.map((x) => x.id));
+  const add = got.filter((x) => !ids.has(x.id));
+  mail.gmail.items.push(...add);
+  return add.length;
 }
 function b64urlBytes(s) {
   const b = atob(s.replace(/-/g, "+").replace(/_/g, "/"));
@@ -1430,15 +1445,16 @@ function renderHomeMail() {
   el.hidden = !state.priv;
   if (!state.priv) return;
   const accts = accountsList();
-  const all = allMail();
+  const all = allMail().filter((it) => !it.more);
   const unread = all.filter(isUnread).length;
   const groups = accts.map((a) => {
-    const items = all.filter((it) => `${it.provider}|${it.account}` === a.key).slice(0, 3);
+    const mine = all.filter((it) => `${it.provider}|${it.account}` === a.key);
+    const items = mine.slice(0, 3), nUnread = mine.filter(isUnread).length;
     const color = PROVIDER[a.provider]?.color || "#8e8e93";
     const many = accts.filter((x) => x.provider === a.provider).length > 1;
     return `<div class="hm-acc">
       <div class="hm-head"><span class="sw" style="background:${color}"></span><b>${esc(a.label)}</b>${many ? `<span class="muted sm">${esc(a.account.split("@")[0])}</span>` : ""}
-        <span class="hm-cnt${a.unread ? " on" : ""}">${a.unread ? `안 읽음 ${a.unread}` : "모두 읽음"}</span></div>
+        <span class="hm-cnt${nUnread ? " on" : ""}">${nUnread ? `안 읽음 ${nUnread}` : "모두 읽음"}</span></div>
       ${items.length ? `<ul class="hm-list">${items.map((it) => `<li class="${isUnread(it) ? "unread" : ""}" data-home-mail="${esc(it.id)}">
         <span class="hm-from">${esc(it.from.name || it.from.addr)}</span>
         <span class="hm-subj">${folderLabel(it) ? `<span class="mfold">${esc(folderLabel(it))}</span>` : ""}${esc(it.subject)}</span>
@@ -1507,6 +1523,53 @@ async function dispatchSeen() {
 // 페이지를 닫거나 다른 앱으로 갈 때 모아 둔 읽음 표시를 저장 (반영은 다음 메일 수집 때)
 document.addEventListener("visibilitychange", () => { if (document.hidden && seenQ.pending.size) flushSeenQueue(); });
 setTimeout(() => { if (seenQ.pending.size) flushSeenQueue(); }, 8000); // 지난번에 저장 못 한 것
+
+// --- 더 많은 메일 보기 ---
+// Gmail 은 바로 더 받아 오고, 네이버·다음은 my-data/mail/more.json 에 폴더별 추가 개수를 남긴 뒤 메일 수집 작업을 실행
+let mailMoreBusy = 0;
+function moreTargets() {
+  const cur = mail.filter === "all" ? null : mail.filter;
+  const gmail = mail.gmail.token && (!cur || cur.startsWith("gmail|"));
+  const folders = (mail.imap?.folders || []).filter((f) =>
+    (!cur || `${f.provider}|${f.account}` === cur) && (!mail.folder || f.path === mail.folder) &&
+    (f.total == null || (f.loaded ?? 0) < f.total));
+  return { gmail, folders };
+}
+async function loadMoreMail(btn) {
+  if (!cfg.token) return openSettings({ needConnect: true });
+  if (mailMoreBusy && Date.now() - mailMoreBusy < 300000) return toast("이전 메일을 불러오는 중입니다. 잠시만 기다려 주세요.");
+  const { gmail, folders } = moreTargets();
+  if (!gmail && !folders.length) return toast("더 불러올 메일이 없습니다.");
+  btn.disabled = true; btn.textContent = "불러오는 중…";
+  const msgs = [];
+  try {
+    if (gmail) {
+      const n = await gmailMore().catch((e) => { msgs.push(`Gmail: ${e.message}`); return -1; });
+      if (n >= 0) msgs.push(n ? `Gmail ${n}통 추가` : "Gmail은 더 오래된 메일이 없습니다");
+      renderMail();
+    }
+    if (folders.length) {
+      let cur = { folders: {} }, sha;
+      try { const f = await ghFile(cfg.dataRepo, "mail/more.json"); cur = f.json; sha = f.sha; } catch (e) { if (e.status !== 404) throw e; }
+      const at = new Date().toISOString();
+      for (const f of folders) {
+        const k = `${f.account}|${f.path}`, step = Math.max(f.base || 0, 20);
+        const prevExtra = Math.max(cur.folders?.[k]?.extra || 0, (f.loaded || 0) - (f.base || 0));
+        cur.folders = { ...cur.folders, [k]: { extra: prevExtra + step, at } };
+      }
+      await ghPut(cfg.dataRepo, "mail/more.json", { ...cur, updatedAt: at }, sha, "메일 더 보기 요청");
+      await gh(cfg.dataRepo, "/actions/workflows/mail.yml/dispatches", { method: "POST", body: JSON.stringify({ ref: "main" }) });
+      mailMoreBusy = Date.now();
+      msgs.push("네이버·다음은 1~2분 뒤 이전 메일이 목록에 추가됩니다");
+      const before = mail.imap?.updatedAt;
+      pollFor(async () => { await loadImapMail(); return mail.imap; }, (d) => d && d.updatedAt !== before,
+        () => { mailMoreBusy = 0; renderMail(); renderHomeMail(); }, "mailMore");
+      setTimeout(() => { if (mailMoreBusy) { mailMoreBusy = 0; renderMail(); } }, 300000);
+    }
+  } catch (e) { msgs.push(e.message); }
+  toast(msgs.join(" · "), 6000);
+  renderMail();
+}
 
 // --- 공통 ---
 async function loadMail(force = false) {
@@ -1616,6 +1679,7 @@ function renderMail() {
         <div class="msnip"><span class="sw" style="background:${PROVIDER[it.provider]?.color || "#8e8e93"}"></span>${folderLabel(it) ? `<span class="mfold">${esc(folderLabel(it))}</span>` : ""}${esc(it.snippet)}</div>
       </li>`).join("")}</ul>`
       : mail.loading ? "" : `<div class="empty">${mail.imapErr === "none" && !mail.gmail.token ? "연결된 메일 계정이 없습니다.<br>＋ Gmail 연결 또는 README의 네이버·다음 설정을 참고하세요." : mail.folder ? "이 폴더에 받아 온 메일이 없습니다." : "최근 7일 메일이 없습니다."}</div>`}
+    ${list.length || mail.folder ? `<div class="mail-more"><button class="sm" data-mail-more${mailMoreBusy ? " disabled" : ""}>${mailMoreBusy ? "이전 메일 불러오는 중…" : "더 많은 메일 보기"}</button></div>` : ""}
     ${synced ? `<p class="help" style="text-align:center">${synced}</p>` : ""}`;
   const fbar = $("#mailList .mfolders");
   if (fbar) { fbar.scrollLeft = prevLeft; keepInView(fbar, fbar.querySelector(".on")); }
@@ -1705,6 +1769,10 @@ $("#mailList").addEventListener("click", (e) => {
   $$("#mailList li.sel").forEach((x) => x.classList.remove("sel")); li.classList.add("sel");
   renderReader();
   if (matchMedia("(max-width: 1000px)").matches) window.scrollTo({ top: 0 });
+});
+$("#mailList").addEventListener("click", (e) => {
+  const mb = e.target.closest("[data-mail-more]");
+  if (mb && !mb.disabled) loadMoreMail(mb);
 });
 $("#mailReader").addEventListener("click", (e) => {
   if (e.target.closest("[data-mail-back]")) { mail.sel = null; renderMail(); return; }
