@@ -705,7 +705,8 @@ function aptCard() {
     const deals = t.deals || [];
     const shown = aptMore ? deals.slice(0, 60) : deals.slice(0, 10);
     const last = deals.find((x) => !x.canceled);
-    return head(t.name) + `
+    const stale = t.stale ? `<p class="muted sm" style="margin:0 0 10px">국토교통부 서버 오류로 새 자료를 못 받아, ${dayLabel(kstDay(t.stale))} 기준 자료를 보여 줍니다. 서버가 복구되면 자동으로 갱신됩니다.</p>` : "";
+    return head(t.name) + stale + `
       <div class="apt-top">
         <div><span class="muted sm">34·35평 최근 1개월 평균</span>
           <div class="apt-avg">${t.avg1m?.n ? `${eokStr(t.avg1m.avg)}` : "<small>최근 1개월 거래 없음</small>"}</div>
