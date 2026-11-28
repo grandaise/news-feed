@@ -701,11 +701,12 @@ function aptCard() {
   const head = (t) => `<div class="card-head"><h3>아파트 실거래가${t ? ` · ${esc(t)}` : ""}</h3><span class="muted sm">${a?.updatedAt ? `${dayLabel(kstDay(a.updatedAt))} ${timeFmt.format(new Date(a.updatedAt))} 갱신` : "매일 새벽 갱신"}</span></div>`;
   if (!a?.targets?.length) return head() + `<div class="empty" style="padding:20px 0">공공데이터포털 인증키(APT_API_KEY)를 등록하면 매일 실거래 내역이 표시됩니다.</div>`;
   return a.targets.map((t) => {
+    if (!t.found && a.errors?.length) return head(t.name) + `<div class="empty" style="padding:16px 0">국토교통부 서버 오류로 실거래 자료를 받지 못했습니다.<br><span class="sm">국토부 쪽 서버가 응답하지 않는 일시적인 문제로, 복구되면 자동으로 다시 받아옵니다.</span></div>`;
     if (!t.found) return head(t.name) + `<div class="empty" style="padding:16px 0">단지를 찾지 못했습니다.${t.hints?.length ? `<br><span class="sm">비슷한 이름: ${t.hints.map(esc).join(", ")}</span>` : ""}</div>`;
     const deals = t.deals || [];
     const shown = aptMore ? deals.slice(0, 60) : deals.slice(0, 10);
     const last = deals.find((x) => !x.canceled);
-    const stale = t.stale ? `<p class="muted sm" style="margin:0 0 10px">국토교통부 서버 오류로 새 자료를 못 받아, ${dayLabel(kstDay(t.stale))} 기준 자료를 보여 줍니다. 서버가 복구되면 자동으로 갱신됩니다.</p>` : "";
+    const stale = t.stale ? `<p class="muted sm" style="margin:0 0 10px">국토교통부 서버 오류(국토부 쪽 서버 응답 없음)로 새 자료를 못 받아, ${dayLabel(kstDay(t.stale))} 기준 자료를 보여 줍니다. 복구되면 자동으로 갱신됩니다.</p>` : "";
     return head(t.name) + stale + `
       <div class="apt-top">
         <div><span class="muted sm">34·35평 최근 1개월 평균</span>
@@ -730,7 +731,7 @@ function renderHomeApt() {
   if (el.hidden) return;
   const deals = (t.deals || []).filter((x) => !x.canceled).slice(0, 3);
   el.innerHTML = `<div class="card-head"><h3>실거래가 · ${esc(t.name)}</h3><a class="more" data-go="apt">부동산 →</a></div>
-    ${!t.found ? `<div class="empty" style="padding:10px 0">단지를 찾지 못했습니다.</div>` : `
+    ${!t.found ? `<div class="empty" style="padding:10px 0">${state.apt.errors?.length ? "국토부 서버 오류로 자료를 받지 못했습니다." : "단지를 찾지 못했습니다."}</div>` : `
     <div class="ha-top" data-go="apt"><span class="muted sm">34·35평 최근 1개월 평균</span>
       <b>${t.avg1m?.n ? eokStr(t.avg1m.avg) : "거래 없음"}</b>${t.avg1m?.n ? `<span class="muted sm">${t.avg1m.n}건</span>` : ""}</div>
     <ul class="ha-list">${deals.map((x) => `<li data-go="apt"><span class="muted">${+x.date.slice(5, 7)}/${+x.date.slice(8)}</span>
