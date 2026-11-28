@@ -1559,6 +1559,25 @@ function renderMailTabs() {
   return accts;
 }
 
+// 폴더 칩의 안 읽은 수: 수집기가 받은 메일 서버 숫자에서, 그 뒤 사이트에서 읽은 메일 수를 뺀다
+function folderUnread(f) {
+  if (!f.unread) return 0;
+  const readHere = allMail().filter((it) => it.provider === f.provider && it.account === f.account &&
+    (it.folder || "INBOX") === f.path && !it.seen && mail.read.has(it.id)).length;
+  return Math.max(0, f.unread - readHere);
+}
+function folderChip(f) {
+  const n = folderUnread(f);
+  return `<button class="fchip${mail.folder === f.path ? " on" : ""}" data-mfolder="${esc(f.path)}" title="${esc(f.name)}${f.total != null ? ` · 전체 ${f.total}통` : ""}">${esc(f.name)}${n ? `<span class="cnt">${n}</span>` : ""}</button>`;
+}
+// 메일을 읽은 직후 폴더 칩 숫자만 다시 그림 (목록 스크롤 위치 유지)
+function refreshFolderCounts() {
+  const cur = (mail.imap?.folders || []).filter((f) => `${f.provider}|${f.account}` === mail.filter);
+  for (const f of cur) {
+    $$(`#mailList [data-mfolder="${CSS.escape(f.path)}"]`).forEach((b) => b.outerHTML = folderChip(f));
+  }
+}
+
 function renderMail() {
   if (!$("#mailList")) return;
   const accts = renderMailTabs();
@@ -1573,7 +1592,7 @@ function renderMail() {
     (!q || `${it.from.name} ${it.from.addr} ${it.subject} ${it.snippet}`.toLowerCase().includes(q)));
   const folderBar = folders.length > 1 ? `<div class="mfolders hs">
       <button class="fchip${!mail.folder ? " on" : ""}" data-mfolder="">전체</button>
-      ${folders.map((f) => `<button class="fchip${mail.folder === f.path ? " on" : ""}" data-mfolder="${esc(f.path)}" title="${esc(f.name)}${f.total != null ? ` · 전체 ${f.total}통` : ""}">${esc(f.name)}${f.unread ? `<span class="cnt">${f.unread}</span>` : ""}</button>`).join("")}
+      ${folders.map(folderChip).join("")}
     </div>` : "";
 
   const notes = [];
@@ -1632,7 +1651,7 @@ async function renderReader() {
     mail.read.add(it.id);
     store.set("mailRead", JSON.stringify([...mail.read].slice(-500)));
     $$(`[data-mail="${CSS.escape(it.id)}"]`).forEach((li) => li.classList.remove("unread"));
-    renderMailTabs(); renderHomeMail();
+    renderMailTabs(); renderHomeMail(); refreshFolderCounts();
     if (wasUnread) syncRead(it);
   }
   try {
