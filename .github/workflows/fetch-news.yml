@@ -35,6 +35,9 @@ jobs:
             echo "변경 없음"
           else
             git commit -m "뉴스 업데이트 $(TZ=Asia/Seoul date '+%Y-%m-%d %H:%M')"
-            git pull --rebase
-            git push
+            for n in 1 2 3; do
+              if git pull --rebase -X theirs && git push; then break; fi
+              git rebase --abort 2>/dev/null || true
+              echo "저장 재시도 $n"; sleep $((n * 5))
+            done
           fi
